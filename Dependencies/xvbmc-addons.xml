@@ -706,6 +706,21 @@ this is an unofficial addon. please don't ask for support in openelec forum / ir
   </extension>
 </addon>
 
+<addon id="script.module.TheYid.common"
+	     name="TheYid's common stuff"
+	     version="0.1.2"
+	     provider-name="TheYid">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.module" library="lib" />
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en">Collection of commonly used addon routines</summary>
+    <description lang="en">Collection of commonly used addon routines to simplify addon development.</description>
+  </extension>
+</addon>
+
 <addon id='script.module.torrent.ts' version='0.6.0.28' name='AceStream Client' provider-name='NuisMons'>
   <requires>
     <import addon='xbmc.python' version='2.1.0'/>

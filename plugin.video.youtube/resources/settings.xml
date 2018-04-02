@@ -89,7 +89,7 @@
         <setting id="youtube.api.key" type="text" label="30201" default="AIzaSyCw_fAbz1-y2LQN61QhdtxiHxYEOSWU55U" visible="eq(-1,true)"/>
         <setting id="youtube.api.id" type="text" label="30202" default="612662456993-dt4gqijmi6j9h7cifd3fsnfntuon1c1h.apps.googleusercontent.com" visible="eq(-2,true)"/>
         <setting id="youtube.api.secret" type="text" label="30203" default="sT0LUh8gauARLxG4DT21Ka4g" visible="eq(-3,true)"/>
-        <setting id="youtube.api.key.switch" type="enum" label="30205" values="0|1|2|3|4|5" visible="eq(-4,false)" default="4"/>
+        <setting id="youtube.api.key.switch" type="enum" label="30205" values="0|1|2|3|4|5" visible="eq(-4,false)" default="3"/>
         <setting id="youtube.allow.dev.keys" type="bool" label="30608" default="true"/>
         <setting id="youtube.api.config.address" type="lsep" label="30633" visible="eq(1,true)"/>
         <setting id="youtube.api.config.page" type="bool" label="30632" default="false"/>

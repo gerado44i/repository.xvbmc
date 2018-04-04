@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="net.rieter.xot.channel.se"
-       version="4.1.7.4"
+       version="4.1.7.8"
        name="Retrospect Swedish Channels"
        provider-name="Bas Rieter">
 
     <requires>
-        <!--import addon="net.rieter.xot" version="x.x.x" optional="false" /-->
+        <!--import  addon="net.rieter.xot" version="x.x.x" optional="false" /-->
     </requires>
     
     <extension point="xbmc.python.pluginsource"

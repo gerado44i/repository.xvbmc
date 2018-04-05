@@ -1,5 +1,0 @@
-v0.0.3 (mirror in XvBMC-NL)
-Changelog unknown
-
-Version 0.0.2 - Nov 18-2017
-Added Project D Repo to Looking Glass

@@ -1,5 +1,5 @@
 '''
-    resolveurl XBMC Addon
+    urlresolver XBMC Addon
     Copyright (C) 2016 Gujal
 
 This program is free software: you can redistribute it and/or modify
@@ -16,11 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 import re
-from resolveurl import common
-from resolveurl.plugins.lib import helpers
-from resolveurl.resolver import ResolveUrl, ResolverError
+from urlresolver import common
+from urlresolver.plugins.lib import helpers
+from urlresolver.resolver import UrlResolver, ResolverError
 
-class TubePornClassicResolver(ResolveUrl):
+class TubePornClassicResolver(UrlResolver):
     name = 'tubepornclassic'
     domains = ['tubepornclassic.com']
     pattern = '(?://|\.)(tubepornclassic\.com)/videos/(\d+/[^/\s]+)'
@@ -36,9 +36,9 @@ class TubePornClassicResolver(ResolveUrl):
             html = self.net.http_GET(web_url, headers=headers).content
             
             if html:
-                source = re.search('''video_url=['"]([^'"]+)['"]''', html, re.DOTALL)
-                if source:
-                    return self.net.http_GET(source.group(1), headers=headers).get_url() + helpers.append_headers(headers)
+                sources = re.findall('''['"]file['"]:\s*['"](?P<label>[^'"]+)['"],\s*['"]type['"]:\s*['"](?P<url>[^'"]+)["']''', html, re.DOTALL)
+                sources = [(i[1], i[0]) for i in sorted(sources)]
+                return self.net.http_GET(helpers.pick_source(sources), headers=headers).get_url() + helpers.append_headers(headers)
 
             raise ResolverError('File not found')
         except:

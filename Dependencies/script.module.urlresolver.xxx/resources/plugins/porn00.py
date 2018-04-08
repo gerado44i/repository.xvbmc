@@ -1,5 +1,5 @@
 '''
-    resolveurl XBMC Addon
+    urlresolver XBMC Addon
     Copyright (C) 2016 Gujal
 
 This program is free software: you can redistribute it and/or modify
@@ -16,14 +16,14 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 import re
-from resolveurl import common
-from resolveurl.plugins.lib import helpers
-from resolveurl.resolver import ResolveUrl, ResolverError
+from urlresolver import common
+from urlresolver.plugins.lib import helpers
+from urlresolver.resolver import UrlResolver, ResolverError
 
-class Porn00Resolver(ResolveUrl):
+class Porn00Resolver(UrlResolver):
     name = 'porn00'
     domains = ['porn00.org', 'porn00.com']
-    pattern = '(?://|\.)(porn00\.org)/(?:video|plays|player)/\?v=(\d+)'
+    pattern = '(?://|\.)(porn00\.org)/(?:video|plays)/\?v=(\d+)'
     pattern2 = '(?://|\.)(porn00\.(?:org|com))/([\w\-]+)'
     
     def __init__(self):
@@ -36,7 +36,7 @@ class Porn00Resolver(ResolveUrl):
             html = self.net.http_GET(web_url, headers=headers).content
             
             if html:
-                video_ids = re.findall("""<iframe.+?src=["'].*?\?v=(\d+)["'&]""", html, re.I)
+                video_ids = re.findall("""<iframe.+?src=["'].*?\?v=(\d+)["']""", html, re.I)
                 if video_ids:
                     video_id = video_ids[-1]
                     return helpers.get_media_url('http://www.porn00.org/video/?v=%s' % video_id).replace(' ', '%20')

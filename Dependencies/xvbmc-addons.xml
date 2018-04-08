@@ -599,7 +599,7 @@ this is an unofficial addon. please don't ask for support in openelec forum / ir
 	</extension>
 </addon>
 
-<addon id="script.module.resolveurl.xxx" version="2.0.01" name="Adult Resolver SMR Extension" provider-name="jsergio, Echo Coder">
+<addon id="script.module.resolveurl.xxx" version="2.0.02" name="Adult Resolver SMR Extension" provider-name="jsergio, Echo Coder">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.resolveurl" version="5.0.00" />
@@ -823,7 +823,7 @@ this is an unofficial addon. please don't ask for support in openelec forum / ir
         </extension>
 </addon>
 
-<addon id="script.module.urlresolver" name="URLResolver" version="5.0.09" provider-name="tvaddons">
+<addon id="script.module.urlresolver" name="URLResolver" version="5.0.10" provider-name="tvaddons">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
 		<import addon="plugin.video.youtube" optional="true" />
@@ -842,6 +842,19 @@ this is an unofficial addon. please don't ask for support in openelec forum / ir
 		<description lang="hr">Prilagodi najčešće URL-ove video izvora kako bi radili u XBMC/Kodiju, pojednostavnjuje razvoj priključaka za video dodatke koji zahtjevaju višestruke video izvore.</description>
 		<forum>https://www.tvaddons.co/forums</forum>
         <website>https://www.tvaddons.co</website>
+	</extension>
+</addon>
+
+<addon id="script.module.urlresolver.xxx" version="1.0.09" name="Adult Resolver SMU Extension" provider-name="jsergio, Echo Coder">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+        	<import addon="script.module.urlresolver" version="3.0.38" />
+	</requires>
+	<extension point="xbmc.python.module" library="lib" />
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Resolve adult video host URL's to be playable in XBMC/Kodi.</summary>
+		<description lang="en">Resolve adult video host URL's to be playable in XBMC/Kodi.</description>
+		<platform>all</platform>
 	</extension>
 </addon>
 

@@ -487,6 +487,10 @@
 		<setting id="StreamcloudResolver_priority" type="number" label="Priority" default="100"/>
 		<setting id="StreamcloudResolver_enabled" type="bool" label="Enabled" default="true"/>
 		<setting id="StreamcloudResolver_login" type="bool" label="login" default="true" visible="false"/>
+		<setting label="streamdor" type="lsep"/>
+		<setting id="StreamDorResolver_priority" type="number" label="Priority" default="100"/>
+		<setting id="StreamDorResolver_enabled" type="bool" label="Enabled" default="true"/>
+		<setting id="StreamDorResolver_login" type="bool" label="login" default="true" visible="false"/>
 		<setting label="streame.net" type="lsep"/>
 		<setting id="StreameResolver_priority" type="number" label="Priority" default="100"/>
 		<setting id="StreameResolver_enabled" type="bool" label="Enabled" default="true"/>
@@ -549,12 +553,12 @@
 		<setting id="TubiTvResolver_priority" type="number" label="Priority" default="100"/>
 		<setting id="TubiTvResolver_enabled" type="bool" label="Enabled" default="true"/>
 		<setting id="TubiTvResolver_login" type="bool" label="login" default="true" visible="false"/>
+	</category>
+	<category label="Resolvers 7">
 		<setting label="Tudou" type="lsep"/>
 		<setting id="TudouResolver_priority" type="number" label="Priority" default="100"/>
 		<setting id="TudouResolver_enabled" type="bool" label="Enabled" default="true"/>
 		<setting id="TudouResolver_login" type="bool" label="login" default="true" visible="false"/>
-	</category>
-	<category label="Resolvers 7">
 		<setting label="tune.pk" type="lsep"/>
 		<setting id="TunePkResolver_priority" type="number" label="Priority" default="100"/>
 		<setting id="TunePkResolver_enabled" type="bool" label="Enabled" default="true"/>
@@ -627,12 +631,12 @@
 		<setting id="VidCrazyResolver_priority" type="number" label="Priority" default="100"/>
 		<setting id="VidCrazyResolver_enabled" type="bool" label="Enabled" default="true"/>
 		<setting id="VidCrazyResolver_login" type="bool" label="login" default="true" visible="false"/>
+	</category>
+	<category label="Resolvers 8">
 		<setting label="videa" type="lsep"/>
 		<setting id="VideaResolver_priority" type="number" label="Priority" default="100"/>
 		<setting id="VideaResolver_enabled" type="bool" label="Enabled" default="true"/>
 		<setting id="VideaResolver_login" type="bool" label="login" default="true" visible="false"/>
-	</category>
-	<category label="Resolvers 8">
 		<setting label="videocloud.co" type="lsep"/>
 		<setting id="VideocloudResolver_priority" type="number" label="Priority" default="100"/>
 		<setting id="VideocloudResolver_enabled" type="bool" label="Enabled" default="true"/>
@@ -705,12 +709,12 @@
 		<setting id="VidtoResolver_priority" type="number" label="Priority" default="100"/>
 		<setting id="VidtoResolver_enabled" type="bool" label="Enabled" default="true"/>
 		<setting id="VidtoResolver_login" type="bool" label="login" default="true" visible="false"/>
+	</category>
+	<category label="Resolvers 9">
 		<setting label="vidtodo" type="lsep"/>
 		<setting id="VidToDoResolver_priority" type="number" label="Priority" default="100"/>
 		<setting id="VidToDoResolver_enabled" type="bool" label="Enabled" default="true"/>
 		<setting id="VidToDoResolver_login" type="bool" label="login" default="true" visible="false"/>
-	</category>
-	<category label="Resolvers 9">
 		<setting label="vidup.me" type="lsep"/>
 		<setting id="VidUpMeResolver_priority" type="number" label="Priority" default="100"/>
 		<setting id="VidUpMeResolver_enabled" type="bool" label="Enabled" default="true"/>
@@ -783,13 +787,13 @@
 		<setting id="YourUploadResolver_priority" type="number" label="Priority" default="100"/>
 		<setting id="YourUploadResolver_enabled" type="bool" label="Enabled" default="true"/>
 		<setting id="YourUploadResolver_login" type="bool" label="login" default="true" visible="false"/>
+	</category>
+	<category label="Resolvers 10">
 		<setting label="youtube" type="lsep"/>
 		<setting id="YoutubeResolver_priority" type="number" label="Priority" default="100"/>
 		<setting id="YoutubeResolver_enabled" type="bool" label="Enabled" default="true"/>
 		<setting id="YoutubeResolver_login" type="bool" label="login" default="true" visible="false"/>
 		<setting label="This plugin calls the youtube addon -change settings there." type="lsep" />
-	</category>
-	<category label="Resolvers 10">
 		<setting label="zstream.to" type="lsep"/>
 		<setting id="ZstreamResolver_priority" type="number" label="Priority" default="100"/>
 		<setting id="ZstreamResolver_enabled" type="bool" label="Enabled" default="true"/>

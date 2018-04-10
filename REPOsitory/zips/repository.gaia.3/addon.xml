@@ -8,12 +8,12 @@
 		However, the GitLab repo is still updated and can be manually accessed using a borwser
 
 		<dir>
-			<info compressed="false">https://gitlab.com/gaiaorigin/gaiaorigin/raw/HEAD/common/addons.xml?v=2.0.0</info>
-			<checksum>https://gitlab.com/gaiaorigin/gaiaorigin/raw/HEAD/common/addons.xml.md5?v=2.0.0</checksum>
+			<info compressed="false">https://gitlab.com/gaiaorigin/gaiaorigin/raw/HEAD/common/addons.xml?v=2.1.0</info>
+			<checksum>https://gitlab.com/gaiaorigin/gaiaorigin/raw/HEAD/common/addons.xml.md5?v=2.1.0</checksum>
 			<datadir zip="true">https://gitlab.com/gaiaorigin/gaiaorigin/raw/HEAD/common/</datadir>
 		</dir>
-		<info compressed="false">https://gitlab.com/gaiaorigin/gaiaorigin/raw/HEAD/addons.xml?v=2.0.0</info>
-		<checksum>https://gitlab.com/gaiaorigin/gaiaorigin/raw/HEAD/addons.xml.md5?v=2.0.0</checksum>
+		<info compressed="false">https://gitlab.com/gaiaorigin/gaiaorigin/raw/HEAD/addons.xml?v=2.1.0</info>
+		<checksum>https://gitlab.com/gaiaorigin/gaiaorigin/raw/HEAD/addons.xml.md5?v=2.1.0</checksum>
 		<datadir zip="true">https://gitlab.com/gaiaorigin/gaiaorigin/raw/HEAD/</datadir>
 		-->
 		<dir>

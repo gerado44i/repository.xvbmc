@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="repository.gaia.2" version="2.0.0" name="Gaia Repository 2" provider-name="Gaia">
+<addon id="repository.gaia.2" version="2.1.0" name="Gaia Repository 2" provider-name="Gaia">
 	<extension point="xbmc.addon.repository" name="Gaia Repository Mirror 2">
 		<dir>
-			<info compressed="false">https://bitbucket.org/gaiaorigin/gaiaorigin/raw/HEAD/common/addons.xml?v=2.0.0</info>
-			<checksum>https://bitbucket.org/gaiaorigin/gaiaorigin/raw/HEAD/common/addons.xml.md5?v=2.0.0</checksum>
+			<info compressed="false">https://bitbucket.org/gaiaorigin/gaiaorigin/raw/HEAD/common/addons.xml?v=2.1.0</info>
+			<checksum>https://bitbucket.org/gaiaorigin/gaiaorigin/raw/HEAD/common/addons.xml.md5?v=2.1.0</checksum>
 			<datadir zip="true">https://bitbucket.org/gaiaorigin/gaiaorigin/raw/HEAD/common/</datadir>
 		</dir>
-		<info compressed="false">https://bitbucket.org/gaiaorigin/gaiaorigin/raw/HEAD/addons.xml?v=2.0.0</info>
-		<checksum>https://bitbucket.org/gaiaorigin/gaiaorigin/raw/HEAD/addons.xml.md5?v=2.0.0</checksum>
+		<info compressed="false">https://bitbucket.org/gaiaorigin/gaiaorigin/raw/HEAD/addons.xml?v=2.1.0</info>
+		<checksum>https://bitbucket.org/gaiaorigin/gaiaorigin/raw/HEAD/addons.xml.md5?v=2.1.0</checksum>
 		<datadir zip="true">https://bitbucket.org/gaiaorigin/gaiaorigin/raw/HEAD/</datadir>
 	</extension>
 	<extension point="xbmc.addon.metadata">

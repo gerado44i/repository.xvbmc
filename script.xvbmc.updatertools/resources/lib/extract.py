@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 
 """
-    IF you copy/paste please keep the credits -2- XvBMC-NL, Thx.
+    IF you copy/paste XvBMC's -script.xvbmc.updatertools- please keep the credits -2- XvBMC-NL, Thx.
 """
 
 import zipfile, xbmc
@@ -49,3 +49,7 @@ def allWithProgress(_in, _out, dp):
         return False
 
     return True
+
+"""
+    IF you copy/paste XvBMC's -extract.py- please keep the credits -2- XvBMC-NL, Thx.
+"""

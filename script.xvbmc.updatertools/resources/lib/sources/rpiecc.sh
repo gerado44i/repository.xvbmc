@@ -17,9 +17,9 @@ rm -rf /storage/.ash_history*
 rm -rf /storage/.kodi/userdata/addon_data/service.libreelec.settings
 
 sleep 1
+sync
 
 kodi-send -a "Notification(RPi-CrapCleaner,FINISHED! PLEASE REBOOT...,5000,special://home/addons/script.xvbmc.updatertools/icon.png)"
-
 sleep 2
 
 #reboot

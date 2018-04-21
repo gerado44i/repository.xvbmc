@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 
 """
-    IF you copy/paste please keep the credits -2- XvBMC-NL, Thx.
+    IF you copy/paste XvBMC's -script.xvbmc.updatertools- please keep the credits -2- XvBMC-NL, Thx.
 """
 
 import xbmcgui
@@ -50,3 +50,7 @@ def download(url, dest):
                 break
             except:
                 pass
+
+"""
+    IF you copy/paste XvBMC's -downloader.py- please keep the credits -2- XvBMC-NL, Thx.
+"""

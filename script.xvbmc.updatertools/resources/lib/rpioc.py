@@ -1,4 +1,5 @@
 #!/usr/bin/python
+#-*- coding: utf-8 -*-
 import xbmc,xbmcaddon,xbmcgui,xbmcplugin
 import os,shutil,time
 import urllib2,urllib
@@ -10,25 +11,25 @@ piOC='XvBMC overclock [COLOR white]RPi[/COLOR]'
 SubTitle=" [B]-[/B] [COLOR lime]RPi[/COLOR] [B]-[/B] #OverClock#"
 def ocMenu():
  userchoice=[]
- userchoice.append(piOC+' [B]-[/B]None')
- userchoice.append(piOC+' [B]-[/B]High')
- userchoice.append(piOC+' [B]-[/B]XvBMC')
- userchoice.append(piOC+' [B]-[/B]Turbo')
- userchoice.append(piOC+' [B]-[/B]3Dfx')
- userchoice.append(piOC+' [B]-[/B]Max')
+ userchoice.append(piOC+' [B]-[/B]None    (RPi2\\3\\3B+)')
+ userchoice.append(piOC+' [B]-[/B]High     (RPi2\\3\\3B+)')
+ userchoice.append(piOC+' [B]-[/B]XvBMC (RPi2\\3\\3B+)')
+ userchoice.append(piOC+' [B]-[/B]Turbo    (RPi2\\3)')
+ userchoice.append(piOC+' [B]-[/B]3Dfx      (RPi2\\3)')
+ userchoice.append(piOC+' [B]-[/B]Max       (RPi2\\3)')
  userchoice.append("[B][COLOR white]Exit[/COLOR][/B]")
  inputchoice=xbmcgui.Dialog().select(MainTitle+SubTitle,userchoice)
- if userchoice[inputchoice]==piOC+' [B]-[/B]None':
+ if userchoice[inputchoice]==piOC+' [B]-[/B]None    (RPi2\\3\\3B+)':
   Config0()
- elif userchoice[inputchoice]==piOC+' [B]-[/B]High':
+ elif userchoice[inputchoice]==piOC+' [B]-[/B]High     (RPi2\\3\\3B+)':
   Config1()
- elif userchoice[inputchoice]==piOC+' [B]-[/B]XvBMC':
+ elif userchoice[inputchoice]==piOC+' [B]-[/B]XvBMC (RPi2\\3\\3B+)':
   Config2()
- elif userchoice[inputchoice]==piOC+' [B]-[/B]Turbo':
+ elif userchoice[inputchoice]==piOC+' [B]-[/B]Turbo    (RPi2\\3)':
   Config3()
- elif userchoice[inputchoice]==piOC+' [B]-[/B]3Dfx':
+ elif userchoice[inputchoice]==piOC+' [B]-[/B]3Dfx      (RPi2\\3)':
   Config4a()
- elif userchoice[inputchoice]==piOC+' [B]-[/B]Max':
+ elif userchoice[inputchoice]==piOC+' [B]-[/B]Max       (RPi2\\3)':
   Config4b()
 class Config0Class(xbmcgui.Window):
  def __init__(self):
@@ -97,5 +98,5 @@ def Config4b():
  mydisplay=Config4bClass()
  del mydisplay
 """
-    IF you copy/paste XvBMC's 'script.xvbmc.updatertools' please keep the credits -2- XvBMC-NL, Thx.
+    IF you copy/paste XvBMC's -rpioc.py- please keep the credits -2- XvBMC-NL, Thx.
 """

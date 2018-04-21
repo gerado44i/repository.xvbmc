@@ -1324,8 +1324,8 @@
 </addon>
 
 <addon id="script.xvbmc.updatertools"
-       name=" [COLOR lime][B]X[/B][/COLOR]vBMC [COLOR red]UPDATE[/COLOR], Tools [COLOR white]&amp;[/COLOR] Maintenance[COLOR darkgreen] [I] (v[COLOR lime]4.3[/COLOR])[/I][/COLOR]"
-       version="4.3.4"
+       name=" [COLOR lime][B]X[/B][/COLOR]vBMC [COLOR red]UPDATE[/COLOR], Tools [COLOR white]&amp;[/COLOR] Maintenance[COLOR darkgreen] [I] (v[COLOR lime]4.4[/COLOR])[/I][/COLOR]"
+       version="4.4.0"
        provider-name="XvBMC-NL">
   <requires>
     <import addon="repository.xvbmc" version="4.2"/>
@@ -1346,7 +1346,7 @@
     <forum>http://bit.ly/XvBMC-NL</forum>
     <website>https://bit.ly/XvBMC-Android</website>
     <source>http://bit.ly/XvBMC-Pi</source>
-    <news>v4.3.4 -2018- MO' vOoDoO</news>
+    <news>v4.4.0 -2018- CodeCosmetics vOoDoO</news>
     <assets>
         <icon>icon.png</icon>
         <fanart>fanart.jpg</fanart>

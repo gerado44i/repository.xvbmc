@@ -24,10 +24,6 @@
 * https://bit.ly/XvBMC-Gaming 
 * https://www.fb.com/groups/ctrlgamingroom/ 
  
-### XvBMC_Marktplaats: 
-* https://bit.ly/XvBMC-Marktplaats 
-* https://www.fb.com/groups/xbmckoopenverkoop/ 
- 
 ### XvBMC_YouTube: 
 * https://bit.ly/XvBMC-YouTube 
 * https://www.youtube.com/user/onlinefilmskijken/ 

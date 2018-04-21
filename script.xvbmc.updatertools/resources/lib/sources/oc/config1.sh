@@ -5,6 +5,7 @@
 mount -o remount,rw /flash/
 cp -rav /storage/.kodi/addons/script.xvbmc.updatertools/resources/lib/sources/oc/data/config-high.txt /flash/config.txt
 
+sync
 sleep 2
 
 # kodi-send -a "Notification(XvBMC-NL High-overclock Pi,FINISHED! PLEASE REBOOT...,5000,special://home/addons/script.xvbmc.oc/icon.png)"

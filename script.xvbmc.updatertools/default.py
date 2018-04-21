@@ -203,6 +203,9 @@ def XvBMCmaint():
  elif int(utils.kodiver)>16.7:
   addItem('[B][COLOR lime]X[/COLOR][/B]vBMC\'s enable all add-ons [COLOR dimgray](Kodi 17+ Krypton)[/COLOR]',BASEURL,29,os.path.join(mediaPath,"xvbmc.png"))
  addItem('',BASEURL,'',ART+'xvbmc.png')
+ addItem('[B]S[/B]how: Outdated Kodi addons',BASEURL,21,ART+'maint.png')
+ addItem('[B]S[/B]how: Recently updated Kodi addons',BASEURL,24,ART+'maint.png')
+ addItem('',BASEURL,'',ART+'xvbmc.png')
  addItem(About,BASEURL,2,os.path.join(mediaPath,"wtf.png"))
  addItem(Terug,BASEURL,3,os.path.join(mediaPath,"xvbmc.png"))
  Common.setView('movies','EPiC')
@@ -222,8 +225,15 @@ def XvBMCtools1():
  Common.setView('movies','EPiC')
 def XvBMCrpi():
  addItem('[COLOR white][B]R[/B][/COLOR]aspberry [COLOR white]Pi[/COLOR] extreme crapcleaner [COLOR dimgray]([B]no[/B] factory reset)[/COLOR]',BASEURL,31,os.path.join(mediaPath,"tools.png"))
- addItem('[COLOR white][B]R[/B][/COLOR]aspberry [COLOR white]Pi[/COLOR] overclock [COLOR dimgray](raspberry Pi ***only***)[/COLOR]',BASEURL,32,os.path.join(mediaPath,"overclock.png"))
- addItem('[COLOR white][B]R[/B][/COLOR]aspberry [COLOR white]Pi[/COLOR] #dev# corner [COLOR dimgray](firmware, OS, etc.)[/COLOR]',BASEURL,33,os.path.join(mediaPath,"firmware.png"))
+ addItem('[COLOR white][B]R[/B][/COLOR]aspberry [COLOR white]Pi[/COLOR] overclock [COLOR dimgray](Raspberry Pi ***[B]only[/B]***)[/COLOR]',BASEURL,32,os.path.join(mediaPath,"overclock.png"))
+ addItem('[COLOR white][B]R[/B][/COLOR]aspberry [COLOR white]Pi[/COLOR] #dev# corner [COLOR dimgray](firmware,OS,update)[/COLOR]',BASEURL,33,os.path.join(mediaPath,"firmware.png"))
+ addItem('',BASEURL,'',ART+'xvbmc.png')
+ addItem('[COLOR white][B]S[/B][/COLOR]how: [COLOR red]Outdated[/COLOR] Kodi addons',BASEURL,21,ART+'maint.png')
+ addItem('[COLOR white][B]S[/B][/COLOR]how: [COLOR green]Recently updated[/COLOR] Kodi addons',BASEURL,24,ART+'maint.png')
+ addItem('',BASEURL,'',ART+'xvbmc.png')
+ addDir('[B][COLOR lime]X[/COLOR][/B]vBMC\'s [COLOR white]H[/COLOR]idden [COLOR white]g[/COLOR]ems & [COLOR white]M[/COLOR]ore [COLOR white]t[/COLOR]ools [COLOR dimgray](T[COLOR dodgerblue]i[/COLOR]P[B]!!![/B])[/COLOR]',BASEURL,40,ART+'xvbmc.png',os.path.join(mediaPath,"gereedschap.jpg"),'')
+ addDir('[B][COLOR lime]X[/COLOR][/B]vBMC\'s [COLOR white]M[/COLOR]aintenance [COLOR dimgray](back to main menu)[/COLOR]',BASEURL,20,ART+'maint.png',os.path.join(mediaPath,"onderhoud.jpg"),'')
+ addDir('[B][COLOR lime]X[/COLOR][/B]vBMC\'s [COLOR white]T[/COLOR]ools [COLOR dimgray](back to main menu)[/COLOR]',BASEURL,10,ART+'tools.png',os.path.join(mediaPath,"gereedschap.jpg"),'')
  addItem('',BASEURL,'',ART+'xvbmc.png')
  addItem(About,BASEURL,2,os.path.join(mediaPath,"wtf.png"))
  addItem(Terug,BASEURL,3,os.path.join(mediaPath,"xvbmc.png"))
@@ -597,10 +607,14 @@ elif mode==18:
  Urlresolver_settings()
 elif mode==19:
  unlocker()
+elif mode==21:
+ xbmc.executebuiltin('ActivateWindow(10040,addons://outdated/,return)')
 elif mode==22:
  nursemaid.clearCache()
 elif mode==23:
  nursemaid.deleteThumbnails()
+elif mode==24:
+ xbmc.executebuiltin('ActivateWindow(10040,addons://recently_updated/,return)')
 elif mode==25:
  nursemaid.autocleanask()
 elif mode==26:
@@ -628,7 +642,7 @@ elif mode==43:
 elif mode==44:
  disabled()
 elif mode==45:
- name='repository.xvbmc-4.2.0.zip'
+ name='repository.xvbmc-4.2.1.zip'
  url=base64.b64decode(repos)
  storeLoc=xbmc.translatePath(os.path.join('special://home/addons','packages'))
  unzipLoc=os.path.join(HOME,'addons')

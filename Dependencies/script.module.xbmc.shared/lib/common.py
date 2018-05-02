@@ -394,4 +394,3 @@ def closeandexit():
 """
     IF you copy/paste XvBMC's -common.py- please keep the credits -2- XvBMC-NL, Thx.
 """
-# Created by pyminifier (https://github.com/liftoff/pyminifier)

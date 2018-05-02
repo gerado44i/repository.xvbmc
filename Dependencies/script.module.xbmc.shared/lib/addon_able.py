@@ -36,4 +36,3 @@ def setall_enable():
 """
     IF you copy/paste XvBMC's 'addon_able.py' please keep the credits -2- XvBMC-NL, Thx.
 """
-# Created by pyminifier (https://github.com/liftoff/pyminifier)

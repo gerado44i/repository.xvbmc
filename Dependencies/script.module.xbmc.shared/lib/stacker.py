@@ -71,8 +71,7 @@ def showFiles(url,location=1):
    dialog.ok('Downloaden Mislukt','Downloaden mislukt','Probeer opnieuw','')
  except:dialog.ok('Downloaden Mislukt','Downloaden mislukt','Probeer opnieuw','')
 class StopDownloading(Exception):
- def __init__(self,value):self.value=value
-  pass
+ def __init__(self,value):self.value=value 
  def __str__(self):return repr(self.value)
 def downloadFile(url,name,download_path):
  def _pbhook(downloaded,filesize,url=None,dp=None):
@@ -272,4 +271,3 @@ def getCookiesString():
   import sys,traceback
   traceback.print_exc(file=sys.stdout)
  return cookieString
-# Created by pyminifier (https://github.com/liftoff/pyminifier)

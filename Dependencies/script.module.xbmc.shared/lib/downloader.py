@@ -44,4 +44,3 @@ def download(url,dest):
 """
     IF you copy/paste XvBMC's -downloader.py- please keep the credits -2- XvBMC-NL, Thx.
 """
-# Created by pyminifier (https://github.com/liftoff/pyminifier)

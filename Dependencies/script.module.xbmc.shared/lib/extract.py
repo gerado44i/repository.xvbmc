@@ -37,4 +37,3 @@ def allWithProgress(_in,_out,dp):
 """
     IF you copy/paste XvBMC's -extract.py- please keep the credits -2- XvBMC-NL, Thx.
 """
-# Created by pyminifier (https://github.com/liftoff/pyminifier)

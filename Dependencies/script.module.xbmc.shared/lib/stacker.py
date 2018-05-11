@@ -11,7 +11,7 @@ import xbmcvfs
 progress=xbmcgui.DialogProgress()
 dialog=xbmcgui.Dialog()
 herstart='PRESS OK TO FORCECLOSE AND REBOOT!'
-forceersluiten='[COLOR dimgray]indien forceclose niet werkt, herstart uw systeem handmatig, [/COLOR]if forceclose does not work shutdown manually'
+forceersluiten='[COLOR dimgray][B]indien[/B] forceclose niet werkt, herstart uw systeem handmatig, if forceclose does not work shutdown Kodi manually.[/COLOR]'
 __scriptid__="script.tar.gz.updater"
 addon=xbmcaddon.Addon(id=__scriptid__)
 USER_AGENT='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
@@ -37,10 +37,11 @@ def showFiles(url,location=1):
  domain=url.split('/')[2]
  listurl='https://%s/public-share/%s/list'%(domain,token)
  dlurl='https://%s/public-share/%s/download'%(domain,token)
- if location==2:
+ if location==1:
   download_path=xbmc.translatePath(os.path.join('/storage/.update/',''))
  else:
-  download_path=xbmc.translatePath(os.path.join('/storage/.restore/',''))
+ #download_path=xbmc.translatePath(os.path.join('/storage/.restore/',''))
+  download_path=xbmc.translatePath(os.path.join('/storage/.update/',''))
  bestanden=[]
  filelist=getHtml(listurl)
  filelist=re.compile('path":"([^"]+)"',re.DOTALL|re.IGNORECASE).findall(filelist)

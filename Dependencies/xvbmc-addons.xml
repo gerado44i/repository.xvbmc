@@ -856,10 +856,10 @@ this is an unofficial addon. please don't ask for support in openelec forum / ir
 	</extension>
 </addon>
 
-<addon id="script.module.xbmc.shared" name="Xbmc - Common Libraries" version="1.0" provider-name="XvBMC">
+<addon id="script.module.xbmc.shared" name="Xbmc - Common Libraries" version="1.1" provider-name="XvBMC">
   <requires>
-    <import addon="repository.xvbmc" version="4.2"/>
     <import addon="xbmc.python" version="2.14.0" />
+    <import addon="repository.xvbmc" version="4.2"/>
   </requires>
   <extension point="xbmc.python.module" library="lib" />
   <extension point="xbmc.addon.metadata">

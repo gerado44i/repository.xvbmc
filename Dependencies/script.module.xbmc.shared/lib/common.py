@@ -21,26 +21,10 @@ basewiz='aHR0cHM6Ly9hcmNoaXZlLm9yZy9kb3dubG9hZC94dmJtY3dpemFyZHov'
 bldversietxt=xbmc.translatePath(os.path.join('special://home/userdata','versiebld.txt'))
 bldversietxtwiz=xbmc.translatePath(os.path.join('special://home/userdata','wizbld.txt'))
 repos='aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1h2Qk1DL3JlcG9zaXRvcnkueHZibWMvbWFzdGVyL1JFUE9zaXRvcnkvemlwcy9yZXBvc2l0b3J5Lnh2Ym1jLw=='
-EminenceTxt=xbmc.translatePath(os.path.join('special://home/userdata','eminence-sp.txt'))
-EminenceUrl=base64.b64decode(basewiz)+'eminence-sp.txt'
 NoxSpinTxt=xbmc.translatePath(os.path.join('special://home/userdata','noxspin-sp.txt'))
 NoxSpinUrl=base64.b64decode(basewiz)+'noxspin-sp.txt'
-PortableTxt=xbmc.translatePath(os.path.join('special://home/userdata','portable-sp.txt'))
-PortableUrl=base64.b64decode(base)+'update/service/portable-sp.txt'
-RPiTxt=xbmc.translatePath(os.path.join('special://home/userdata','rpi-sp.txt'))
-RPiUrl=base64.b64decode(base)+'update/service/rpi-sp.txt'
-ZeitgeistTxt=xbmc.translatePath(os.path.join('special://home/userdata','zeitgeist-sp.txt'))
-ZeitgeistUrl=base64.b64decode(basewiz)+'zeitgeist-sp.txt'
-EminenceTxtBld=xbmc.translatePath(os.path.join('special://home/userdata','eminence-bld.txt'))
-EminenceUrlBld=base64.b64decode(basewiz)+'eminence-bld.txt'
 NoxSpinTxtBld=xbmc.translatePath(os.path.join('special://home/userdata','noxspin-bld.txt'))
 NoxSpinUrlBld=base64.b64decode(basewiz)+'noxspin-bld.txt'
-PortableTxtBld=xbmc.translatePath(os.path.join('special://home/userdata','portable-bld.txt'))
-PortableUrlBld=base64.b64decode(base)+'update/builds/portable-bld.txt'
-RPiTxtBld=xbmc.translatePath(os.path.join('special://home/userdata','rpi-bld.txt'))
-RPiUrlBld=base64.b64decode(base)+'update/builds/rpi-bld.txt'
-ZeitgeistTxtBld=xbmc.translatePath(os.path.join('special://home/userdata','zeitgeist-bld.txt'))
-ZeitgeistUrlBld=base64.b64decode(basewiz)+'zeitgeist-bld.txt'
 def killKodi():
  myplatform=platform()
  log("XvBMC_Platform: "+str(myplatform))
@@ -207,31 +191,13 @@ def KODIVERSION(url):
  log("XvBMC_v"+version)
  dialog.ok(MainTitle,'Your Kodi Version : [COLOR lime][B]%s[/B][/COLOR]'%version)
 def checkXvbmcVersie():
- if os.path.isfile(EminenceTxtBld):
-  file=open(EminenceTxtBld,'r')
-  EminenceVersie=file.read()
-  file.close()
-  return 'EminenceTxtBld','[COLOR gray]'+EminenceVersie+'[/COLOR]'
- elif os.path.isfile(NoxSpinTxtBld):
+ pass
+def checkXvbmcVersie():
+ if os.path.isfile(NoxSpinTxtBld):
   file=open(NoxSpinTxtBld,'r')
   NoxSpinVersie=file.read()
   file.close()
   return 'NoxSpinTxtBld','[COLOR gray]'+NoxSpinVersie+'[/COLOR]'
- elif os.path.isfile(PortableTxtBld):
-  file=open(PortableTxtBld,'r')
-  PortableVersie=file.read()
-  file.close()
-  return 'PortableTxtBld','[COLOR gray]'+PortableVersie+'[/COLOR]'
- elif os.path.isfile(RPiTxtBld):
-  file=open(RPiTxtBld,'r')
-  RPiVersie=file.read()
-  file.close()
-  return 'RPiTxtBld','[COLOR gray]'+RPiVersie+'[/COLOR]'
- elif os.path.isfile(ZeitgeistTxtBld):
-  file=open(ZeitgeistTxtBld,'r')
-  ZeitgeistVersie=file.read()
-  file.close()
-  return 'ZeitgeistTxtBld','[COLOR gray]'+ZeitgeistVersie+'[/COLOR]'
  else:
   return 'unknown',''
 def removefolder(map,exclude=None):
@@ -385,10 +351,22 @@ def get_kversion():
  intbase=int(baseversion[0])
  return intbase
 def setView(content,viewType):
+ log("XvBMC_viewType: "+str(viewType))
  if content:
   xbmcplugin.setContent(int(sys.argv[1]),content)
+ else:
+  xbmcplugin.setContent(int(sys.argv[1]),'files')
+ log("XvBMC_vieContent: "+str(content))
+ skin=xbmc.getSkinDir().lower()
+ log("XvBMC_Skin: "+str(skin))
  if ADDON.getSetting('auto-view')=='true':
   xbmc.executebuiltin("Container.SetViewMode(%s)"%ADDON.getSetting(viewType))
+  viewName=xbmc.getInfoLabel('Container.Viewmode')
+  log("XvBMC_viewName: "+str(viewName))
+ else:
+  viewmode=55 if 'estuary' in skin else 50
+  xbmc.executebuiltin("Container.SetViewMode(%s)"%viewmode)
+  log("XvBMC_viewMode: "+str(viewmode))
 def closeandexit():
  xbmc.executebuiltin('Action(back)')
 """

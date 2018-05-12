@@ -351,22 +351,22 @@ def get_kversion():
  intbase=int(baseversion[0])
  return intbase
 def setView(content,viewType):
- log("XvBMC_viewType: "+str(viewType))
+#log("XvBMC_viewType: "+str(viewType))
  if content:
   xbmcplugin.setContent(int(sys.argv[1]),content)
  else:
   xbmcplugin.setContent(int(sys.argv[1]),'files')
- log("XvBMC_vieContent: "+str(content))
+#log("XvBMC_viewContent: "+str(content))
  skin=xbmc.getSkinDir().lower()
- log("XvBMC_Skin: "+str(skin))
+#log("XvBMC_Skin: "+str(skin))
  if ADDON.getSetting('auto-view')=='true':
   xbmc.executebuiltin("Container.SetViewMode(%s)"%ADDON.getSetting(viewType))
   viewName=xbmc.getInfoLabel('Container.Viewmode')
-  log("XvBMC_viewName: "+str(viewName))
+ #log("XvBMC_viewName: "+str(viewName))
  else:
   viewmode=55 if 'estuary' in skin else 50
   xbmc.executebuiltin("Container.SetViewMode(%s)"%viewmode)
-  log("XvBMC_viewMode: "+str(viewmode))
+ #log("XvBMC_viewMode: "+str(viewmode))
 def closeandexit():
  xbmc.executebuiltin('Action(back)')
 """

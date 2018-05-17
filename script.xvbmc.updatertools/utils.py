@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 import cookielib,os,urllib,urllib2
 import xbmc,xbmcaddon,xbmcgui,xbmcplugin
-from resources.lib.common import log
+from common import log
 ADDON=xbmcaddon.Addon(id='script.xvbmc.updatertools')
 USER_AGENT='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 profileDir=ADDON.getAddonInfo('profile')
@@ -11,7 +11,7 @@ headers={'User-Agent':USER_AGENT,'Accept':'*/*','Connection':'keep-alive'}
 cookiePath=os.path.join(profileDir,'cookies.lwp')
 dialog=xbmcgui.Dialog()
 kodiver=xbmc.getInfoLabel("System.BuildVersion").split(".")[0]
-from resources.lib.common import EminenceTxt,EminenceUrl,NoxSpinTxt,NoxSpinUrl,PortableTxt,PortableUrl,RPiTxt,RPiUrl,ZeitgeistTxt,ZeitgeistUrl
+from common import NoxSpinTxt,NoxSpinUrl
 if not os.path.exists(profileDir):
  os.makedirs(profileDir)
 urlopen=urllib2.urlopen
@@ -58,20 +58,7 @@ def postHtml(url,form_data={},headers={},compression=True,NoCookie=None):
  response.close()
  return data
 def checkUpdate(onlycurrent=False):
- if os.path.isfile(EminenceTxt):
-  file=open(EminenceTxt,'r')
-  versie=file.read()
-  file.close()
-  if onlycurrent:return versie,'EminenceUpdate'
-  try:EminenceDev=getHtml2(EminenceUrl)
-  except:return 'noupdate',versie
-  try:
-   if int(EminenceDev)>int(versie):
-    return 'EminenceUpdate',EminenceDev
-  except ValueError:
-   return 'notinstalled',''
-  else:return 'noupdate',versie
- elif os.path.isfile(NoxSpinTxt):
+ if os.path.isfile(NoxSpinTxt):
   file=open(NoxSpinTxt,'r')
   versie=file.read()
   file.close()
@@ -81,45 +68,6 @@ def checkUpdate(onlycurrent=False):
   try:
    if int(NoxSpinDev)>int(versie):
     return 'NoxSpinUpdate',NoxSpinDev
-  except ValueError:
-   return 'notinstalled',''
-  else:return 'noupdate',versie
- elif os.path.isfile(PortableTxt):
-  file=open(PortableTxt,'r')
-  versie=file.read()
-  file.close()
-  if onlycurrent:return versie,'PortableUpdate'
-  try:PortableDev=getHtml2(PortableUrl)
-  except:return 'noupdate',versie
-  try:
-   if int(PortableDev)>int(versie):
-    return 'PortableUpdate',PortableDev
-  except ValueError:
-   return 'notinstalled',''
-  else:return 'noupdate',versie
- elif os.path.isfile(RPiTxt):
-  file=open(RPiTxt,'r')
-  versie=file.read()
-  file.close()
-  if onlycurrent:return versie,'RPiUpdate'
-  try:RPiDev=getHtml2(RPiUrl)
-  except:return 'noupdate',versie
-  try:
-   if int(RPiDev)>int(versie):
-    return 'RPiUpdate',RPiDev
-  except ValueError:
-   return 'notinstalled',''
-  else:return 'noupdaterpi',versie
- elif os.path.isfile(ZeitgeistTxt):
-  file=open(ZeitgeistTxt,'r')
-  versie=file.read()
-  file.close()
-  if onlycurrent:return versie,'ZeitgeistUpdate'
-  try:ZeitgeistDev=getHtml2(ZeitgeistUrl)
-  except:return 'noupdate',versie
-  try:
-   if int(ZeitgeistDev)>int(versie):
-    return 'ZeitgeistUpdate',ZeitgeistDev
   except ValueError:
    return 'notinstalled',''
   else:return 'noupdate',versie
@@ -143,4 +91,6 @@ def enableAddons(melding=None,update=True):
    dialog.ok("[COLOR lime][B]Addons enabled[/COLOR][/B]",'[COLOR white]ALL[/COLOR] addons are [B]enabled![/B]')
  else:
   pass
-# Created by pyminifier (https://github.com/liftoff/pyminifier)
+"""
+    IF you copy/paste XvBMC's -utils.py- please keep the credits -2- XvBMC-NL, Thx.
+"""

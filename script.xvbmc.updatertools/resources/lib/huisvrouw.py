@@ -545,36 +545,6 @@ def xvbmcLog():
   return True
  else:
   dialog.ok(MainTitle,'Sorry, No log file was found.','','[COLOR yellow]Sorry, er was geen log file gevonden.[/COLOR]')
-if Common.get_kversion()>16.5:
- try:from sqlite3 import dbapi2 as db_lib
- except:from pysqlite2 import dbapi2 as db_lib
- db_dir=xbmc.translatePath("special://profile/Database")
- db_path=os.path.join(db_dir,'Addons27.db')
- conn=db_lib.connect(db_path)
- conn.text_factory=str
-def AddonsEnable():
- if Common.get_kversion()>16.5:
-  conn=sqlite3.connect(xbmc.translatePath("special://database/Addons27.db"))
-  c=conn.cursor()
-  c.execute("UPDATE installed SET enabled = 1 WHERE addonID NOT LIKE '%audiodecoder.%' AND addonID NOT LIKE '%inputstream.%' AND addonID NOT LIKE '%pvr.%' AND addonID NOT LIKE '%screensaver.%' AND addonID NOT LIKE '%visualization.%';")
-  conn.commit()
-  conn.close()
-  xbmc.executebuiltin('UpdateLocalAddons()')
-  xbmc.executebuiltin('UpdateAddonRepos()')
-  choice=xbmcgui.Dialog().yesno(MainTitle+' : add-ons [B]enabled[/B]','[COLOR=green][B]!!!  FINISHED  !!![/B][/COLOR]','[B]Reboot[/B] Kodi to complete (\'yes\' is force close)','[B]Herstart[/B] Kodi ter afronding (ja is \'force close\')',yeslabel='[COLOR lime]Ja/Yes[/COLOR]',nolabel='[COLOR red]Nee/No[/COLOR]')
-  if choice==1:
-   os._exit(1)
-  else:pass
- else:pass
-def EnableRTMP():
- try:addon_able.set_enabled("inputstream.adaptive")
- except:pass
- time.sleep(0.5)
- try:addon_able.set_enabled("inputstream.rtmp")
- except:pass
- time.sleep(0.5)
- xbmc.executebuiltin('XBMC.UpdateLocalAddons()')
- dialog.ok("Operation Complete!",'Live Streaming has been Enabled!','Brought To You By %s '%MainTitle)
 """
-    IF you copy/paste 'script.xvbmc.updatertools' please keep the credits -2- XvBMC-NL, Thx.
+    IF you copy/paste XvBMC's -huisvrouw.py- please keep the credits -2- XvBMC-NL, Thx.
 """

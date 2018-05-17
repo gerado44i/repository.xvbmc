@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 #cp -rav /storage/.kodi/addons/script.xvbmc.updatertools/resources/lib/sources/oc/data/SettingsSystemInfo-noclock.xml /storage/.kodi/addons/skin.nox4beginners/1080i/SettingsSystemInfo.xml
 

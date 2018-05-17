@@ -5,9 +5,9 @@ import urllib
 import time
 import os
 class StopDownloading(Exception):
- def __init__(self,value):self.value=value 
+ def __init__(self,value):self.value=value
  def __str__(self):return repr(self.value)
-def download(url,dest):
+def download(url,dest,dp=None):
  def _pbhook(numblocks,blocksize,filesize,url=None,dp=None):
   try:
    percent=min((numblocks*blocksize*100)/filesize,100)
@@ -29,10 +29,12 @@ def download(url,dest):
   if dp.iscanceled():
    dp.close()
    raise StopDownloading('Stopped Downloading')
- dp=xbmcgui.DialogProgress()
- dp.create("XvBMC Nederland - leecher",'XvBMC-NL: crazy ass download vOoDoO...')
+ if not dp:
+  dp=xbmcgui.DialogProgress()
+  dp.create("XvBMC Nederland - leecher",'XvBMC-NL: crazy ass download [B]vOoDoO[/B]...',' ',' ')
  start=time.clock()
  try:
+  dp.update(0)
   urllib.urlretrieve(url,dest,lambda nb,bs,fs,url=url:_pbhook(nb,bs,fs,url,dp))
  except:
   while os.path.exists(dest):

@@ -3,6 +3,7 @@
 import xbmc,xbmcaddon,xbmcgui,xbmcplugin
 import base64,os,sys,time
 import re,urllib,urllib2
+import sqlite3
 AddonID='script.xvbmc.updatertools'
 ADDON=xbmcaddon.Addon(id=AddonID)
 addonInfo=xbmcaddon.Addon().getAddonInfo
@@ -16,6 +17,8 @@ notforked='[COLOR dimgray](the newest XvBMC\'s [B]Pi[/B]-image is not forked, [B
 subtitleNope="[COLOR=red][B]!!!  NOPE  !!![/B][/COLOR]"
 nonlinux="[US] you\'re running a \'none linux os\' (Open-/LibreELEC)"
 nonelecNL="[NL] dit is geen Raspberry Pi met Open-/LibreELEC \'OS\'"
+simpleNote="[COLOR dodgerblue]XvBMC simple/short note:[/COLOR]"
+kussie="with kind regards, team [COLOR green]XvBMC Nederland[/COLOR]"
 base='aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1h2Qk1DL3JlcG9zaXRvcnkueHZibWMvbWFzdGVyL3ppcHMv'
 basewiz='aHR0cHM6Ly9hcmNoaXZlLm9yZy9kb3dubG9hZC94dmJtY3dpemFyZHov'
 bldversietxt=xbmc.translatePath(os.path.join('special://home/userdata','versiebld.txt'))
@@ -185,13 +188,22 @@ def verifyplatform():
  else:
   dialog.ok(waarschuwing,readme,'[COLOR=white]XvBMC[/COLOR]\'s Update(r) should work, [B]but[/B]...','NO! guarantees though [B];-p[/B]')
   log("=== ATV2/iOS/OSMC/Raspbmc/etc ===")
-def KODIVERSION(url):
- xbmc_version=xbmc.getInfoLabel("System.BuildVersion")
- version=xbmc_version[:4]
+def KODIVERSION():
+ xvbmc_version=xbmc.getInfoLabel("System.BuildVersion");version=xvbmc_version[:4];
  log("XvBMC_v"+version)
- dialog.ok(MainTitle,'Your Kodi Version : [COLOR lime][B]%s[/B][/COLOR]'%version)
-def checkXvbmcVersie():
- pass
+ xvbmc_build=xbmc.getInfoLabel("System.BuildDate")
+ xbmc.getInfoLabel("System.OSVersionInfo");xbmc.sleep(200);
+ os_version=xbmc.getInfoLabel("System.OSVersionInfo")
+ xbmc_iip=xbmc.getInfoLabel("Network.IPAddress")
+ try:
+  import urllib2 as urlreq
+ except:
+  import urllib.request as urlreq
+ req=urlreq.Request("https://api.ipify.org/")
+ req.add_header('User-Agent','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36')
+ xbmc_eip=urlreq.urlopen(req).read()
+ log('xbmc_eip ='+str(xbmc_eip))
+ dialog.ok('[B]'+MainTitle+' [COLOR dodgerblue]-info-[/COLOR][/B]','Kodi version: [COLOR orange][B]%s[/B][/COLOR]'%version+' [B] & [/B] '+'(build compile: %s)'%xvbmc_build,'[COLOR dimgray]OS: %s'%os_version+'[/COLOR]','Build iP: [COLOR lime]%s[/COLOR] '%xbmc_iip+'[B] & [/B]'+' WWW iP: [COLOR red]%s[/COLOR]'%xbmc_eip)
 def checkXvbmcVersie():
  if os.path.isfile(NoxSpinTxtBld):
   file=open(NoxSpinTxtBld,'r')
@@ -235,7 +247,7 @@ def TextBoxes(announce):
    self.setControls()
   def setControls(self):
    self.win.getControl(self.CONTROL_LABEL).setLabel('XvBMC - View Log[B]:[/B]')
-   try:f=open(announce);text=f.read()
+   try:f=open(announce);text=f.read();
    except:text=announce
    self.win.getControl(self.CONTROL_TEXTBOX).setText(str(text))
    return
@@ -254,7 +266,7 @@ def TextBoxesPlain(heading,announce):
    self.setControls()
   def setControls(self):
    self.win.getControl(self.CONTROL_LABEL).setLabel(heading)
-   try:f=open(announce);text=f.read()
+   try:f=open(announce);text=f.read();
    except:text=announce
    self.win.getControl(self.CONTROL_TEXTBOX).setText(str(text))
    return
@@ -297,6 +309,42 @@ def infoTXT(heading,text):
    return
   except:
    pass
+def get_kversion():
+ full_version_info=xbmc.getInfoLabel('System.BuildVersion')
+ baseversion=full_version_info.split(".")
+ intbase=int(baseversion[0])
+ return intbase
+if get_kversion()>16.5:
+ try:from sqlite3 import dbapi2 as db_lib
+ except:from pysqlite2 import dbapi2 as db_lib
+ db_dir=xbmc.translatePath("special://profile/Database")
+ db_path=os.path.join(db_dir,'Addons27.db')
+ conn=db_lib.connect(db_path)
+ conn.text_factory=str
+def AddonsEnable():
+ if get_kversion()>16.5:
+  conn=sqlite3.connect(xbmc.translatePath("special://database/Addons27.db"))
+  c=conn.cursor()
+  c.execute("UPDATE installed SET enabled = 1 WHERE addonID NOT LIKE '%audiodecoder.%' AND addonID NOT LIKE '%inputstream.%' AND addonID NOT LIKE '%pvr.%' AND addonID NOT LIKE '%screensaver.%' AND addonID NOT LIKE '%visualization.%';")
+  conn.commit()
+  conn.close()
+  xbmc.executebuiltin('UpdateLocalAddons()');log("XvBMC_UpdateLocalAddons()");
+  xbmc.executebuiltin('UpdateAddonRepos()');log("XvBMC_UpdateAddonRepos()");
+  choice=xbmcgui.Dialog().yesno(MainTitle+' : add-ons [B]enabled[/B]','[COLOR=green][B]!!!  FINISHED  !!![/B][/COLOR]','[B]Reboot[/B] Kodi to complete (\'yes\' is force close)','[B]Herstart[/B] Kodi ter afronding (ja is \'force close\')',yeslabel='[COLOR lime]Ja/Yes[/COLOR]',nolabel='[COLOR red]Nee/No[/COLOR]')
+  if choice==1:
+   os._exit(1)
+  else:pass
+ else:
+  dialog.ok('Error Add-ons enable [COLOR red]ERROR[/COLOR]','[COLOR red][B]!!!  NOPE  !!![/B][/COLOR]','[US] you\'re not running Kodi v17 Krypton.','[NL] dit is geen Kodi v17 Krypton.')
+def EnableRTMP():
+ try:addon_able.set_enabled("inputstream.adaptive")
+ except:pass
+ time.sleep(0.5)
+ try:addon_able.set_enabled("inputstream.rtmp")
+ except:pass
+ time.sleep(0.5)
+ xbmc.executebuiltin('XBMC.UpdateLocalAddons()');log("XvBMC_UpdateLocalAddons()");
+ dialog.ok("[B]Operation Complete![/B]",'[COLOR white]Live Streaming[/COLOR] has been [COLOR lime]Enabled![/COLOR]','[COLOR dimgray]Brought To You By %s '%MainTitle+'[/COLOR]')
 artwork=xbmc.translatePath(os.path.join('special://home','addons',AddonID,'/'))
 fanart=artwork+'fanart.jpg'
 def addonIcon():
@@ -320,7 +368,7 @@ def infoDialog(message,heading=addonInfo('name'),icon=addonIcon(),time=3000):
   execute("Notification(%s,%s, %s, %s)"%(heading,message,time,icon))
 def okDialog(line1,line2,line3,heading=addonInfo('name')):
  return dialog.ok(heading,line1,line2,line3)
-def yesnoDialog(line1,line2,line3,heading=addonInfo('name'),nolabel='',yeslabel=''):
+def yesnoDialog(line1,line2,line3,heading=addonInfo('name'),nolabel='[COLOR red]nee/nope[/COLOR]',yeslabel='[COLOR lime][B]JA/YES[/B][/COLOR]'):
  return dialog.yesno(heading,line1,line2,line3,nolabel,yeslabel)
 def log(msg,level=xbmc.LOGNOTICE):
  name='XvBMC_NOTICE'
@@ -332,41 +380,40 @@ def log(msg,level=xbmc.LOGNOTICE):
    xbmc.log('Logging Failure',level)
   except:
    pass
-def forceRefresh(melding=None):
- xbmc.executebuiltin('UpdateLocalAddons()');log("XvBMC_UpdateLocalAddons()")
+def forceRefresh(melding=None,skin=None):
+ if melding:
+  dialog.ok(MainTitle,'Force Refresh Repos and Update LocalAddons');
+ xbmc.executebuiltin('UpdateLocalAddons()');log("XvBMC_UpdateLocalAddons()");
  time.sleep(0.5)
- xbmc.executebuiltin('UpdateAddonRepos()');log("XvBMC_UpdateAddonRepos()")
+ xbmc.executebuiltin('UpdateAddonRepos()');log("XvBMC_UpdateAddonRepos()");
  time.sleep(0.5)
  if melding:
-  dialog.ok(MainTitle,'Force Refresh Repos and Update LocalAddons')
   try:
-   xbmc.executebuiltin('ReloadSkin()');log("XvBMC_ReloadSkin()")
+   xbmc.executebuiltin('Container.Refresh');log("Container.Refresh");
   except:pass
+ if skin:
   try:
-   xbmc.executebuiltin('Container.Refresh');log("Container.Refresh")
+   ReloadSkin=yesnoDialog('ReFresh/Reload Kodi Skin?',' ',' ',MainTitle)
+   if ReloadSkin:
+    xbmc.executebuiltin('ReloadSkin()');log("XvBMC_ReloadSkin()");
+   else:pass
   except:pass
-def get_kversion():
- full_version_info=xbmc.getInfoLabel('System.BuildVersion')
- baseversion=full_version_info.split(".")
- intbase=int(baseversion[0])
- return intbase
+ else:pass
 def setView(content,viewType):
-#log("XvBMC_viewType: "+str(viewType))
  if content:
   xbmcplugin.setContent(int(sys.argv[1]),content)
  else:
   xbmcplugin.setContent(int(sys.argv[1]),'files')
-#log("XvBMC_viewContent: "+str(content))
  skin=xbmc.getSkinDir().lower()
-#log("XvBMC_Skin: "+str(skin))
- if ADDON.getSetting('auto-view')=='true':
+ if 'estuary' in skin:
+  viewmode=55
+  xbmc.executebuiltin("Container.SetViewMode(%s)"%viewmode)
+ elif ADDON.getSetting('auto-view')=='true':
   xbmc.executebuiltin("Container.SetViewMode(%s)"%ADDON.getSetting(viewType))
   viewName=xbmc.getInfoLabel('Container.Viewmode')
- #log("XvBMC_viewName: "+str(viewName))
  else:
-  viewmode=55 if 'estuary' in skin else 50
+  viewmode=50
   xbmc.executebuiltin("Container.SetViewMode(%s)"%viewmode)
- #log("XvBMC_viewMode: "+str(viewmode))
 def closeandexit():
  xbmc.executebuiltin('Action(back)')
 """

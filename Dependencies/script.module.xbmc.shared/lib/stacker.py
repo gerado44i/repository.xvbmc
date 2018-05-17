@@ -10,8 +10,8 @@ import gzip,tempfile,time
 import xbmcvfs
 progress=xbmcgui.DialogProgress()
 dialog=xbmcgui.Dialog()
-herstart='PRESS OK TO FORCECLOSE AND REBOOT!'
-forceersluiten='[COLOR dimgray][B]indien[/B] forceclose niet werkt, herstart uw systeem handmatig, if forceclose does not work shutdown Kodi manually.[/COLOR]'
+herstart='[COLOR white]PRESS OK TO FORCECLOSE AND REBOOT![/COLOR]'
+forceersluiten='[COLOR dimgray]indien forceclose niet werkt, herstart uw systeem handmatig, if forceclose does not work shutdown Kodi manually.[/COLOR]'
 __scriptid__="script.tar.gz.updater"
 addon=xbmcaddon.Addon(id=__scriptid__)
 USER_AGENT='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
@@ -63,7 +63,7 @@ def showFiles(url,location=1):
  fildl=downloadFile(fullurl,dlname,download_path)
  try:
   if os.path.isfile(fildl):
-   dialog.ok('Downloaden Voltooid','Klaar met downloaden',herstart,forceersluiten)
+   dialog.ok('[COLOR lime]DOWNLOAD FINISHED![/COLOR]',herstart,forceersluiten)
    try:os.system('reboot')
    except:pass
    try:xbmc.executebuiltin("Reboot")

@@ -164,10 +164,10 @@
 
 </addon>
 
-<addon id="plugin.program.xvbmcinstaller.nl" name=" [COLOR lime][B]X[/B][/COLOR]vBMC-[COLOR white]NL[/COLOR] wizard/installer" version="1.0.5" provider-name="XvBMC-NL">
+<addon id="plugin.program.xvbmcinstaller.nl" name=" [COLOR lime][B]X[/B][/COLOR]vBMC-[COLOR white]NL[/COLOR] wizard/installer" version="1.0.6" provider-name="XvBMC-NL">
   <requires>
+    <import addon="xbmc.python" version="2.14.0"/>
     <import addon="repository.xvbmc" version="4.2" optional="true"/>
-    <import addon="xbmc.python" version="2.1.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>executable</provides>

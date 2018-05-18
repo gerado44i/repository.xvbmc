@@ -1,50 +1,67 @@
 #!/usr/bin/python
-import os #line:4
-import xbmc ,xbmcaddon ,xbmcgui #line:5
-AddonID ='plugin.program.xvbmcinstaller.nl'#line:7
-ADDON =xbmcaddon .Addon (id =AddonID )#line:8
-def get_kversion ():#line:10
-    OO00OOO00OOOO0000 =xbmc .getInfoLabel ('System.BuildVersion')#line:11
-    O00O0O0OO0O0O00O0 =OO00OOO00OOOO0000 .split (".")#line:12
-    O00O00OO0O0OO0OOO =int (O00O0O0OO0O0O00O0 [0 ])#line:13
-    return O00O00OO0O0OO0OOO #line:18
-if get_kversion ()>16.5 :#line:20
-    try :from sqlite3 import dbapi2 as db_lib #line:21
-    except :from pysqlite2 import dbapi2 as db_lib #line:22
-    db_dir =xbmc .translatePath ("special://profile/Database")#line:24
-    db_path =os .path .join (db_dir ,'Addons27.db')#line:25
-    conn =db_lib .connect (db_path )#line:26
-    conn .text_factory =str #line:27
-def log (msg ,level =xbmc .LOGNOTICE ):#line:29
-    O0OO000OO00O0O0OO ='XvBMC_NOTICE'#line:30
-    level =xbmc .LOGNOTICE #line:32
-    try :#line:41
-        xbmc .log ('%s: %s'%(O0OO000OO00O0O0OO ,msg ),level )#line:42
-    except :#line:43
-        try :#line:44
-            xbmc .log ('Logging Failure',level )#line:45
-        except :#line:46
-            pass #line:47
-def set_enabled (newaddon ,data =None ):#line:50
-    if get_kversion ()>16.5 :#line:51
-        log ("Enabling "+newaddon )#line:52
-        OOOO00O0O0O0OO0OO =1 #line:53
-        if data is None :data =''#line:54
-        O000OO0OOOO0OOO00 ='REPLACE INTO installed (addonID,enabled) VALUES(?,?)'#line:55
-        conn .execute (O000OO0OOOO0OOO00 ,(newaddon ,OOOO00O0O0O0OO0OO ,))#line:56
-        conn .commit ()#line:57
-    else :#line:58
-        pass #line:59
-def setall_enable ():#line:62
-    if get_kversion ()>16.5 :#line:63
-        O000OO0OOO0OOO0O0 =xbmc .translatePath (os .path .join ('special://home','addons'))#line:64
-        OO00O0000OO0O0OO0 =os .listdir (O000OO0OOO0OOO0O0 )#line:65
-        log (OO00O0000OO0O0OO0 )#line:66
-        conn .executemany ('update installed set enabled=1 WHERE addonID = (?)',((O0OO00OO000OOO0OO ,)for O0OO00OO000OOO0OO in OO00O0000OO0O0OO0 ))#line:67
-        conn .commit ()#line:68
-        O0OO0OOOOO0O00O0O =xbmcgui .Dialog ()#line:70
-        O0OO0OOOOO0O00O0O .ok ("[COLOR lime][B]Addons enabled[/COLOR][/B]",'[COLOR white]ALL[/COLOR] addons are [B]enabled![/B]')#line:71
-        xbmc .executebuiltin ('UpdateLocalAddons()')#line:72
-        xbmc .executebuiltin ('UpdateAddonRepos()')#line:73
-    else :#line:74
-        pass
+#-*- coding: utf-8 -*-
+import os
+import xbmc,xbmcaddon,xbmcgui
+AddonID='plugin.program.xvbmcinstaller.nl'
+ADDON=xbmcaddon.Addon(id=AddonID)
+def log(msg,level=xbmc.LOGNOTICE):
+ name='XvBMC_NOTICE'
+ level=xbmc.LOGNOTICE
+ try:
+  xbmc.log('%s: %s'%(name,msg),level)
+ except:
+  try:
+   xbmc.log('Logging Failure',level)
+  except:
+   pass
+def get_kversion():
+ full_version_info=xbmc.getInfoLabel('System.BuildVersion')
+ baseversion=full_version_info.split(".")
+ intbase=int(baseversion[0])
+ return intbase
+def AddonsEnable():
+ if get_kversion()>16.5:
+  conn=sqlite3.connect(xbmc.translatePath("special://database/Addons27.db"))
+  c=conn.cursor()
+  c.execute("UPDATE installed SET enabled = 1 WHERE addonID NOT LIKE '%audiodecoder.%' AND addonID NOT LIKE '%inputstream.%' AND addonID NOT LIKE '%pvr.%' AND addonID NOT LIKE '%screensaver.%' AND addonID NOT LIKE '%visualization.%';")
+  conn.commit()
+  conn.close()
+  xbmc.executebuiltin('UpdateLocalAddons()')
+  xbmc.executebuiltin('UpdateAddonRepos()')
+  choice=xbmcgui.Dialog().yesno(AddonID+' : add-ons [B]enabled[/B]','[COLOR green][B]!!!  FINISHED  !!![/B][/COLOR]','[B]Reboot[/B] Kodi to complete (\'yes\' is force close)','[B]Herstart[/B] Kodi ter afronding (ja is \'force close\')',yeslabel='[COLOR lime]Ja/Yes[/COLOR]',nolabel='[COLOR red]Nee/No[/COLOR]')
+  if choice==1:
+   os._exit(1)
+  else:pass
+ else:
+  dialog.ok('Error Add-ons enable [COLOR red]ERROR[/COLOR]','[COLOR red][B]!!!  NOPE  !!![/B][/COLOR]','[US] you\'re not running Kodi v17 Krypton.','[NL] dit is geen Kodi v17 Krypton.')
+if get_kversion()>16.5:
+ try:from sqlite3 import dbapi2 as db_lib
+ except:from pysqlite2 import dbapi2 as db_lib
+ db_dir=xbmc.translatePath("special://profile/Database")
+ db_path=os.path.join(db_dir,'Addons27.db')
+ conn=db_lib.connect(db_path)
+ conn.text_factory=str
+def set_enabled(newaddon,data=None):
+ if get_kversion()>16.5:
+  log("Enabling "+newaddon)
+  setit=1
+  if data is None:data=''
+  sql='REPLACE INTO installed (addonID,enabled) VALUES(?,?)'
+  conn.execute(sql,(newaddon,setit,))
+  conn.commit()
+ else:pass
+def setall_enable():
+ if get_kversion()>16.5:
+  addonfolder=xbmc.translatePath(os.path.join('special://home','addons'))
+  contents=os.listdir(addonfolder)
+  log(contents)
+  conn.executemany('update installed set enabled=1 WHERE addonID = (?)',((val,)for val in contents))
+  conn.commit()
+  dialog=xbmcgui.Dialog()
+  dialog.ok("[COLOR lime][B]Addons enabled[/COLOR][/B]",'[COLOR white]ALL[/COLOR] addons are [B]enabled![/B]')
+  xbmc.executebuiltin('UpdateLocalAddons()')
+  xbmc.executebuiltin('UpdateAddonRepos()')
+ else:pass
+"""
+    IF you copy/paste XvBMC's 'addon_able.py' please keep the credits -2- XvBMC-NL, Thx.
+"""

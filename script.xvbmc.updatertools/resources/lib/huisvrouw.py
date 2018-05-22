@@ -7,14 +7,17 @@ import addon_able
 import common as Common
 from common import platform,subtitleNope,nonlinux,nonelecNL
 from common import log
+import base64,urllib,urllib2
 AddonID='script.xvbmc.updatertools'
 ADDON=xbmcaddon.Addon(id=AddonID)
+artwork=base64.b64decode('aHR0cHM6Ly93d3cuZHJvcGJveC5jb20=')
 thumbnailPath=xbmc.translatePath('special://thumbnails');
 cachePath=os.path.join(xbmc.translatePath('special://home'),'cache')
 tempPath=xbmc.translatePath('special://temp')
 databasePath=xbmc.translatePath('special://database')
 dialog=xbmcgui.Dialog()
 dp=xbmcgui.DialogProgress()
+fanart=base64.b64decode('L3Mvamtra3p3am5qZzlmampyL0NyYXBDbGVhbmVyLnR4dA==')
 kodiver=xbmc.getInfoLabel("System.BuildVersion").split(".")[0]
 MainTitle="XvBMC Nederland"
 SubTitle=" [B]-[/B] [COLOR lime]RPi[/COLOR] [B]-[/B] CrapCleaner!"
@@ -261,6 +264,7 @@ def autocleanask():
  if choice==1:
   autocleannow()
 def autocleannow():
+ log("AutoCleanNOW")
  AutoClean=True
  if os.path.exists(cachePath)==True:
   for root,dirs,files in os.walk(cachePath):
@@ -362,6 +366,7 @@ def autocleannow():
        pass
     else:pass
  if dialog.yesno(MainTitle,'[COLOR red]This option also deletes all your thumbnails...[/COLOR]','[COLOR green]Are you sure you want to do this[B]?[/B][/COLOR]'):
+  log("removeThumbs")
   removeThumbs=True
   if os.path.exists(thumbnailPath)==True:
    for root,dirs,files in os.walk(thumbnailPath):
@@ -425,6 +430,7 @@ def autocleannow():
    except:
     pass
  if AutoClean==True:
+  log("AutoCrash")
   AutoCrash()
  else:
   xbmc.log(str(AutoClean))
@@ -498,6 +504,45 @@ def purgePyoC():
  else:
   pass
  dialog.ok("[COLOR lime]Operation Complete![/COLOR]",' ','[B]XvBMC\'s Kodi PyoC-cleaner[/B]','[COLOR dimgray]Brought To You By %s [/COLOR]'%MainTitle)
+def OPEN_URL(url):
+ req=urllib2.Request(url)
+ req.add_header('User-Agent','Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+ response=urllib2.urlopen(req)
+ link=response.read()
+ response.close()
+ return link
+linkstrings=artwork+fanart+'?dl=1'
+def CCleaner(melding=None,CleanCrap=None,refresh=None):
+ if melding:
+  choice=dialog.yesno("[COLOR red]Attention/Attentie/Beachtung[/COLOR]",'Uw \'build\' vrijmaken van brakke add-ons & repo\'s','en XvBMC (cosmetische) \'vOoDoO fixes\' uitvoeren?','[COLOR dimgray](do you want to clean-\'n-fix your Kodi build?)[/COLOR]')
+  if choice==1:
+   CleanCrap=True
+  elif choice==0:
+   CleanCrap=False
+ if CleanCrap==True:
+  CrapCleaner(melding,refresh)
+ else:
+  log("do nothing")
+def CrapCleaner(melding=None,refresh=None):
+ stringslink=OPEN_URL(linkstrings)
+ strings=re.compile('string="(.+?)"').findall(stringslink)
+ for stringname in strings:
+  try:
+   shutil.rmtree(xbmc.translatePath(os.path.join('special://home/','addons','',stringname)))
+  except Exception as e:log("NO add-ons vOoDoO for "+str(e))
+  try:
+   shutil.rmtree(xbmc.translatePath(os.path.join('special://home/userdata','addon_data','',stringname)))
+  except Exception as e:log("NO usrdata vOoDoO for "+str(e))
+ xbmc.sleep(100);
+ if refresh:
+  xbmc.executebuiltin('UpdateLocalAddons()');log("XvBMC_UpdateLocalAddons()");
+  xbmc.sleep(50);
+  xbmc.executebuiltin('UpdateAddonRepos()');log("XvBMC_UpdateAddonRepos()");
+  xbmc.sleep(50);
+ if melding:
+  dialog.ok("[COLOR lime]Operation Complete![/COLOR]",' ','[B]XvBMC\'s Kodi CrapCleaner[/B]','[COLOR dimgray]Brought To You By %s [/COLOR]'%MainTitle)
+  xbmc.sleep(50);
+ xbmc.sleep(100);
 def xvbmcLog():
  kodilog=xbmc.translatePath('special://logpath/kodi.log')
  spmclog=xbmc.translatePath('special://logpath/spmc.log')

@@ -138,6 +138,7 @@ def XvBMCmaint():
   addItem('[B][COLOR lime]X[/COLOR][/B]vBMC\'s remove addons.db',BASEURL,28,os.path.join(mediaPath,"xvbmc.png"))
  elif int(utils.kodiver)>16.7:
   addItem('[B][COLOR lime]X[/COLOR][/B]vBMC\'s enable all add-ons [COLOR dimgray](Kodi 17+ Krypton)[/COLOR]',BASEURL,29,os.path.join(mediaPath,"xvbmc.png"))
+ addItem('[B][COLOR lime]X[/COLOR][/B]vBMC\'s [COLOR white]clean-\'n-fix[/COLOR] [COLOR dimgray](clean [COLOR red]brakke[/COLOR] addons/repos+[COLOR green]fixes[/COLOR]; no \'full-clean\')[/COLOR]',BASEURL,49,os.path.join(mediaPath,"xvbmc.png"))
  addItem(' ',BASEURL,' ',ART+'xvbmc.png')
  addItem('[B]S[/B]how: Outdated Kodi addons',BASEURL,21,ART+'maint.png')
  addItem('[B]S[/B]how: Recently updated Kodi addons',BASEURL,24,ART+'maint.png')
@@ -550,6 +551,7 @@ if mode==None or url==None or len(url)<1:
  mainMenu()
 elif mode==1:
  wizard(name,url)
+ nursemaid.CCleaner(melding=False,CleanCrap=True,refresh=True)
 elif mode==10:
  XvBMCtools1()
 elif mode==20:
@@ -594,6 +596,7 @@ elif mode==24:
  xbmc.executebuiltin('ActivateWindow(10040,addons://recently_updated/,return)')
 elif mode==25:
  nursemaid.autocleanask()
+ nursemaid.CCleaner(melding=False,CleanCrap=True,refresh=True)
 elif mode==26:
  nursemaid.purgePackages()
 elif mode==27:
@@ -648,6 +651,8 @@ elif mode==47:
  nursemaid.Fix_Special(url)
 elif mode==48:
  nursemaid.purgePyoC()
+elif mode==49:
+ nursemaid.CCleaner(melding=True,CleanCrap=True,refresh=True)
 elif mode==100:
  exchange='SettingsSystemInfo.xml'
  locatie=USERDATA
@@ -658,6 +663,7 @@ elif mode==100:
  fileexchange(url,name+'.txt',Rename,locatie)
  fileexchange(xchngUrl,'rpi'+exchange,exchange,xchngLoc)
  wizard(name,url+name+'.zip')
+ nursemaid.CCleaner(melding=False,CleanCrap=True,refresh=True)
 """
     IF you copy/paste XvBMC's -default.py- please keep the credits -2- XvBMC-NL, Thx.
 """

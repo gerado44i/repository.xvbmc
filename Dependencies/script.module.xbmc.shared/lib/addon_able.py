@@ -3,8 +3,8 @@
 import os
 import xbmc,xbmcaddon,xbmcgui,xbmcplugin
 import common as Common
-AddonID='script.xvbmc.updatertools'
-ADDON=xbmcaddon.Addon(id=AddonID)
+addon_id=xbmcaddon.Addon().getAddonInfo('id')
+ADDON=xbmcaddon.Addon(id=addon_id)
 if Common.get_kversion()>16.5:
  try:from sqlite3 import dbapi2 as db_lib
  except:from pysqlite2 import dbapi2 as db_lib

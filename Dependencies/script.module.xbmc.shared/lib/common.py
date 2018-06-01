@@ -4,9 +4,25 @@ import xbmc,xbmcaddon,xbmcgui,xbmcplugin
 import base64,os,sys,time
 import re,urllib,urllib2
 import sqlite3
-AddonID='script.xvbmc.updatertools'
-ADDON=xbmcaddon.Addon(id=AddonID)
-addonInfo=xbmcaddon.Addon().getAddonInfo
+addon_id=xbmcaddon.Addon().getAddonInfo('id')
+addon_name=xbmcaddon.Addon().getAddonInfo('name')
+addon_icon=xbmcaddon.Addon().getAddonInfo('icon')
+ADDON=xbmcaddon.Addon(id=addon_id)
+home_folder=xbmc.translatePath('special://home/')
+addon_folder=os.path.join(home_folder,'addons','')
+art_path=os.path.join(addon_folder,addon_id,'')
+fanart=os.path.join(art_path,'fanart.jpg')
+profileDir=ADDON.getAddonInfo('profile')
+profileDir=xbmc.translatePath(profileDir).decode("utf-8")
+if not os.path.exists(profileDir):
+ os.makedirs(profileDir)
+rootDir=ADDON.getAddonInfo('path')
+if rootDir[-1]==';':
+ rootDir=rootDir[0:-1]
+rootDir=xbmc.translatePath(rootDir)
+mediaPath=os.path.join(rootDir,'resources\media','')
+addonFanart=os.path.join(rootDir,'fanart.jpg')
+addonIcon=os.path.join(rootDir,'icon.png')
 dialog=xbmcgui.Dialog()
 HOME=xbmc.translatePath('special://home/')
 MainTitle="XvBMC Nederland"
@@ -165,6 +181,19 @@ def killKodi():
   dialog.ok(waarschuwing,'If you\'re seeing this message it means the force close','was unsuccessful. Please force close XBMC/Kodi [COLOR=lime]DO NOT[/COLOR] exit via the menu.','(trying \'reboot\' after OK, else pull power cable.)')
   try:xbmc.executebuiltin("Reboot")
   except:pass
+def prettyReboot():
+ choice=xbmcgui.Dialog().yesno("[COLOR red]Force-Close Kodi[/COLOR]",'[CR][COLOR green][B]U MOET Kodi hertarten, is dit akkoord?[/B][/COLOR]','[COLOR dimgray]You MUST reboot Kodi, would you like to continue?[/COLOR]',nolabel='[COLOR dimgray]nee/no[/COLOR]',yeslabel='[COLOR lime]JA/Yes[/COLOR]')
+ if choice==0:
+  return
+ elif choice==1:
+  pass
+ try:xbmc.executebuiltin("Reboot")
+ except:pass
+ try:os.system('reboot')
+ except:pass
+ try:os._exit(1)
+ except:pass
+ dialog.ok(waarschuwing,'[CR]If you\'re seeing this message it means the force close','was unsuccessful. Please close/reboot Kodi yourself...','[COLOR dimgray](oOoOops niet gelukt, Kodi zelf ff herstarten a.u.b. thx.)[/COLOR]')
 def platform():
  if xbmc.getCondVisibility('system.platform.android'):return 'android'
  elif xbmc.getCondVisibility('system.platform.linux'):return 'linux'
@@ -192,8 +221,6 @@ def KODIVERSION():
  xvbmc_version=xbmc.getInfoLabel("System.BuildVersion");version=xvbmc_version[:4];
  log("XvBMC_v"+version)
  xvbmc_build=xbmc.getInfoLabel("System.BuildDate")
- xbmc.getInfoLabel("System.OSVersionInfo");xbmc.sleep(200);
- os_version=xbmc.getInfoLabel("System.OSVersionInfo")
  xbmc_iip=xbmc.getInfoLabel("Network.IPAddress")
  try:
   import urllib2 as urlreq
@@ -203,7 +230,9 @@ def KODIVERSION():
  req.add_header('User-Agent','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36')
  xbmc_eip=urlreq.urlopen(req).read()
  log('xbmc_eip ='+str(xbmc_eip))
- dialog.ok('[B]'+MainTitle+' [COLOR dodgerblue]-info-[/COLOR][/B]','Kodi version: [COLOR orange][B]%s[/B][/COLOR]'%version+' [B] & [/B] '+'(build compile: %s)'%xvbmc_build,'[COLOR dimgray]OS: %s'%os_version+'[/COLOR]','Build iP: [COLOR lime]%s[/COLOR] '%xbmc_iip+'[B] & [/B]'+' WWW iP: [COLOR red]%s[/COLOR]'%xbmc_eip)
+ xbmc.getInfoLabel("System.OSVersionInfo");xbmc.sleep(200);
+ os_version=xbmc.getInfoLabel("System.OSVersionInfo")
+ dialog.ok('[B]'+MainTitle+' [COLOR dodgerblue]-info-[/COLOR][/B]','Kodi version: [COLOR orange][B]%s[/B][/COLOR]'%version+' [B] & [/B] '+'(build compile: %s)'%xvbmc_build,'Build iP: [COLOR lime]%s[/COLOR] '%xbmc_iip+'[B] & [/B]'+' WWW iP: [COLOR red]%s[/COLOR]'%xbmc_eip,'OS info:[COLOR dimgray][CR]%s'%os_version+'[/COLOR]')
 def checkXvbmcVersie():
  if os.path.isfile(NoxSpinTxtBld):
   file=open(NoxSpinTxtBld,'r')
@@ -309,6 +338,13 @@ def infoTXT(heading,text):
    return
   except:
    pass
+def OPEN_URL(url):
+ req=urllib2.Request(url)
+ req.add_header('User-Agent','Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+ response=urllib2.urlopen(req)
+ link=response.read()
+ response.close()
+ return link
 def get_kversion():
  full_version_info=xbmc.getInfoLabel('System.BuildVersion')
  baseversion=full_version_info.split(".")
@@ -321,7 +357,7 @@ if get_kversion()>16.5:
  db_path=os.path.join(db_dir,'Addons27.db')
  conn=db_lib.connect(db_path)
  conn.text_factory=str
-def AddonsEnable():
+def AddonsEnable(melding=True):
  if get_kversion()>16.5:
   conn=sqlite3.connect(xbmc.translatePath("special://database/Addons27.db"))
   c=conn.cursor()
@@ -330,12 +366,13 @@ def AddonsEnable():
   conn.close()
   xbmc.executebuiltin('UpdateLocalAddons()');log("XvBMC_UpdateLocalAddons()");
   xbmc.executebuiltin('UpdateAddonRepos()');log("XvBMC_UpdateAddonRepos()");
-  choice=xbmcgui.Dialog().yesno(MainTitle+' : add-ons [B]enabled[/B]','[COLOR=green][B]!!!  FINISHED  !!![/B][/COLOR]','[B]Reboot[/B] Kodi to complete (\'yes\' is force close)','[B]Herstart[/B] Kodi ter afronding (ja is \'force close\')',yeslabel='[COLOR lime]Ja/Yes[/COLOR]',nolabel='[COLOR red]Nee/No[/COLOR]')
-  if choice==1:
-   os._exit(1)
-  else:pass
+  if melding:
+   choice=xbmcgui.Dialog().yesno(addon_id+' : add-ons [B]enabled[/B]','[COLOR green][B]!!!  FINISHED  !!![/B][/COLOR]','[B]Reboot[/B] Kodi to complete (\'yes\' is force close)','[B]Herstart[/B] Kodi ter afronding (ja is \'force close\')',yeslabel='[COLOR lime]Ja/Yes[/COLOR]',nolabel='[COLOR red]Nee/No[/COLOR]')
+   if choice==1:
+    os._exit(1)
+   else:pass
  else:
-  dialog.ok('Error Add-ons enable [COLOR red]ERROR[/COLOR]','[COLOR red][B]!!!  NOPE  !!![/B][/COLOR]','[US] you\'re not running Kodi v17 Krypton.','[NL] dit is geen Kodi v17 Krypton.')
+  dialog.ok('Add-ons enable(r) [COLOR red]ERROR[/COLOR]','[COLOR red][B]!!!  NOPE  !!![/B][/COLOR]','[US] you\'re not running Kodi v17 Krypton.','[NL] dit is geen Kodi v17 Krypton.')
 def EnableRTMP():
  try:addon_able.set_enabled("inputstream.adaptive")
  except:pass
@@ -345,10 +382,6 @@ def EnableRTMP():
  time.sleep(0.5)
  xbmc.executebuiltin('XBMC.UpdateLocalAddons()');log("XvBMC_UpdateLocalAddons()");
  dialog.ok("[B]Operation Complete![/B]",'[COLOR white]Live Streaming[/COLOR] has been [COLOR lime]Enabled![/COLOR]','[COLOR dimgray]Brought To You By %s '%MainTitle+'[/COLOR]')
-artwork=xbmc.translatePath(os.path.join('special://home','addons',AddonID,'/'))
-fanart=artwork+'fanart.jpg'
-def addonIcon():
- return artwork+'icon.png'
 def message(text1,text2="",text3=""):
  if text3=="":
   xbmcgui.Dialog().ok(text1,text2)
@@ -361,14 +394,14 @@ def message_yes_no(text1,text2="",text3=""):
  elif text2=="":yes_pressed=xbmcgui.Dialog().yesno("",text1)
  else:yes_pressed=xbmcgui.Dialog().yesno(text1,text2,text3)
  return yes_pressed
-def infoDialog(message,heading=addonInfo('name'),icon=addonIcon(),time=3000):
+def infoDialog(message,heading=addon_name,icon=addonIcon,time=3000):
  try:
   dialog.notification(heading,message,icon,time,sound=False)
  except:
   execute("Notification(%s,%s, %s, %s)"%(heading,message,time,icon))
-def okDialog(line1,line2,line3,heading=addonInfo('name')):
+def okDialog(line1,line2,line3,heading=addon_name):
  return dialog.ok(heading,line1,line2,line3)
-def yesnoDialog(line1,line2,line3,heading=addonInfo('name'),nolabel='[COLOR red]nee/nope[/COLOR]',yeslabel='[COLOR lime][B]JA/YES[/B][/COLOR]'):
+def yesnoDialog(line1,line2,line3,heading=addon_name,nolabel='[COLOR red]nee/nope[/COLOR]',yeslabel='[COLOR lime][B]JA/YES[/B][/COLOR]'):
  return dialog.yesno(heading,line1,line2,line3,nolabel,yeslabel)
 def log(msg,level=xbmc.LOGNOTICE):
  name='XvBMC_NOTICE'

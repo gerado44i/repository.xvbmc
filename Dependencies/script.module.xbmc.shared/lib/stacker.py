@@ -4,16 +4,25 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
-import os.path,sys,re,urllib,urllib2,cookielib,os
+import os.path,sys,re,base64,urllib,urllib2,cookielib,os
 from StringIO import StringIO
 import gzip,tempfile,time
 import xbmcvfs
+from common import log,AddonsEnable
+addon_id=xbmcaddon.Addon().getAddonInfo('id')
+addon_name=xbmcaddon.Addon().getAddonInfo('name')
+addon_icon=xbmcaddon.Addon().getAddonInfo('icon')
+ADDON=xbmcaddon.Addon(id=addon_id)
 progress=xbmcgui.DialogProgress()
 dialog=xbmcgui.Dialog()
-herstart='[COLOR white]PRESS OK TO FORCECLOSE AND REBOOT![/COLOR]'
-forceersluiten='[COLOR dimgray]indien forceclose niet werkt, herstart uw systeem handmatig, if forceclose does not work shutdown Kodi manually.[/COLOR]'
+Herstarten='[COLOR white]PRESS OK TO FORCECLOSE AND REBOOT![/COLOR]'
+ForceClose='[COLOR dimgray]indien forceclose niet werkt, Kodi handmatig herstarten[CR]if forceclose does not work, shutdown Kodi manually[/COLOR]'
+Doorgaan='druk op[B] OK [/B]om door te gaan met fase 2-2,[CR]press[B] OK [/B]to continue with fase 2-2...'
 __scriptid__="script.tar.gz.updater"
 addon=xbmcaddon.Addon(id=__scriptid__)
+toolupdate=base64.b64decode('aHR0cHM6Ly94dmJtY25sLnN0YWNrc3RvcmFnZS5jb20vcy9PREJkdzRjR2psOEVhTnk=')
+updateurl=base64.b64decode('aHR0cHM6Ly94dmJtY25sLnN0YWNrc3RvcmFnZS5jb20vcy9CTmhkbjdzTm80VUlMOUY=')
+upgradeurl=base64.b64decode('aHR0cHM6Ly94dmJtY25sLnN0YWNrc3RvcmFnZS5jb20vcy9MRk1keHZFYWc5U1pGeUE=')
 USER_AGENT='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 headers={'User-Agent':USER_AGENT,'Accept':'*/*','Connection':'keep-alive'}
 profileDir=addon.getAddonInfo('profile')
@@ -32,24 +41,43 @@ if cj!=None:
 else:
  opener=urllib2.build_opener()
 urllib2.install_opener(opener)
-def showFiles(url,location=1):
+def showFiles(url,location=1,xvbmc=2,melding=True):
  token=url.split('/')[4]
  domain=url.split('/')[2]
  listurl='https://%s/public-share/%s/list'%(domain,token)
  dlurl='https://%s/public-share/%s/download'%(domain,token)
  if location==1:
-  download_path=xbmc.translatePath(os.path.join('/storage/.update/',''))
+  if xbmc.getCondVisibility('System.HasAddon("service.openelec.settings")')+xbmc.getCondVisibility('System.HasAddon("service.libreelec.settings")'):
+   download_path=xbmc.translatePath(os.path.join('/storage/.update/',''))
+  else:
+   download_path=xbmc.translatePath(os.path.join('special://home/addons/packages',''))
+  if not os.path.exists(download_path):
+   os.makedirs(download_path);log("stacker.showFiles.DLpath1-FiX = "+str(download_path));
+  log("stacker.showFiles.DLpath1 = "+str(download_path));
+ elif location==2:
+  if xbmc.getCondVisibility('System.HasAddon("service.openelec.settings")')+xbmc.getCondVisibility('System.HasAddon("service.libreelec.settings")'):
+   download_path=xbmc.translatePath(os.path.join('/storage/.restore/',''))
+  else:
+   download_path=xbmc.translatePath(os.path.join('special://home/addons/packages',''))
+  if not os.path.exists(download_path):
+   os.makedirs(download_path);log("stacker.showFiles.DLpath2-FiX = "+str(download_path));
+  log("stacker.showFiles.DLpath2 = "+str(download_path));
  else:
- #download_path=xbmc.translatePath(os.path.join('/storage/.restore/',''))
-  download_path=xbmc.translatePath(os.path.join('/storage/.update/',''))
+  download_path=xbmc.translatePath(os.path.join('special://home/addons/packages',''))
+  if not os.path.exists(download_path):
+   os.makedirs(download_path);log("stacker.showFiles.DLpath3-FiX = "+str(download_path));
+  log("stacker.showFiles.DLpath3 = "+str(download_path));
  bestanden=[]
  filelist=getHtml(listurl)
  filelist=re.compile('path":"([^"]+)"',re.DOTALL|re.IGNORECASE).findall(filelist)
  for bestand in filelist:
   bestanden.append(urllib.unquote_plus(bestand[1:].replace('\u00','%')))
- vh=dialog.select('Select een bestand om te downloaden',bestanden)
- if vh==-1:
-  return
+ if len(bestanden)>1:
+  vh=dialog.select('Selecteer bestand om te downloaden',bestanden)
+  if vh==-1:
+   return
+ else:
+  vh=0
  dlpath=filelist[vh]
  dlname=bestanden[vh]
  dlpath=urllib.unquote_plus(dlpath.replace('\u00','%'))
@@ -63,16 +91,19 @@ def showFiles(url,location=1):
  fildl=downloadFile(fullurl,dlname,download_path)
  try:
   if os.path.isfile(fildl):
-   dialog.ok('[COLOR lime]DOWNLOAD FINISHED![/COLOR]',herstart,forceersluiten)
-   try:os.system('reboot')
-   except:pass
-   try:xbmc.executebuiltin("Reboot")
-   except:pass
+   if xvbmc==1:
+    if melding:
+     dialog.ok('[COLOR green]DOWNLOAD[B] '+str(xvbmc)+' [/B]FINISHED![/COLOR]',' ',Doorgaan)
+    log("stacker.showFiles = "+'loc:'+str(location)+'='+str(download_path)+' while xvbmc:'+str(xvbmc)+'=Step1')
+   else:
+    if melding:
+     dialog.ok('[COLOR green]DOWNLOAD [/COLOR][COLOR lime]FINISHED![/COLOR]',Herstarten,ForceClose)
+    log("stacker.showFiles = "+'loc:'+str(location)+'='+str(download_path)+' while xvbmc:'+str(xvbmc)+'=Final')
   else:
-   dialog.ok('Downloaden Mislukt','Downloaden mislukt','Probeer opnieuw','')
- except:dialog.ok('Downloaden Mislukt','Downloaden mislukt','Probeer opnieuw','')
+   dialog.ok('Download failed','Downloaden mislukt','Probeer opnieuw / Try again','')
+ except:dialog.ok('Download failed','Downloaden mislukt','Probeer opnieuw / Try again','')
 class StopDownloading(Exception):
- def __init__(self,value):self.value=value 
+ def __init__(self,value):self.value=value
  def __str__(self):return repr(self.value)
 def downloadFile(url,name,download_path):
  def _pbhook(downloaded,filesize,url=None,dp=None):
@@ -113,16 +144,16 @@ def downloadFile(url,name,download_path):
   file=dest.rsplit(os.sep,1)[-1]
   resp=getResponse(url,headers,0,data)
   if not resp:
-   xbmcgui.Dialog().ok("Downloaden Mislukt",'Download failed','No response from server')
+   xbmcgui.Dialog().ok("Download Failed/Mislukt",'download failed/mislukt','no response from server / geen reactie')
    return False
   try:content=int(resp.headers['Content-Length'])
   except:content=0
   try:resumable='bytes' in resp.headers['Accept-Ranges'].lower()
   except:resumable=False
   if resumable:
-   xbmc.log("Download is resumable")
+   log("EPiC_doDownload: Download is resumable")
   if content<1:
-   xbmcgui.Dialog().ok("Downloaden Mislukt",'Unknown filesize','Unable to download')
+   xbmcgui.Dialog().ok("Downloaden Failed/Mislukt",'unknown filesize / onbekende grootte','unable to download / downloaden lukt niet')
    return False
   size=8192
   mb=content/(1024*1024)
@@ -214,7 +245,7 @@ def downloadFile(url,name,download_path):
   start=time.clock()
   try:
    downloaded=doDownload(url,tmp_file,dp)
-   xbmc.log("Downloaded "+str(downloaded))
+   log("Downloaded = "+str(downloaded))
    if downloaded:
     vidfile=xbmc.makeLegalFilename(download_path+clean_filename(name))
     try:
@@ -272,3 +303,17 @@ def getCookiesString():
   import sys,traceback
   traceback.print_exc(file=sys.stdout)
  return cookieString
+def fixer(url,location,xvbmc):
+ log("XvBMC = "+str(xvbmc))
+ showFiles(toolupdate,3,2,melding=False)
+ import extract
+ dp=xbmcgui.DialogProgress()
+ dp.create('[COLOR hotpink][B]VoOdOo[/B][/COLOR]','XvBMC-NL: pull update [B]vOoDoO[/B]...',' ','Please Wait')
+ path=xbmc.translatePath(os.path.join('special://home/addons','packages'))
+ lib=os.path.join(path,'script.tar.gz.updater.zip')
+ addonfolder=xbmc.translatePath(os.path.join('special://home','addons'))
+ extract.all(lib,addonfolder,dp)
+ xbmc.sleep(500)
+ try:os.remove(lib)
+ except:pass
+ AddonsEnable(melding=False)

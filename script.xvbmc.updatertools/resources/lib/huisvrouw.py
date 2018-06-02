@@ -1,15 +1,17 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 import xbmc,xbmcaddon,xbmcgui,xbmcplugin
+import base64,urllib,urllib2
 import os,re,shutil,time
 import sqlite3
 import addon_able
 import common as Common
 from common import platform,subtitleNope,nonlinux,nonelecNL
 from common import log
-import base64,urllib,urllib2
-AddonID='script.xvbmc.updatertools'
-ADDON=xbmcaddon.Addon(id=AddonID)
+addon_id=xbmcaddon.Addon().getAddonInfo('id')
+addon_name=xbmcaddon.Addon().getAddonInfo('name')
+addon_icon=xbmcaddon.Addon().getAddonInfo('icon')
+ADDON=xbmcaddon.Addon(id=addon_id)
 artwork=base64.b64decode('aHR0cHM6Ly93d3cuZHJvcGJveC5jb20=')
 thumbnailPath=xbmc.translatePath('special://thumbnails');
 cachePath=os.path.join(xbmc.translatePath('special://home'),'cache')
@@ -528,11 +530,17 @@ def CrapCleaner(melding=None,refresh=None):
  strings=re.compile('string="(.+?)"').findall(stringslink)
  for stringname in strings:
   try:
-   shutil.rmtree(xbmc.translatePath(os.path.join('special://home/','addons','',stringname)))
-  except Exception as e:log("NO add-ons vOoDoO for "+str(e))
+   removeAddons=xbmc.translatePath(os.path.join('special://home/','addons','',stringname))
+   if os.path.exists(removeAddons):
+    shutil.rmtree(removeAddons);log("EPiC: VoOdOo for "+str(removeAddons));
+   else:pass
+  except Exception as e:log("NO! add-ons vOoDoO for "+str(e))
   try:
-   shutil.rmtree(xbmc.translatePath(os.path.join('special://home/userdata','addon_data','',stringname)))
-  except Exception as e:log("NO usrdata vOoDoO for "+str(e))
+   removeUsradd=xbmc.translatePath(os.path.join('special://home/userdata','addon_data','',stringname))
+   if os.path.exists(removeUsradd):
+    shutil.rmtree(removeUsradd);log("EPiC: vOoDoO for "+str(removeUsradd));
+   else:pass
+  except Exception as e:log("NO! usrdata vOoDoO for "+str(e))
  xbmc.sleep(100);
  if refresh:
   xbmc.executebuiltin('UpdateLocalAddons()');log("XvBMC_UpdateLocalAddons()");

@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 import re,base64,urllib,urllib2,sys,xbmcvfs
 import xbmc,xbmcaddon,xbmcgui,xbmcplugin
-import os,shutil,time
+import os,shutil,stacker,time
 import sqlite3
 import utils
 import addon_able
@@ -15,21 +15,32 @@ from common import NoxSpinTxtBld,NoxSpinUrlBld
 from resources.lib import huisvrouw as nursemaid
 from resources.lib import rpioc as overclck
 from resources.lib import rpidev as rpidevc
-ADDON=utils.ADDON
-ADDON_ID=xbmcaddon.Addon().getAddonInfo('id')
-AddonID='script.xvbmc.updatertools'
+addon_id=xbmcaddon.Addon().getAddonInfo('id')
+addon_name=xbmcaddon.Addon().getAddonInfo('name')
+addon_icon=xbmcaddon.Addon().getAddonInfo('icon')
+ADDON=xbmcaddon.Addon(id=addon_id)
+home_folder=xbmc.translatePath('special://home/')
+addon_folder=os.path.join(home_folder,'addons','')
+art_path=os.path.join(addon_folder,addon_id,'')
 AddonTitle='XvBMC Nederland'
-addonPath=os.path.join(os.path.join(xbmc.translatePath('special://home'),'addons'),'script.xvbmc.updatertools')
-ART=xbmc.translatePath(os.path.join('special://home/addons/'+AddonID+'/resources/media/'))
-artwork=base64.b64decode('c2tpbi5hZW9uLm5veC5zcGlu')
-FANART=xbmc.translatePath(os.path.join('special://home/addons/'+AddonID,'fanart.jpg'))
-FANARTsub=xbmc.translatePath(os.path.join('special://home/addons/'+AddonID+'/resources/media/','art.jpg'))
-ICON=xbmc.translatePath(os.path.join('special://home/addons/'+AddonID,'icon.png'))
 MainTitle=AddonTitle
-mediaPath=os.path.join(addonPath,'resources/media')
 U=ADDON.getSetting('User')
 USER_AGENT='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
+profileDir=ADDON.getAddonInfo('profile')
+profileDir=xbmc.translatePath(profileDir).decode("utf-8")
+if not os.path.exists(profileDir):
+ os.makedirs(profileDir)
+rootDir=ADDON.getAddonInfo('path')
+if rootDir[-1]==';':
+ rootDir=rootDir[0:-1]
+rootDir=xbmc.translatePath(rootDir)
+mediaPath=os.path.join(rootDir,'resources\media','')
+addonFanart=os.path.join(rootDir,'fanart.jpg')
+addonIcon=os.path.join(rootDir,'icon.png')
+SubFanart=os.path.join(rootDir,'resources\media','rpi1.jpg')
 About='[COLOR dimgray][B]X[/B]v[B]BMC[/B] disclaimer & usage policy[/COLOR]'
+AddonsOutdated='[COLOR red]Outdated[/COLOR] Kodi addons'
+AddonsRecentUpd='[COLOR green]Recently updated[/COLOR] Kodi addons'
 Terug='[COLOR dimgray]<<<back[/COLOR]'
 dialog=xbmcgui.Dialog()
 dp=xbmcgui.DialogProgress()
@@ -39,7 +50,7 @@ xvbmcSPcheck='[COLOR gray][B] - [/B]your service pack: [I]unknown[/I] [/COLOR]'
 xvbmcUnknown='[COLOR orange]unknown build status; force update?[/COLOR] [COLOR red][B](continue at your own risk)[/B][/COLOR]'
 xbmcver=xbmc.getInfoLabel("System.BuildVersion")[:4]
 databasePath=xbmc.translatePath('special://database')
-EXCLUDES=[ADDON_ID,'skin.estuary','plugin.program.xvbmcinstaller.nl','repository.xvbmc','script.module.xbmc.shared','script.xvbmc.updatertools']
+EXCLUDES=[addon_id,'skin.estuary','plugin.program.xvbmcinstaller.nl','repository.xvbmc','script.module.xbmc.shared','script.xvbmc.updatertools']
 HOME=xbmc.translatePath('special://home/')
 skin=xbmc.getSkinDir()
 USERDATA=xbmc.translatePath(os.path.join('special://home/userdata',''))
@@ -58,144 +69,147 @@ def mainMenu():
  if update=="NoxSpinUpdate":
   updatetxt="[COLOR orange]XvBMC update available[B]: %s[/B][/COLOR]"%(updateversie)+'[COLOR orange] (NoxSpin)[/COLOR]'
   Link=base64.b64decode(basewiz)+'noxspin-sp.zip'
-  addDir('%s'%updatetxt,Link,1,ART+'xvbmc.png',FANART,' ')
+  addDir('%s'%updatetxt,Link,1,addonIcon,addonFanart,'',False)
  elif update=="notinstalled":
   if xbmc.getCondVisibility('System.HasAddon(skin.aeon.nox.spin)'):
    if os.path.isfile(NoxSpinTxtBld):
     if xbmc.getCondVisibility('System.HasAddon("service.openelec.settings")')+xbmc.getCondVisibility('System.HasAddon("service.libreelec.settings")'):
      updatetxt="[COLOR orange]unknown [COLOR red]RPi[/COLOR] (NoxSpin) version; force update[B]?[/B][/COLOR] [COLOR lime] (continue?)[/COLOR]"
      forceRPi=base64.b64decode(basewiz)
-     addDir('%s'%updatetxt,forceRPi,100,ART+'xvbmc.png',FANART,' ')
+     addDir('%s'%updatetxt,forceRPi,100,mediaPath+'xvbmc.png',addonFanart,'',False)
     else:
      updatetxt="[COLOR orange]Sorry (NoxSpin) wizard status [COLOR red]unknown[/COLOR], continue anyway[B]?[/B][/COLOR]"
      Link=base64.b64decode(basewiz)+'noxspin-sp.zip'
-     addDir('%s'%updatetxt,Link,1,ART+'xvbmc.png',FANART,' ')
+     addDir('%s'%updatetxt,Link,1,addonIcon,addonFanart,'',False)
    elif os.path.isfile(Common.bldversietxt):
     updatetxt="[COLOR orange][B]OLD[/B] (NoxSpin) portable status [COLOR red]unknown[/COLOR], continue anyway[B]?[/B][/COLOR]"
     Link=base64.b64decode(basewiz)+'noxspin-sp.zip'
-    addDir('%s'%updatetxt,Link,1,ART+'xvbmc.png',FANART,' ')
+    addDir('%s'%updatetxt,Link,1,addonIcon,addonFanart,'',False)
    elif os.path.isfile(Common.bldversietxtwiz):
     updatetxt="[COLOR orange][B]OLD[/B] (NoxSpin) wizard status [COLOR red]unknown[/COLOR], continue anyway[B]?[/B][/COLOR]"
     Link=base64.b64decode(basewiz)+'noxspin-sp.zip'
-    addDir('%s'%updatetxt,Link,1,ART+'xvbmc.png',FANART,' ')
+    addDir('%s'%updatetxt,Link,1,mediaPath+'xvbmc.png',addonFanart,'',False)
    else:
     if xbmc.getCondVisibility('System.HasAddon("service.openelec.settings")')+xbmc.getCondVisibility('System.HasAddon("service.libreelec.settings")'):
      updatetxt="[COLOR orange]unknown [COLOR red]RPi[/COLOR] build status; force update[B]?[/B][/COLOR] [COLOR lime] (continue?)[/COLOR]"
      forceRPi=base64.b64decode(basewiz)
-     addDir('%s'%updatetxt,forceRPi,100,ART+'xvbmc.png',FANART,' ')
+     addDir('%s'%updatetxt,forceRPi,100,mediaPath+'xvbmc.png',addonFanart,'',False)
     else:
      forceLink=base64.b64decode(basewiz)+'noxspin-sp.zip'
-     addDir('%s'%xvbmcUnknown,forceLink,1,ART+'xvbmc.png',FANART,' ')
+     addDir('%s'%xvbmcUnknown,forceLink,1,mediaPath+'xvbmc.png',addonFanart,'',False)
   else:
    updatetxt="[COLOR orange]Sorry, [COLOR red][B]unknown[/B][/COLOR] build/servicepack/update status [B] :[/B]\'-([/COLOR]"
-   addItem('%s'%updatetxt,BASEURL,4,ART+'xvbmc.png')
+   addItem('%s'%updatetxt,BASEURL,4,addonIcon,'')
  else:
   if xbmc.getCondVisibility('System.HasAddon("service.openelec.settings")')+xbmc.getCondVisibility('System.HasAddon("service.libreelec.settings")'):
    updatetxt="[COLOR orange]You have the [B]latest[/B] [COLOR red]XvBMC[/COLOR] [COLOR lime][B]RPi[/B][/COLOR] updates [B] 3:[/B]-)[/COLOR]"
-   addItem('%s'%updatetxt,BASEURL,4,ART+'xvbmc.png')
+   addItem('%s'%updatetxt,BASEURL,4,mediaPath+'xvbmc.png','')
   else:
    updatetxt="[COLOR orange]You have the [B]latest[/B] XvBMC updates [B] :[/B]-)[/COLOR]"
-   addItem('%s'%updatetxt,BASEURL,4,ART+'xvbmc.png')
+   addItem('%s'%updatetxt,BASEURL,4,addonIcon,'')
  if xbmc.getCondVisibility('System.HasAddon("service.openelec.settings")')+xbmc.getCondVisibility('System.HasAddon("service.libreelec.settings")'):
-  addDir('[COLOR orange] [B] »--> [/B]XvBMC [B]Raspberry[/B] Pi [B]»-->[/B] Tools, DEV. [B]&[/B] Maintenance [B]»-->[/B][/COLOR]',BASEURL,30,ART+'RPi.png',FANARTsub,' ')
- addItem(' ',BASEURL,' ',ART+'xvbmc.png')
- addDir('[COLOR red]XvBMC Tools[/COLOR]',BASEURL,10,ART+'tools.png',os.path.join(mediaPath,"gereedschap.jpg"),' ')
- addDir('[COLOR white]XvBMC Maintenance[/COLOR]',BASEURL,20,ART+'maint.png',os.path.join(mediaPath,"onderhoud.jpg"),' ')
- addDir('[COLOR dodgerblue]XvBMC About/info[/COLOR]',BASEURL,2,ART+'wtf.png',os.path.join(mediaPath,"over.jpg"),' ')
- addItem(' ',BASEURL,' ',ART+'xvbmc.png')
- addItem('[COLOR gray]system information (Kodi [B]%s[/B])'%xbmcver+' ; click for more info[B]:[/B][/COLOR]',BASEURL,16,ART+'xvbmc.png')
+  addDir('[COLOR orange] [B] »--> [/B]XvBMC [B]Raspberry[/B] Pi [B]»-->[/B] Tools, DEV. [B]&[/B] Maintenance [B]»-->[/B][/COLOR]',BASEURL,30,mediaPath+'RPi.png',SubFanart,'',True)
+ addDir('',BASEURL,666,addonIcon,'','',False)
+ addDir('[COLOR red]XvBMC Tools[/COLOR]',BASEURL,10,mediaPath+'tools.png',mediaPath+'tools.jpg','',True)
+ addDir('[COLOR white]XvBMC Maintenance[/COLOR]',BASEURL,20,mediaPath+'maint.png',mediaPath+'maintenance.jpg','',True)
+ addDir('[COLOR dodgerblue]XvBMC About/info[/COLOR]',BASEURL,2,mediaPath+'wtf.png',mediaPath+'over.jpg','',False)
+ addDir('',BASEURL,666,addonIcon,'','',False)
+ addItem('[COLOR gray]system information (Kodi [B]%s[/B])'%xbmcver+' ; click for more info[B]:[/B][/COLOR]',BASEURL,16,mediaPath+'wtf.png','')
  global xvbmcSPcheck
  currentOnly,xvbmcVersie=utils.checkUpdate(onlycurrent=True)
  if xvbmcVersie=="NoxSpinUpdate":
   try:NoxSpinOnline=utils.getHtml2(NoxSpinUrl)
   except:NoxSpinOnline='unknown'
   xvbmcSPcheck='[COLOR gray][B] - [/B]your service pack: %s [/COLOR]'%(currentOnly+' [COLOR dimgray][I](online: %s)[/I][/COLOR]'%NoxSpinOnline)
- addItem('%s'%xvbmcSPcheck,BASEURL,5,os.path.join(mediaPath,"wtf.png"))
+ addItem('%s'%xvbmcSPcheck,BASEURL,5,mediaPath+'wtf.png','')
  global buildinfotxt
  buildinfo,buildversie=Common.checkXvbmcVersie()
  if buildinfo=="NoxSpinTxtBld":
   try:bldversion=utils.getHtml2(NoxSpinUrlBld)
   except:bldversion='unknown'
   buildinfotxt='[COLOR gray][B] - [/B]your wizard build: %s [/COLOR]'%(buildversie+' [COLOR dimgray][I](current wiz.: %s)[/I][/COLOR]'%bldversion)
- addItem('%s'%buildinfotxt,BASEURL,6,os.path.join(mediaPath,"wtf.png"))
+ addItem('%s'%buildinfotxt,BASEURL,6,mediaPath+'wtf.png','')
  if os.path.isfile(xxxCheck):
   if xbmc.getCondVisibility('System.HasAddon("plugin.program.super.favourites")'):
-   addItem(' ',BASEURL,' ',ART+'xvbmc.png')
-   addItem(xxxDirty,BASEURL,69,xxxIcon)
+   addDir('',BASEURL,666,addonIcon,'','',False)
+   addItem(xxxDirty,BASEURL,69,xxxIcon,'')
   else:
-   addItem(' ',BASEURL,' ',ART+'xvbmc.png')
-   addItem('[COLOR red]\'Super Favourites\' is missing, [COLOR lime][I]click here [/I][/COLOR] to (re-)install & enable [B]18+[/B][/COLOR]',BASEURL,70,xxxIcon)
- addItem(' ',BASEURL,' ',ART+'xvbmc.png')
- addItem(Terug,BASEURL,3,os.path.join(mediaPath,"xvbmc.png"))
+   addDir('',BASEURL,666,addonIcon,'','',False)
+   addItem('[COLOR red]\'Super Favourites\' is missing, [COLOR lime][I]click here [/I][/COLOR] to (re-)install & enable [B]18+[/B][/COLOR]',BASEURL,70,xxxIcon,'')
+ addDir('',BASEURL,666,addonIcon,'','',False)
+ addItem(Terug,BASEURL,3,addonIcon,'')
  Common.setView('movies','EPiC')
 def XvBMCmaint():
- addItem('[B]C[/B]lear cache',BASEURL,22,os.path.join(mediaPath,"maint.png"))
- addItem('[B]D[/B]elete thumbnails',BASEURL,23,os.path.join(mediaPath,"maint.png"))
- addItem('[B]F[/B]ull clean [COLOR dimgray](cache, crashlogs, packages & thumbnails)[/COLOR]',BASEURL,25,os.path.join(mediaPath,"maint.png"))
- addItem('[B]P[/B]urge packages',BASEURL,26,os.path.join(mediaPath,"maint.png"))
- addItem('[B]R[/B]efresh addons[COLOR white]+[/COLOR]repos',BASEURL,27,os.path.join(mediaPath,"maint.png"))
+ addItem('[B]C[/B]lear cache',BASEURL,22,mediaPath+'maint.png','')
+ addItem('[B]D[/B]elete thumbnails',BASEURL,23,mediaPath+'maint.png','')
+ addItem('[B]F[/B]ull clean [COLOR dimgray](cache, crashlogs, packages & thumbnails)[/COLOR]',BASEURL,25,mediaPath+'maint.png','')
+ addItem('[B]P[/B]urge packages',BASEURL,26,mediaPath+'maint.png','')
+ addItem('[B]R[/B]efresh addons[COLOR white]+[/COLOR]repos',BASEURL,27,mediaPath+'maint.png','')
+ addDir('',BASEURL,666,addonIcon,'','',False)
+ addItem('[B]S[/B]how: '+AddonsOutdated,BASEURL,21,mediaPath+'tools.png','')
+ addItem('[B]S[/B]how: '+AddonsRecentUpd,BASEURL,24,mediaPath+'tools.png','')
+ addDir('',BASEURL,666,addonIcon,'','',False)
  if int(utils.kodiver)<=16.7:
-  addItem('[B][COLOR lime]X[/COLOR][/B]vBMC\'s remove addons.db',BASEURL,28,os.path.join(mediaPath,"xvbmc.png"))
+  addItem('[B][COLOR lime]X[/COLOR][/B]vBMC\'s remove addons.db',BASEURL,28,addonIcon,'')
  elif int(utils.kodiver)>16.7:
-  addItem('[B][COLOR lime]X[/COLOR][/B]vBMC\'s enable all add-ons [COLOR dimgray](Kodi 17+ Krypton)[/COLOR]',BASEURL,29,os.path.join(mediaPath,"xvbmc.png"))
- addItem('[B][COLOR lime]X[/COLOR][/B]vBMC\'s [COLOR white]clean-\'n-fix[/COLOR] [COLOR dimgray](clean [COLOR red]brakke[/COLOR] addons/repos+[COLOR green]fixes[/COLOR]; no \'full-clean\')[/COLOR]',BASEURL,49,os.path.join(mediaPath,"xvbmc.png"))
- addItem(' ',BASEURL,' ',ART+'xvbmc.png')
- addItem('[B]S[/B]how: Outdated Kodi addons',BASEURL,21,ART+'maint.png')
- addItem('[B]S[/B]how: Recently updated Kodi addons',BASEURL,24,ART+'maint.png')
- addItem(' ',BASEURL,' ',ART+'xvbmc.png')
- addItem(About,BASEURL,2,os.path.join(mediaPath,"wtf.png"))
- addItem(Terug,BASEURL,3,os.path.join(mediaPath,"xvbmc.png"))
+  addItem('[B][COLOR lime]X[/COLOR][/B]vBMC\'s enable all \'available/current\' add-ons util [COLOR dimgray](Kodi 17[B]+[/B])[/COLOR]',BASEURL,29,addonIcon,'')
+ addItem('[B][COLOR lime]X[/COLOR][/B]vBMC\'s [COLOR white]clean-\'n-fix[/COLOR] [COLOR dimgray](clean [COLOR red]brakke[/COLOR] addons/repos+[COLOR green]fixes[/COLOR]; no \'full-clean\')[/COLOR]',BASEURL,49,addonIcon,'')
+ addDir('',BASEURL,666,addonIcon,'','',False)
+ addItem(About,BASEURL,2,mediaPath+'wtf.png','')
+ addItem(Terug,BASEURL,3,addonIcon,'')
  Common.setView('movies','EPiC')
 def XvBMCtools1():
- addItem('[B]E[/B]nable Kodi Addons [COLOR dimgray](Kodi 17+ Krypton; [COLOR white]most[/COLOR] add-ons)[/COLOR]',BASEURL,12,os.path.join(mediaPath,"maint.png"))
- addItem('[B]E[/B]nable Kodi Addons [COLOR dimgray](Kodi 17+ Krypton; [COLOR white]all[/COLOR] add-ons)[/COLOR]',BASEURL,13,os.path.join(mediaPath,"maint.png"))
- addItem('[B]E[/B]nable Kodi Live Streams [COLOR dimgray](17+ Krypton; [COLOR white]RTMP[/COLOR])[/COLOR]',BASEURL,14,os.path.join(mediaPath,"maint.png"))
- addItem('[B]F[/B]orce close Kodi  [COLOR dimgray](Kill Kodi)[/COLOR]',BASEURL,15,os.path.join(mediaPath,"maint.png"))
- addItem('[B]L[/B]og viewer [COLOR dimgray](show \'kodi.log\')[/COLOR]',BASEURL,17,os.path.join(mediaPath,"maint.png"))
- addItem('[B]R[/B]esolveURL  -> settings',BASEURL,8,os.path.join(mediaPath,"maint.png"))
- addItem('[B]U[/B]RLResolver -> settings',BASEURL,18,os.path.join(mediaPath,"maint.png"))
- addItem('[B][COLOR lime]X[/COLOR][/B]vBMC\'s Advancedsettings unlocker [COLOR dimgray](reset)[/COLOR]',BASEURL,19,os.path.join(mediaPath,"xvbmc.png"))
- addDir('[B][COLOR lime]X[/COLOR][/B]vBMC\'s [COLOR white][B]H[/B]idden [B]g[/B]ems[B] & [/B][B]M[/B]ore [B]t[/B]ools[/COLOR] [COLOR dimgray](T[COLOR dodgerblue]i[/COLOR]P[B]!![/B])[/COLOR]',BASEURL,40,ART+'xvbmc.png',os.path.join(mediaPath,"gereedschap.jpg"),' ')
- addItem(' ',BASEURL,' ',ART+'xvbmc.png')
- addItem(About,BASEURL,2,os.path.join(mediaPath,"wtf.png"))
- addItem(Terug,BASEURL,3,os.path.join(mediaPath,"xvbmc.png"))
+ addItem('[B]E[/B]nable Kodi 17+ Addons [COLOR dimgray]([COLOR red]exc.[/COLOR] audiodec./inputstr./pvr/scrsvr/visualize.)[/COLOR]',BASEURL,12,mediaPath+'maint.png','')
+ addItem('[B]E[/B]nable Kodi 17+ Addons [COLOR dimgray]([COLOR green]ALL[/COLOR] available/current add-ons)[/COLOR]',BASEURL,13,mediaPath+'maint.png','')
+ addItem('[B]E[/B]nable Kodi 17+ Live Streams [COLOR dimgray](RTMP / InputStream Adaptive)[/COLOR]',BASEURL,14,mediaPath+'maint.png','')
+ addItem('[B]F[/B]orce close Kodi  [COLOR dimgray](Kill Kodi)[/COLOR]',BASEURL,15,mediaPath+'maint.png','')
+ addItem('[B]L[/B]og viewer [COLOR dimgray](show \'kodi.log\')[/COLOR]',BASEURL,17,mediaPath+'maint.png','')
+ addDir('',BASEURL,666,addonIcon,'','',False)
+ addItem('[B]R[/B]esolveURL  -> settings',BASEURL,8,mediaPath+'tools.png','')
+ addItem('[B]U[/B]RLResolver -> settings',BASEURL,18,mediaPath+'tools.png','')
+ addDir('',BASEURL,666,addonIcon,'','',False)
+ addItem('[B][COLOR lime]X[/COLOR][/B]vBMC\'s Advancedsettings unlocker [COLOR dimgray](reset)[/COLOR]',BASEURL,19,addonIcon,'')
+ addDir('[B][COLOR lime]X[/COLOR][/B]vBMC\'s [COLOR white][B]H[/B]idden [B]g[/B]ems[B] & [/B][B]M[/B]ore [B]t[/B]ools[/COLOR] [COLOR dimgray](T[COLOR dodgerblue]i[/COLOR]P[B]!![/B])[/COLOR]',BASEURL,40,addonIcon,addonFanart,'',True)
+ addDir('',BASEURL,666,addonIcon,'','',False)
+ addItem(About,BASEURL,2,mediaPath+'wtf.png','')
+ addItem(Terug,BASEURL,3,addonIcon,'')
  Common.setView('movies','EPiC')
 def XvBMCrpi():
- addItem('[COLOR white][B]R[/B][/COLOR]aspberry [COLOR white]Pi[/COLOR] extreme crapcleaner [COLOR dimgray]([B]no[/B] factory reset)[/COLOR]',BASEURL,31,os.path.join(mediaPath,"tools.png"))
- addItem('[COLOR white][B]R[/B][/COLOR]aspberry [COLOR white]Pi[/COLOR] overclock [COLOR dimgray](Raspberry Pi ***[B]only[/B]***)[/COLOR]',BASEURL,32,os.path.join(mediaPath,"overclock.png"))
- addItem('[COLOR white][B]R[/B][/COLOR]aspberry [COLOR white]Pi[/COLOR] #dev# corner [COLOR dimgray](firmware,OS,update)[/COLOR]',BASEURL,33,os.path.join(mediaPath,"firmware.png"))
- addItem(' ',BASEURL,' ',ART+'xvbmc.png')
- addItem('[COLOR white][B]S[/B][/COLOR]how: [COLOR red]Outdated[/COLOR] Kodi addons',BASEURL,21,ART+'maint.png')
- addItem('[COLOR white][B]S[/B][/COLOR]how: [COLOR green]Recently updated[/COLOR] Kodi addons',BASEURL,24,ART+'maint.png')
- addItem(' ',BASEURL,' ',ART+'xvbmc.png')
- addDir('[B][COLOR lime]X[/COLOR][/B]vBMC\'s [COLOR white]H[/COLOR]idden [COLOR white]g[/COLOR]ems & [COLOR white]M[/COLOR]ore [COLOR white]t[/COLOR]ools [COLOR dimgray](T[COLOR dodgerblue]i[/COLOR]P[B]!!![/B])[/COLOR]',BASEURL,40,ART+'xvbmc.png',os.path.join(mediaPath,"gereedschap.jpg"),' ')
- addDir('[B][COLOR lime]X[/COLOR][/B]vBMC\'s [COLOR white]M[/COLOR]aintenance [COLOR dimgray](back to main menu)[/COLOR]',BASEURL,20,ART+'maint.png',os.path.join(mediaPath,"onderhoud.jpg"),' ')
- addDir('[B][COLOR lime]X[/COLOR][/B]vBMC\'s [COLOR white]T[/COLOR]ools [COLOR dimgray](back to main menu)[/COLOR]',BASEURL,10,ART+'tools.png',os.path.join(mediaPath,"gereedschap.jpg"),' ')
- addItem(' ',BASEURL,' ',ART+'xvbmc.png')
- addItem(About,BASEURL,2,os.path.join(mediaPath,"wtf.png"))
- addItem(Terug,BASEURL,3,os.path.join(mediaPath,"xvbmc.png"))
+ addItem('[COLOR white][B]R[/B][/COLOR]aspberry [COLOR white]Pi[/COLOR] extreme crapcleaner [COLOR dimgray]([B]no[/B] factory reset)[/COLOR]',BASEURL,31,mediaPath+'evilpi.png',mediaPath+'rpi2.jpg')
+ addItem('[COLOR white][B]R[/B][/COLOR]aspberry [COLOR white]Pi[/COLOR] overclock [COLOR dimgray](Raspberry Pi ***[B]only[/B]***)[/COLOR]',BASEURL,32,mediaPath+'overclock.png',mediaPath+'rpi2.jpg')
+ addItem('[COLOR white][B]R[/B][/COLOR]aspberry [COLOR white]Pi[/COLOR] #dev# corner [COLOR dimgray](firmware,OS,update)[/COLOR]',BASEURL,33,mediaPath+'firmware.png',mediaPath+'rpi2.jpg')
+ addDir('',BASEURL,666,mediaPath+'raspi.png','','',False)
+ addItem('[COLOR white][B]S[/B][/COLOR]how: '+AddonsOutdated,BASEURL,21,mediaPath+'rpitools.png',mediaPath+'rpi2.jpg')
+ addItem('[COLOR white][B]S[/B][/COLOR]how: '+AddonsRecentUpd,BASEURL,24,mediaPath+'rpitools.png',mediaPath+'rpi2.jpg')
+ addDir('',BASEURL,666,mediaPath+'raspi.png','','',False)
+ addDir('[B][COLOR lime]X[/COLOR][/B]vBMC\'s [COLOR white]H[/COLOR]idden [COLOR white]g[/COLOR]ems & [COLOR white]M[/COLOR]ore [COLOR white]t[/COLOR]ools [COLOR dimgray](T[COLOR dodgerblue]i[/COLOR]P[B]!!![/B])[/COLOR]',BASEURL,40,mediaPath+'xvbmc.png',mediaPath+'rpi2.jpg','',True)
+ addDir('[B][COLOR lime]X[/COLOR][/B]vBMC\'s [COLOR white]M[/COLOR]aintenance [COLOR dimgray](back to main menu)[/COLOR]',BASEURL,20,mediaPath+'xvbmc.png',mediaPath+'rpi2.jpg','',True)
+ addDir('[B][COLOR lime]X[/COLOR][/B]vBMC\'s [COLOR white]T[/COLOR]ools [COLOR dimgray](back to main menu)[/COLOR]',BASEURL,10,mediaPath+'xvbmc.png',mediaPath+'rpi2.jpg','',True)
+ addDir('',BASEURL,666,mediaPath+'raspi.png','','',False)
+ addItem(About,BASEURL,2,mediaPath+'wtf.png',mediaPath+'rpi2.jpg')
+ addItem(Terug,BASEURL,3,addonIcon,mediaPath+'rpi2.jpg')
  Common.setView('movies','EPiC')
 def XvBMCtools2():
- addItem('[B]K[/B]odi Quick Reset [COLOR dimgray](\"rejuvenate\" XvBMC-NL build)[/COLOR]',BASEURL,41,os.path.join(mediaPath,"maint.png"))
- addItem('[B]K[/B]odi Factory Reset [COLOR dimgray](complete Kodi Krypton wipe)[/COLOR]',BASEURL,42,os.path.join(mediaPath,"maint.png"))
- addItem('[B]K[/B]odi Fresh Start [COLOR dimgray](wipe for older Kodi\'s)[/COLOR]',BASEURL,43,os.path.join(mediaPath,"maint.png"))
- addItem('[B]P[/B]ush Fixes [COLOR dimgray](for XvBMC builds)[/COLOR]',BASEURL,44,os.path.join(mediaPath,"maint.png"))
- addItem('[B]P[/B]ush XvBMC REPOsitory [COLOR dimgray](install or fix repo)[/COLOR]',BASEURL,45,os.path.join(mediaPath,"maint.png"))
+ addItem('[B]K[/B]odi Quick Reset [COLOR dimgray](\"rejuvenate\" XvBMC-NL build)[/COLOR]',BASEURL,41,mediaPath+'maint.png','')
+ addItem('[B]K[/B]odi Factory Reset [COLOR dimgray](complete Kodi Krypton wipe)[/COLOR]',BASEURL,42,mediaPath+'maint.png','')
+ addItem('[B]K[/B]odi Fresh Start [COLOR dimgray](wipe for older Kodi\'s)[/COLOR]',BASEURL,43,mediaPath+'maint.png','')
+ addItem('[B]P[/B]ush [COLOR lime]Fix[/COLOR]es and/or updates [COLOR dimgray](for XvBMC builds)[/COLOR]',BASEURL,44,mediaPath+'maint.png','')
+ addItem('[B]P[/B]ush XvBMC REPOsitory [COLOR dimgray](install or fix repo)[/COLOR]',BASEURL,45,mediaPath+'maint.png','')
  if os.path.isfile(xxxCheck):
   if xbmc.getCondVisibility('System.HasAddon("plugin.program.super.favourites")'):
-   addItem(' ',BASEURL,' ',ART+'xvbmc.png')
-   addItem('[COLOR hotpink]activated: [/COLOR]'+xxxDirty,BASEURL,69,xxxIcon)
+   addDir('',BASEURL,666,addonIcon,'','',False)
+   addItem('[COLOR hotpink]activated: [/COLOR]'+xxxDirty,BASEURL,69,xxxIcon,'')
   else:
-   addItem(' ',BASEURL,' ',ART+'xvbmc.png')
-   addItem('[COLOR red]\'Super Favourites\' is missing, [COLOR lime][I]click here [/I][/COLOR] to (re-)install & enable [B]18+[/B][/COLOR]',BASEURL,70,xxxIcon)
+   addDir('',BASEURL,666,addonIcon,'','',False)
+   addItem('[COLOR red]\'Super Favourites\' is missing, [COLOR lime][I]click here [/I][/COLOR] to (re-)install & enable [B]18+[/B][/COLOR]',BASEURL,70,xxxIcon,'')
  else:
-  addItem('[B]P[/B]ush [COLOR hotpink]x[B][COLOR pink]X[/COLOR][/B]x[/COLOR] [COLOR dimgray](\"dirty\"-up your box with some 69 and mo\')[/COLOR]',BASEURL,46,xxxIcon)
- addItem(' ',BASEURL,' ',ART+'xvbmc.png')
- addItem('[B]T[/B]ool: convert physical paths (\'home\') to \'special\'',BASEURL,47,os.path.join(mediaPath,"maint.png"))
- addItem('[B]T[/B]ool: clean-up *.pyo and *.pyc files',BASEURL,48,os.path.join(mediaPath,"maint.png"))
- addItem(' ',BASEURL,' ',ART+'xvbmc.png')
- addItem(About,BASEURL,2,os.path.join(mediaPath,"wtf.png"))
- addItem(Terug,BASEURL,3,os.path.join(mediaPath,"xvbmc.png"))
+  addItem('[B]P[/B]ush [COLOR hotpink]x[B][COLOR pink]X[/COLOR][/B]x[/COLOR] [COLOR dimgray](\"dirty\"-up your box with some 69 and mo\')[/COLOR]',BASEURL,46,xxxIcon,'')
+ addDir('',BASEURL,666,addonIcon,'','',False)
+ addItem('[B]T[/B]ool: convert physical paths (\'home\') to \'special\'',BASEURL,47,mediaPath+'tools.png','')
+ addItem('[B]T[/B]ool: clean-up *.pyo and *.pyc files',BASEURL,48,mediaPath+'tools.png','')
+ addDir('',BASEURL,666,addonIcon,'','',False)
+ addItem(About,BASEURL,2,mediaPath+'wtf.png','')
+ addItem(Terug,BASEURL,3,addonIcon,'')
  Common.setView('movies','EPiC')
 def wizard(name,url):
  path=xbmc.translatePath(os.path.join('special://home/addons','packages'))
@@ -331,17 +345,17 @@ def XvbmcDev():
   Common.log("linux os")
   rpidevc.devMenu()
 def disabled():
- Common.okDialog('[COLOR red][B]Sorry, disabled! [/B](for now)[/COLOR]',' ','[COLOR lime]goto [COLOR dodgerblue]http://bit.ly/XvBMC-NL[/COLOR], [COLOR dodgerblue]http://bit.ly/XvBMC-Pi[/COLOR] or [COLOR dodgerblue]https://bit.ly/XvBMC-Android[/COLOR] for more information...[/COLOR]')
+ Common.okDialog('[CR][COLOR red][B]Sorry, disabled! [/B](for now)[/COLOR][CR]','[COLOR lime]goto [COLOR dodgerblue]http://bit.ly/XvBMC-NL[/COLOR], [COLOR dodgerblue]http://bit.ly/XvBMC-Pi[/COLOR] or [COLOR dodgerblue]https://bit.ly/XvBMC-Android[/COLOR] for more information...[/COLOR]','')
 def rejuvXvbmc():
  yes_pressed=Common.message_yes_no("[COLOR dodgerblue]"+AddonTitle+"[/COLOR] [COLOR red][B]- Reset![/B][/COLOR]",'Wilt u uw XvBMC \'build\' volledig opschonen (wipe) en Kodi Krypton [B]leeg[/B] her-configureren?','[COLOR dimgray]Please confirm that you wish you wipe clean your current configuration and reconfigure Kodi.[/COLOR]')
  if yes_pressed:
   dp.create("[COLOR white]"+AddonTitle+"[/COLOR] [COLOR red][B]- Reset![/B][/COLOR]",'Snelle XvBMC Krypton reset, even geduld...',' ','[COLOR dimgray](Quick XvBMC Krypton reset, please wait...)[/COLOR]')
-  addonPath=xbmcaddon.Addon(id=AddonID).getAddonInfo('path');addonPath=xbmc.translatePath(addonPath);
-  xbmcPath=os.path.join(addonPath,"..","..");xbmcPath=os.path.abspath(xbmcPath);Common.log("rejuvXvbmc.main_XvBMC: xbmcPath="+xbmcPath);
+  profileDir=xbmcaddon.Addon(id=addon_id).getAddonInfo('path');profileDir=xbmc.translatePath(profileDir);
+  xbmcPath=os.path.join(profileDir,"..","..");xbmcPath=os.path.abspath(xbmcPath);Common.log("rejuvXvbmc.main_XvBMC: xbmcPath="+xbmcPath);
   dir_exclude=('addons','Database','packages','userdata')
-  sub_dir_exclude=('metadata.album.universal','metadata.artists.universal','metadata.common.imdb.com','metadata.common.musicbrainz.org','metadata.common.theaudiodb.com','metadata.common.themoviedb.org','metadata.themoviedb.org','metadata.tvdb.com','plugin.program.super.favourites','plugin.program.xvbmcinstaller.nl','repository.xvbmc','resource.language.nl_nl','script.xvbmc.updatertools','service.xbmc.versioncheck','script.module.xbmc.shared','skin.aeon.nox.spin','skin.eminence.2','skin.estuary','skin.aczg','script.grab.fanart','service.library.data.provider','resource.images.recordlabels.white','resource.images.studios.coloured','resource.images.studios.white','xbmc.gui','script.skinshortcuts','script.module.simplejson','script.module.unidecode')
+  sub_dir_exclude=('metadata.album.universal','metadata.artists.universal','metadata.common.imdb.com','metadata.common.musicbrainz.org','metadata.common.theaudiodb.com','metadata.common.themoviedb.org','metadata.themoviedb.org','metadata.tvdb.com','plugin.program.super.favourites','plugin.program.xvbmcinstaller.nl','repository.xvbmc','resource.language.nl_nl','script.xvbmc.updatertools','service.xbmc.versioncheck','script.module.xbmc.shared','skin.aeon.nox.spin','script.grab.fanart','service.library.data.provider','resource.images.recordlabels.white','resource.images.studios.coloured','resource.images.studios.white','xbmc.gui','script.skinshortcuts','script.module.simplejson','script.module.unidecode')
   file_exclude=('guisettings.xml','kodi.log','Textures13.db')
-  Common.log("XvBMC.dir_exclude="+str(dir_exclude));Common.log("XvBMC.sub_dir_exclude="+str(sub_dir_exclude));Common.log("XvBMC.file_exclude="+str(file_exclude));
+  KEEP=os.path.join(xbmcPath,'media')
   dbList=os.listdir(databasePath)
   dbAddons=[]
   for file in dbList:
@@ -351,35 +365,31 @@ def rejuvXvbmc():
    dbFile=os.path.join(databasePath,file)
    try:
     file_exclude=(file,)+file_exclude
-    Common.log("XvBMC.file_exclude_dB="+str(file_exclude))
+    Common.log("XvBMC.file_exclude+dB="+str(file_exclude))
    except:
     Common.log("XvBMC.file_exclude_dB=EXCEPTION")
   dp.update(11,'','***Clean: files+folders...')
   keep_xvbmc=Common.message_yes_no("[COLOR white][B]"+AddonTitle+"[/B][/COLOR]",'Wilt u het XvBMC-NL basis \'framework\' handhaven na reset? Verwijderd alles behalve XvBMC (aanbeveling).','[COLOR dimgray](do you wish to keep XvBMC\'s default framework?)[/COLOR]')
   if keep_xvbmc:
-   dir_exclude=('addon_data','keymaps','media',)+dir_exclude
-   sub_dir_exclude=('inputstream.rtmp','keymaps','media','service.subtitles.addic7ed','service.subtitles.opensubtitles_by_opensubtitles','service.subtitles.opensubtitlesBeta','service.subtitles.podnapisi','service.subtitles.subscene',)+sub_dir_exclude
+   dir_exclude=('addon_data','media',)+dir_exclude
+   sub_dir_exclude=('inputstream.rtmp','keymaps','service.subtitles.addic7ed','service.subtitles.opensubtitles_by_opensubtitles','service.subtitles.opensubtitlesBeta','service.subtitles.podnapisi','service.subtitles.subscene','script.module.resolveurl','script.module.urlresolver',)+sub_dir_exclude
    file_exclude=('advancedsettings.xml','favourites.xml','profiles.xml','RssFeeds.xml','sources.xml',)+file_exclude
-   Common.log("XvBMC.dir_exclude="+str(dir_exclude))
-   Common.log("XvBMC.sub_dir_exclude="+str(sub_dir_exclude))
-   Common.log("XvBMC.file_exclude="+str(file_exclude))
   else:
    dir_exclude=('addon_data',)+dir_exclude
    sub_dir_exclude=('inputstream.rtmp',)+sub_dir_exclude
    file_exclude=('advancedsettings.xml','RssFeeds.xml',)+file_exclude
-   Common.log("XvBMC.dir_exclude="+str(dir_exclude))
-   Common.log("XvBMC.sub_dir_exclude="+str(sub_dir_exclude))
-   Common.log("XvBMC.file_exclude="+str(file_exclude))
-   Superfavo=xbmc.translatePath(os.path.join(USERADDONDATA,'plugin.program.super.favourites','Super Favourites'))
+   Superfavos=xbmc.translatePath(os.path.join(USERADDONDATA,'plugin.program.super.favourites','Super Favourites'))
    SkinShrtct=xbmc.translatePath(os.path.join(USERDATA,'addon_data','script.skinshortcuts'))
    try:
-    shutil.rmtree(Superfavo)
+    shutil.rmtree(Superfavos)
    except Exception as e:Common.log("rejuvXvbmc.keep_xvbmc: XvBMC-vOoDoO @ "+str(e))
    try:
     shutil.rmtree(SkinShrtct)
    except Exception as e:Common.log("rejuvXvbmc.keep_xvbmc: XvBMC-vOoDoO @ "+str(e))
   try:
    for root,dirs,files in os.walk(xbmcPath,topdown=True):
+    if KEEP in root:
+     continue
     dirs[:]=[dir for dir in dirs if dir not in sub_dir_exclude]
     files[:]=[file for file in files if file not in file_exclude]
     for file_name in files:
@@ -447,8 +457,8 @@ def FRESHSTART(params):
  else:
   yes_pressed=Common.message_yes_no("[COLOR dodgerblue]"+AddonTitle+"[/COLOR] [COLOR red][B]- Remove[/B][/COLOR]",'Kodi terugzetten naar de standaard fabrieksinstellingen?','[COLOR dimgray](reset Kodi to factory defaults)[/COLOR]')
   if yes_pressed:
-   addonPath=xbmcaddon.Addon(id=AddonID).getAddonInfo('path');addonPath=xbmc.translatePath(addonPath);
-   xbmcPath=os.path.join(addonPath,"..","..");xbmcPath=os.path.abspath(xbmcPath);Common.log("freshstart.main_XvBMC: xbmcPath="+xbmcPath);
+   profileDir=xbmcaddon.Addon(id=addon_id).getAddonInfo('path');profileDir=xbmc.translatePath(profileDir);
+   xbmcPath=os.path.join(profileDir,"..","..");xbmcPath=os.path.abspath(xbmcPath);Common.log("freshstart.main_XvBMC: xbmcPath="+xbmcPath);
    failed=False
    dp.create("[COLOR white]"+AddonTitle+"[/COLOR] [COLOR red][B]- FreshStart![/B][/COLOR]",'terug naar fabrieksinstellingen, even geduld...',' ','[COLOR dimgray](factory reset Kodi, please wait...)[/COLOR]')
    try:
@@ -476,12 +486,15 @@ def FRESHSTART(params):
    dialog.ok("[COLOR dodgerblue]"+AddonTitle+"[/COLOR] [COLOR lime][B]- Reboot![/B][/COLOR]",'Kodi zal nu afsluiten',' ','[COLOR dimgray](shutdown Kodi now)[/COLOR]')
    os._exit(1)
   else:dialog.ok("[COLOR dodgerblue]"+AddonTitle+"[/COLOR] [COLOR red][B]- Cancelled![/B][/COLOR]",'Er is geen schone installatie gedaan...',' ','[COLOR dimgray](interrupted by user)[/COLOR]')
-def addItem(name,url,mode,iconimage):
- u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+def addItem(name,url,mode,iconimage,fanart):
+ u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)+"&fanart="+urllib.quote_plus(fanart)
  ok=True
  liz=xbmcgui.ListItem(name,iconImage="DefaultFolder.png",thumbnailImage=iconimage)
  liz.setInfo(type="Video",infoLabels={"Title":name})
- liz.setArt({'fanart':FANART})
+ if fanart==None or len(fanart)<1:
+  liz.setArt({'fanart':addonFanart})
+ else:
+  liz.setArt({'fanart':fanart})
  ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
  return ok
 def get_params():
@@ -500,12 +513,15 @@ def get_params():
    if(len(splitparams))==2:
     param[splitparams[0]]=splitparams[1]
  return param
-def addDir(name,url,mode,iconimage,fanart,description):
+def addDir(name,url,mode,iconimage,fanart,description,folder=True):
  u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)+"&fanart="+urllib.quote_plus(fanart)+"&description="+urllib.quote_plus(description)
  ok=True
  liz=xbmcgui.ListItem(name,iconImage="DefaultFolder.png",thumbnailImage=iconimage)
  liz.setInfo(type="Video",infoLabels={"Title":name,"Plot":description})
- liz.setProperty("Fanart_Image",fanart)
+ if fanart==None or len(fanart)<1:
+  liz.setProperty("Fanart_Image",addonFanart)
+ else:
+  liz.setProperty("Fanart_Image",fanart)
  if mode==1:
   ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
  elif mode==2:
@@ -513,7 +529,7 @@ def addDir(name,url,mode,iconimage,fanart,description):
  elif mode==100:
   ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
  else:
-  ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+  ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=folder)
  return ok
 params=get_params()
 url=None
@@ -620,7 +636,14 @@ elif mode==42:
 elif mode==43:
  FRESHSTART(params)
 elif mode==44:
- disabled()
+ if xbmc.getCondVisibility('System.HasAddon("service.openelec.settings")')+xbmc.getCondVisibility('System.HasAddon("service.libreelec.settings")'):
+  stacker.fixer(stacker.toolupdate,3,2)
+  stacker.showFiles(stacker.upgradeurl,1,1,melding=False)
+  stacker.showFiles(stacker.updateurl,2,2,melding=False)
+  Common.prettyReboot()
+ else:
+  dialog.ok(MainTitle+" [B]-[/B] [COLOR lime]RPi[/COLOR] [B]-[/B] [COLOR orange]vOoDoO[/COLOR]",subtitleNope,nonlinux,nonelecNL)
+  disabled()
 elif mode==45:
  name='repository.xvbmc-4.2.1.zip'
  url=base64.b64decode(repos)
@@ -667,4 +690,5 @@ elif mode==100:
 """
     IF you copy/paste XvBMC's -default.py- please keep the credits -2- XvBMC-NL, Thx.
 """
-xbmcplugin.endOfDirectory(int(sys.argv[1]))
+if int(sys.argv[1])!=-1:
+ xbmcplugin.endOfDirectory(int(sys.argv[1]))

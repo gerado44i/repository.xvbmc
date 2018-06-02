@@ -2,8 +2,10 @@
 #-*- coding: utf-8 -*-
 import os,xbmc,xbmcaddon,xbmcgui,xbmcplugin
 import utils
-AddonID='script.xvbmc.updatertools'
-ADDON=xbmcaddon.Addon(id=AddonID)
+addon_id=xbmcaddon.Addon().getAddonInfo('id')
+addon_name=xbmcaddon.Addon().getAddonInfo('name')
+addon_icon=xbmcaddon.Addon().getAddonInfo('icon')
+ADDON=xbmcaddon.Addon(id=addon_id)
 dialog=xbmcgui.Dialog()
 MainTitle="[COLOR lime][B]XvBMC[/B] Update[/COLOR]"
 Subtitle='[COLOR white]There is a new [B]XvBMC[/B] update[/COLOR]'

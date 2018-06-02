@@ -3,8 +3,10 @@
 import xbmc,xbmcaddon,xbmcgui,xbmcplugin
 import os,shutil,time
 import urllib2,urllib
-AddonID='script.xvbmc.updatertools'
-ADDON=xbmcaddon.Addon(id=AddonID)
+addon_id=xbmcaddon.Addon().getAddonInfo('id')
+addon_name=xbmcaddon.Addon().getAddonInfo('name')
+addon_icon=xbmcaddon.Addon().getAddonInfo('icon')
+ADDON=xbmcaddon.Addon(id=addon_id)
 dialog=xbmcgui.Dialog()
 MainTitle="XvBMC Nederland"
 piOC='XvBMC overclock [COLOR white]RPi[/COLOR]'

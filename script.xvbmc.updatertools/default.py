@@ -48,6 +48,9 @@ BASEURL="https://bit.ly/XvBMC-Pi"
 buildinfotxt='[COLOR gray][B] - [/B]your XvBMC build: [I]unknown[/I] [/COLOR]'
 xvbmcSPcheck='[COLOR gray][B] - [/B]your service pack: [I]unknown[/I] [/COLOR]'
 xvbmcUnknown='[COLOR orange]unknown build status; force update?[/COLOR] [COLOR red][B](continue at your own risk)[/B][/COLOR]'
+xvbmcForced='[COLOR lime]Force XvBMC Update[B] ??? [/B][/COLOR][COLOR red](continue at your own risk)[/COLOR]'
+forcedXvbmc='[COLOR red]XvBMC Update Forceren?[/COLOR] [COLOR lime](doorgaan op eigen risico)[/COLOR]'
+waarschuwing='[COLOR orange][B]WAARSCHUWING / WARNING / ACHTUNG :[/B][/COLOR]'
 xbmcver=xbmc.getInfoLabel("System.BuildVersion")[:4]
 databasePath=xbmc.translatePath('special://database')
 EXCLUDES=[addon_id,'skin.estuary','plugin.program.xvbmcinstaller.nl','repository.xvbmc','script.module.xbmc.shared','script.xvbmc.updatertools']
@@ -103,10 +106,12 @@ def mainMenu():
  else:
   if xbmc.getCondVisibility('System.HasAddon("service.openelec.settings")')+xbmc.getCondVisibility('System.HasAddon("service.libreelec.settings")'):
    updatetxt="[COLOR orange]You have the [B]latest[/B] [COLOR red]XvBMC[/COLOR] [COLOR lime][B]RPi[/B][/COLOR] updates [B] 3:[/B]-)[/COLOR]"
-   addItem('%s'%updatetxt,BASEURL,4,mediaPath+'xvbmc.png','')
+   forceRPi=base64.b64decode(basewiz)
+   addItem('%s'%updatetxt,forceRPi,5,mediaPath+'xvbmc.png','')
   else:
    updatetxt="[COLOR orange]You have the [B]latest[/B] XvBMC updates [B] :[/B]-)[/COLOR]"
-   addItem('%s'%updatetxt,BASEURL,4,addonIcon,'')
+   Link=base64.b64decode(basewiz)+'noxspin-sp.zip'
+   addItem('%s'%updatetxt,Link,6,addonIcon,'')
  if xbmc.getCondVisibility('System.HasAddon("service.openelec.settings")')+xbmc.getCondVisibility('System.HasAddon("service.libreelec.settings")'):
   addDir('[COLOR orange] [B] »--> [/B]XvBMC [B]Raspberry[/B] Pi [B]»-->[/B] Tools, DEV. [B]&[/B] Maintenance [B]»-->[/B][/COLOR]',BASEURL,30,mediaPath+'RPi.png',SubFanart,'',True)
  addDir('',BASEURL,666,addonIcon,'','',False)
@@ -120,15 +125,15 @@ def mainMenu():
  if xvbmcVersie=="NoxSpinUpdate":
   try:NoxSpinOnline=utils.getHtml2(NoxSpinUrl)
   except:NoxSpinOnline='unknown'
-  xvbmcSPcheck='[COLOR gray][B] - [/B]your service pack: %s [/COLOR]'%(currentOnly+' [COLOR dimgray][I](online: %s)[/I][/COLOR]'%NoxSpinOnline)
- addItem('%s'%xvbmcSPcheck,BASEURL,5,mediaPath+'wtf.png','')
+  xvbmcSPcheck='[COLOR gray][B] - [/B]your service pack: %s [/COLOR]'%currentOnly+' [COLOR dimgray][I](online: %s)[/I][/COLOR]'%NoxSpinOnline
+ addItem('%s'%xvbmcSPcheck,BASEURL,7,mediaPath+'wtf.png','')
  global buildinfotxt
  buildinfo,buildversie=Common.checkXvbmcVersie()
  if buildinfo=="NoxSpinTxtBld":
   try:bldversion=utils.getHtml2(NoxSpinUrlBld)
   except:bldversion='unknown'
-  buildinfotxt='[COLOR gray][B] - [/B]your wizard build: %s [/COLOR]'%(buildversie+' [COLOR dimgray][I](current wiz.: %s)[/I][/COLOR]'%bldversion)
- addItem('%s'%buildinfotxt,BASEURL,6,mediaPath+'wtf.png','')
+  buildinfotxt='[COLOR gray][B] - [/B]your wizard build: %s [/COLOR]'%buildversie+' [COLOR dimgray][I](current wiz.: %s)[/I][/COLOR]'%bldversion
+ addItem('%s'%buildinfotxt,BASEURL,8,mediaPath+'wtf.png','')
  if os.path.isfile(xxxCheck):
   if xbmc.getCondVisibility('System.HasAddon("plugin.program.super.favourites")'):
    addDir('',BASEURL,666,addonIcon,'','',False)
@@ -165,7 +170,7 @@ def XvBMCtools1():
  addItem('[B]F[/B]orce close Kodi  [COLOR dimgray](Kill Kodi)[/COLOR]',BASEURL,15,mediaPath+'maint.png','')
  addItem('[B]L[/B]og viewer [COLOR dimgray](show \'kodi.log\')[/COLOR]',BASEURL,17,mediaPath+'maint.png','')
  addDir('',BASEURL,666,addonIcon,'','',False)
- addItem('[B]R[/B]esolveURL  -> settings',BASEURL,8,mediaPath+'tools.png','')
+ addItem('[B]R[/B]esolveURL  -> settings',BASEURL,9,mediaPath+'tools.png','')
  addItem('[B]U[/B]RLResolver -> settings',BASEURL,18,mediaPath+'tools.png','')
  addDir('',BASEURL,666,addonIcon,'','',False)
  addItem('[B][COLOR lime]X[/COLOR][/B]vBMC\'s Advancedsettings unlocker [COLOR dimgray](reset)[/COLOR]',BASEURL,19,addonIcon,'')
@@ -211,6 +216,26 @@ def XvBMCtools2():
  addItem(About,BASEURL,2,mediaPath+'wtf.png','')
  addItem(Terug,BASEURL,3,addonIcon,'')
  Common.setView('movies','EPiC')
+def rpiWizard(name,url):
+ wizardRPi=Common.yesnoDialog(waarschuwing,xvbmcForced,forcedXvbmc,MainTitle)
+ if wizardRPi:
+  exchange='SettingsSystemInfo.xml'
+  locatie=USERDATA
+  name='noxspin-sp'
+  Rename=name+'.log'
+  xchngLoc=xbmc.translatePath(os.path.join('special://home/addons','skin.aeon.nox.spin','1080'))
+  xchngUrl=base64.b64decode(base)+'update/builds/'
+  fileexchange(url,name+'.txt',Rename,locatie)
+  fileexchange(xchngUrl,'rpi'+exchange,exchange,xchngLoc)
+  wizard(name,url+name+'.zip')
+  nursemaid.CCleaner(melding=False,CleanCrap=True,refresh=True)
+ else:pass
+def prtWizard(name,url):
+ wizardPrt=Common.yesnoDialog(waarschuwing,xvbmcForced,forcedXvbmc,MainTitle)
+ if wizardPrt:
+  wizard(name,url)
+  nursemaid.CCleaner(melding=False,CleanCrap=True,refresh=True)
+ else:pass
 def wizard(name,url):
  path=xbmc.translatePath(os.path.join('special://home/addons','packages'))
  if not os.path.exists(path):os.makedirs(path)
@@ -566,8 +591,7 @@ Common.log(str(AddonTitle))
 if mode==None or url==None or len(url)<1:
  mainMenu()
 elif mode==1:
- wizard(name,url)
- nursemaid.CCleaner(melding=False,CleanCrap=True,refresh=True)
+ prtWizard(name,url)
 elif mode==10:
  XvBMCtools1()
 elif mode==20:
@@ -581,8 +605,12 @@ elif mode==3:
 elif mode==4:
  Common.okDialog(subtitleNope,'sorry, nothing todo...','with kind regards, team [COLOR green]XvBMC Nederland[/COLOR]')
 elif mode==5:
- Common.okDialog('[NL] Servicepack updates gaan via deze updater addon','[US] Servicepack updates are pushed by this updater',kussie,simpleNote)
+ rpiWizard(name,url)
 elif mode==6:
+ prtWizard(name,url)
+elif mode==7:
+ Common.okDialog('[NL] Servicepack updates gaan via deze updater addon','[US] Servicepack updates are pushed by this updater',kussie,simpleNote)
+elif mode==8:
  Common.okDialog('[NL] Build updates alleen via de [COLOR red]wizard[/COLOR] [COLOR dimgray](of RPi vOoDoO)[/COLOR]','[US] Build updates only with the [COLOR red]wizard[/COLOR] [COLOR dimgray](or RPi voodoo)[/COLOR]',kussie,simpleNote)
 elif mode==12:
  Common.AddonsEnable()
@@ -596,7 +624,7 @@ elif mode==16:
  Common.KODIVERSION()
 elif mode==17:
  nursemaid.xvbmcLog()
-elif mode==8:
+elif mode==9:
  resolveUrl_settings()
 elif mode==18:
  Urlresolver_settings()
@@ -677,16 +705,7 @@ elif mode==48:
 elif mode==49:
  nursemaid.CCleaner(melding=True,CleanCrap=True,refresh=True)
 elif mode==100:
- exchange='SettingsSystemInfo.xml'
- locatie=USERDATA
- name='noxspin-sp'
- Rename=name+'.log'
- xchngLoc=xbmc.translatePath(os.path.join('special://home/addons','skin.aeon.nox.spin','1080'))
- xchngUrl=base64.b64decode(base)+'update/builds/'
- fileexchange(url,name+'.txt',Rename,locatie)
- fileexchange(xchngUrl,'rpi'+exchange,exchange,xchngLoc)
- wizard(name,url+name+'.zip')
- nursemaid.CCleaner(melding=False,CleanCrap=True,refresh=True)
+ rpiWizard(name,url)
 """
     IF you copy/paste XvBMC's -default.py- please keep the credits -2- XvBMC-NL, Thx.
 """

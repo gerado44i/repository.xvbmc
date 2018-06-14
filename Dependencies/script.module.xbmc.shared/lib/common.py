@@ -35,6 +35,13 @@ nonlinux="[US] you\'re running a \'none linux os\' (Open-/LibreELEC)"
 nonelecNL="[NL] dit is geen Raspberry Pi met Open-/LibreELEC \'OS\'"
 simpleNote="[COLOR dodgerblue]XvBMC simple/short note:[/COLOR]"
 kussie="with kind regards, team [COLOR green]XvBMC Nederland[/COLOR]"
+toolupdate=base64.b64decode('aHR0cHM6Ly94dmJtY25sLnN0YWNrc3RvcmFnZS5jb20vcy9PREJkdzRjR2psOEVhTnk=')
+updateurl=base64.b64decode('aHR0cHM6Ly94dmJtY25sLnN0YWNrc3RvcmFnZS5jb20vcy9CTmhkbjdzTm80VUlMOUY=')
+upgradeurl=base64.b64decode('aHR0cHM6Ly94dmJtY25sLnN0YWNrc3RvcmFnZS5jb20vcy9MRk1keHZFYWc5U1pGeUE=')
+versierpI=base64.b64decode('cnBpdmVyc2llLnR4dA==')
+upgradeurllist=base64.b64decode('aHR0cHM6Ly94dmJtY25sLnN0YWNrc3RvcmFnZS5jb20vcHVibGljLXNoYXJlL0xGTWR4dkVhZzlTWkZ5QS9saXN0')
+updateurllist=base64.b64decode('aHR0cHM6Ly94dmJtY25sLnN0YWNrc3RvcmFnZS5jb20vcHVibGljLXNoYXJlL0JOaGRuN3NObzRVSUw5Ri9saXN0')
+versietxt=xbmc.translatePath(os.path.join('special://home/userdata',versierpI))
 base='aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1h2Qk1DL3JlcG9zaXRvcnkueHZibWMvbWFzdGVyL3ppcHMv'
 basewiz='aHR0cHM6Ly9hcmNoaXZlLm9yZy9kb3dubG9hZC94dmJtY3dpemFyZHov'
 bldversietxt=xbmc.translatePath(os.path.join('special://home/userdata','versiebld.txt'))
@@ -230,7 +237,7 @@ def KODIVERSION():
  req.add_header('User-Agent','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36')
  xbmc_eip=urlreq.urlopen(req).read()
  log('xbmc_eip ='+str(xbmc_eip))
- xbmc.getInfoLabel("System.OSVersionInfo");xbmc.sleep(200);
+ xbmc.getInfoLabel("System.OSVersionInfo");xbmc.sleep(500);
  os_version=xbmc.getInfoLabel("System.OSVersionInfo")
  dialog.ok('[B]'+MainTitle+' [COLOR dodgerblue]-info-[/COLOR][/B]','Kodi version: [COLOR orange][B]%s[/B][/COLOR]'%version+' [B] & [/B] '+'(build compile: %s)'%xvbmc_build,'Build iP: [COLOR lime]%s[/COLOR] '%xbmc_iip+'[B] & [/B]'+' WWW iP: [COLOR red]%s[/COLOR]'%xbmc_eip,'OS info:[COLOR dimgray][CR]%s'%os_version+'[/COLOR]')
 def checkXvbmcVersie():

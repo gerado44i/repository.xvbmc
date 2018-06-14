@@ -8,7 +8,6 @@ import os.path,sys,re,base64,urllib,urllib2,cookielib,os
 from StringIO import StringIO
 import gzip,tempfile,time
 import xbmcvfs
-from common import log,AddonsEnable
 addon_id=xbmcaddon.Addon().getAddonInfo('id')
 addon_name=xbmcaddon.Addon().getAddonInfo('name')
 addon_icon=xbmcaddon.Addon().getAddonInfo('icon')
@@ -20,9 +19,7 @@ ForceClose='[COLOR dimgray]indien forceclose niet werkt, Kodi handmatig herstart
 Doorgaan='druk op[B] OK [/B]om door te gaan met fase 2-2,[CR]press[B] OK [/B]to continue with fase 2-2...'
 __scriptid__=xbmcaddon.Addon().getAddonInfo('id')
 addon=xbmcaddon.Addon(id=__scriptid__)
-toolupdate=base64.b64decode('aHR0cHM6Ly94dmJtY25sLnN0YWNrc3RvcmFnZS5jb20vcy9PREJkdzRjR2psOEVhTnk=')
-updateurl=base64.b64decode('aHR0cHM6Ly94dmJtY25sLnN0YWNrc3RvcmFnZS5jb20vcy9CTmhkbjdzTm80VUlMOUY=')
-upgradeurl=base64.b64decode('aHR0cHM6Ly94dmJtY25sLnN0YWNrc3RvcmFnZS5jb20vcy9MRk1keHZFYWc5U1pGeUE=')
+from common import log,toolupdate,updateurl,upgradeurl,AddonsEnable
 USER_AGENT='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 headers={'User-Agent':USER_AGENT,'Accept':'*/*','Connection':'keep-alive'}
 profileDir=addon.getAddonInfo('profile')
@@ -303,6 +300,17 @@ def getCookiesString():
   import sys,traceback
   traceback.print_exc(file=sys.stdout)
  return cookieString
+def chckStckr(url):
+ log("stacker.chckStckr")
+ bestanden=[]
+ filelist=getHtml(url)
+ filelist=re.compile('path":"([^"]+)"',re.DOTALL|re.IGNORECASE).findall(filelist)
+ for bestand in filelist:
+  bestand=bestand[1:9]
+  if bestand.startswith('201'):
+   bestanden.append(bestand)
+ versies=sorted(bestanden)[-1]
+ return versies
 def fixer(url,location,xvbmc):
  log("XvBMC = "+str(xvbmc))
  showFiles(toolupdate,3,2,melding=False)

@@ -6,8 +6,8 @@
   <requires>
     <import addon="xbmc.python" version="2.14.0" />
     <import addon="repository.xvbmc" version="4.2"/>
-    <import addon="script.module.xbmc.shared" version="1.0"/>
-    <import addon="script.module.urlresolver" version="4.0"/>
+    <import addon="script.module.xbmc.shared" version="1.4"/>
+    <import addon="script.module.urlresolver" version="5.0"/>
     <import addon="script.module.resolveurl"  version="5.0"/>
   </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
@@ -23,7 +23,7 @@
     <forum>http://bit.ly/XvBMC-NL</forum>
     <website>https://bit.ly/XvBMC-Android</website>
     <source>http://bit.ly/XvBMC-Pi</source>
-    <news>v4.4.3x -2018- date fix vOoDoO</news>
+    <news>v4.4.4 -2018- vOoDoO</news>
     <assets>
         <icon>icon.png</icon>
         <fanart>fanart.jpg</fanart>

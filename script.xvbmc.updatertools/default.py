@@ -12,6 +12,7 @@ from common import platform,subtitleNope,nonlinux,nonelecNL,simpleNote,kussie
 from common import base,basewiz,repos
 from common import NoxSpinTxt,NoxSpinUrl
 from common import NoxSpinTxtBld,NoxSpinUrlBld
+from common import upgradeurllist,updateurllist
 from resources.lib import huisvrouw as nursemaid
 from resources.lib import rpioc as overclck
 from resources.lib import rpidev as rpidevc
@@ -49,8 +50,10 @@ buildinfotxt='[COLOR gray][B] - [/B]your XvBMC build: [I]unknown[/I] [/COLOR]'
 xvbmcSPcheck='[COLOR gray][B] - [/B]your service pack: [I]unknown[/I] [/COLOR]'
 xvbmcUnknown='[COLOR orange]unknown build status; force update?[/COLOR] [COLOR red][B](continue at your own risk)[/B][/COLOR]'
 xvbmcForced='[COLOR lime]Force XvBMC Update[B] ??? [/B][/COLOR][COLOR red](continue at your own risk)[/COLOR]'
+iNfo='[COLOR lime]goto [COLOR dodgerblue]http://bit.ly/XvBMC-NL[/COLOR], [COLOR dodgerblue]http://bit.ly/XvBMC-Pi[/COLOR] or [COLOR dodgerblue]https://bit.ly/XvBMC-Android[/COLOR] for info & our disclamer...[/COLOR]'
 forcedXvbmc='[COLOR red]XvBMC Update Forceren?[/COLOR] [COLOR lime](doorgaan op eigen risico)[/COLOR]'
-waarschuwing='[COLOR orange][B]WAARSCHUWING / WARNING / ACHTUNG :[/B][/COLOR]'
+ReDo='[COLOR maroon](click to force/redo update)[/COLOR]'
+waarschuwing='[COLOR darkorange]!![B] WAARSCHUWING [/B]/[B] WARNING [/B]/[B] ACHTUNG [/B]!![/COLOR]'
 xbmcver=xbmc.getInfoLabel("System.BuildVersion")[:4]
 databasePath=xbmc.translatePath('special://database')
 EXCLUDES=[addon_id,'skin.estuary','plugin.program.xvbmcinstaller.nl','repository.xvbmc','script.module.xbmc.shared','script.xvbmc.updatertools']
@@ -61,6 +64,10 @@ USERADDONDATA=xbmc.translatePath(os.path.join('special://home/userdata/addon_dat
 xxxCheck=xbmc.translatePath(os.path.join(USERADDONDATA,'plugin.program.super.favourites','Super Favourites','xXx','favourites.xml'))
 xxxDirty='[COLOR pink]XvBMC\'s [B] [COLOR hotpink]x[COLOR deeppink]X[/COLOR]x[/COLOR] [/B] section ([COLOR hotpink]18[/COLOR][COLOR deeppink][B]+[/B][/COLOR])[/COLOR]'
 xxxIcon=base64.b64decode('aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1h2Qk1DL3JlcG9zaXRvcnkueHZibWMvbWFzdGVyL3ppcHMvdHJpcGxlLXgvYWR1bHQucG5n')
+if not ADDON.getSetting('leesmij')=='true':
+ Common.okDialog('[COLOR white]NOTE:[B] XvBMC is [COLOR red]geen[/COLOR] helpdesk voor boxverkopers[/B] ![/COLOR]','(we aren\'t a helpdesk for resellers or pre-installed builds)[CR]',iNfo,'[COLOR darkorange][B]~  XvBMC = GRATIS  ~  XvBMC = FOR FREE  ~[/B][/COLOR]')
+ ADDON.setSetting('leesmij','true')
+ xbmc.log('usage=okay',level=xbmc.LOGNOTICE)
 def resolveUrl_settings():
  import resolveurl
  resolveurl.display_settings()
@@ -105,11 +112,11 @@ def mainMenu():
    addItem('%s'%updatetxt,BASEURL,4,addonIcon,'')
  else:
   if xbmc.getCondVisibility('System.HasAddon("service.openelec.settings")')+xbmc.getCondVisibility('System.HasAddon("service.libreelec.settings")'):
-   updatetxt="[COLOR orange]You have the [B]latest[/B] [COLOR red]XvBMC[/COLOR] [COLOR lime][B]RPi[/B][/COLOR] updates [B] 3:[/B]-)[/COLOR]"
+   updatetxt="[COLOR orange]You have the [B]latest[/B] XvBMC [COLOR lime][B]RPi[/B][/COLOR] updates [/COLOR]"+ReDo
    forceRPi=base64.b64decode(basewiz)
    addItem('%s'%updatetxt,forceRPi,5,mediaPath+'xvbmc.png','')
   else:
-   updatetxt="[COLOR orange]You have the [B]latest[/B] XvBMC updates [B] :[/B]-)[/COLOR]"
+   updatetxt="[COLOR orange]You have the [B]latest[/B] XvBMC updates [/COLOR]"+ReDo
    Link=base64.b64decode(basewiz)+'noxspin-sp.zip'
    addItem('%s'%updatetxt,Link,6,addonIcon,'')
  if xbmc.getCondVisibility('System.HasAddon("service.openelec.settings")')+xbmc.getCondVisibility('System.HasAddon("service.libreelec.settings")'):
@@ -195,10 +202,11 @@ def XvBMCrpi():
  addItem(Terug,BASEURL,3,addonIcon,mediaPath+'rpi2.jpg')
  Common.setView('movies','EPiC')
 def XvBMCtools2():
+ chkXbmc=stacker.chckStckr(updateurllist)
  addItem('[B]K[/B]odi Quick Reset [COLOR dimgray](\"rejuvenate\" XvBMC-NL build)[/COLOR]',BASEURL,41,mediaPath+'maint.png','')
  addItem('[B]K[/B]odi Factory Reset [COLOR dimgray](complete Kodi Krypton wipe)[/COLOR]',BASEURL,42,mediaPath+'maint.png','')
  addItem('[B]K[/B]odi Fresh Start [COLOR dimgray](wipe for older Kodi\'s)[/COLOR]',BASEURL,43,mediaPath+'maint.png','')
- addItem('[B]P[/B]ush [COLOR lime]Fix[/COLOR]es and/or updates [COLOR dimgray](for XvBMC builds)[/COLOR]',BASEURL,44,mediaPath+'maint.png','')
+ addItem('[B]P[/B]ush [COLOR lime]Fix[/COLOR]es and/or [COLOR green]updates[/COLOR] [COLOR dimgray] (recent vOoDoO: %s)[/COLOR]'%chkXbmc,BASEURL,44,mediaPath+'maint.png','')
  addItem('[B]P[/B]ush XvBMC REPOsitory [COLOR dimgray](install or fix repo)[/COLOR]',BASEURL,45,mediaPath+'maint.png','')
  if os.path.isfile(xxxCheck):
   if xbmc.getCondVisibility('System.HasAddon("plugin.program.super.favourites")'):
@@ -217,7 +225,7 @@ def XvBMCtools2():
  addItem(Terug,BASEURL,3,addonIcon,'')
  Common.setView('movies','EPiC')
 def rpiWizard(name,url):
- wizardRPi=Common.yesnoDialog(waarschuwing,xvbmcForced,forcedXvbmc,MainTitle)
+ wizardRPi=Common.yesnoDialog(waarschuwing,xvbmcForced,forcedXvbmc,'[COLOR darkorange][B]'+MainTitle+'[/B][/COLOR]')
  if wizardRPi:
   exchange='SettingsSystemInfo.xml'
   locatie=USERDATA
@@ -231,7 +239,7 @@ def rpiWizard(name,url):
   nursemaid.CCleaner(melding=False,CleanCrap=True,refresh=True)
  else:pass
 def prtWizard(name,url):
- wizardPrt=Common.yesnoDialog(waarschuwing,xvbmcForced,forcedXvbmc,MainTitle)
+ wizardPrt=Common.yesnoDialog(waarschuwing,xvbmcForced,forcedXvbmc,'[COLOR darkorange][B]'+MainTitle+'[/B][/COLOR]')
  if wizardPrt:
   wizard(name,url)
   nursemaid.CCleaner(melding=False,CleanCrap=True,refresh=True)
@@ -370,7 +378,9 @@ def XvbmcDev():
   Common.log("linux os")
   rpidevc.devMenu()
 def disabled():
- Common.okDialog('[CR][COLOR red][B]Sorry, disabled! [/B](for now)[/COLOR][CR]','[COLOR lime]goto [COLOR dodgerblue]http://bit.ly/XvBMC-NL[/COLOR], [COLOR dodgerblue]http://bit.ly/XvBMC-Pi[/COLOR] or [COLOR dodgerblue]https://bit.ly/XvBMC-Android[/COLOR] for more information...[/COLOR]','')
+ Common.okDialog('[CR][COLOR red][B]Sorry[/B], [COLOR darkorange]disabled![/COLOR][B] or [/B][COLOR darkorange]nothing todo[/COLOR] (well at least for now)[/COLOR][CR]',iNfo,'')
+def nope():
+ Common.okDialog(subtitleNope,'sorry, nothing todo...','with kind regards, team [COLOR green]XvBMC Nederland[/COLOR]')
 def rejuvXvbmc():
  yes_pressed=Common.message_yes_no("[COLOR dodgerblue]"+AddonTitle+"[/COLOR] [COLOR red][B]- Reset![/B][/COLOR]",'Wilt u uw XvBMC \'build\' volledig opschonen (wipe) en Kodi Krypton [B]leeg[/B] her-configureren?','[COLOR dimgray]Please confirm that you wish you wipe clean your current configuration and reconfigure Kodi.[/COLOR]')
  if yes_pressed:
@@ -397,7 +407,7 @@ def rejuvXvbmc():
   keep_xvbmc=Common.message_yes_no("[COLOR white][B]"+AddonTitle+"[/B][/COLOR]",'Wilt u het XvBMC-NL basis \'framework\' handhaven na reset? Verwijderd alles behalve XvBMC (aanbeveling).','[COLOR dimgray](do you wish to keep XvBMC\'s default framework?)[/COLOR]')
   if keep_xvbmc:
    dir_exclude=('addon_data','media',)+dir_exclude
-   sub_dir_exclude=('inputstream.rtmp','keymaps','service.subtitles.addic7ed','service.subtitles.opensubtitles_by_opensubtitles','service.subtitles.opensubtitlesBeta','service.subtitles.podnapisi','service.subtitles.subscene','script.module.resolveurl','script.module.urlresolver',)+sub_dir_exclude
+   sub_dir_exclude=('inputstream.rtmp','keymaps','service.subtitles.addic7ed','service.subtitles.opensubtitles_by_opensubtitles','service.subtitles.opensubtitlesBeta','service.subtitles.podnapisi','service.subtitles.subscene','script.module.requests','script.module.resolveurl','script.module.urlresolver',)+sub_dir_exclude
    file_exclude=('advancedsettings.xml','favourites.xml','profiles.xml','RssFeeds.xml','sources.xml',)+file_exclude
   else:
    dir_exclude=('addon_data',)+dir_exclude
@@ -511,6 +521,30 @@ def FRESHSTART(params):
    dialog.ok("[COLOR dodgerblue]"+AddonTitle+"[/COLOR] [COLOR lime][B]- Reboot![/B][/COLOR]",'Kodi zal nu afsluiten',' ','[COLOR dimgray](shutdown Kodi now)[/COLOR]')
    os._exit(1)
   else:dialog.ok("[COLOR dodgerblue]"+AddonTitle+"[/COLOR] [COLOR red][B]- Cancelled![/B][/COLOR]",'Er is geen schone installatie gedaan...',' ','[COLOR dimgray](interrupted by user)[/COLOR]')
+def vOoDoO():
+ chkLbre=stacker.chckStckr(upgradeurllist)
+ chkXbmc=stacker.chckStckr(updateurllist)
+ opties=['[COLOR dimgray] 0. fix/update RPi-tool (if \'upgrade\' doesn\'t work)[/COLOR]']
+ opties.append('[COLOR dimgray] 1. [/COLOR] [COLOR red]LibreELEC[/COLOR]+XvBMC [COLOR white](v%s)[/COLOR]'%chkLbre)
+ opties.append('[COLOR dimgray] 2.[/COLOR] [COLOR lime]XvBMC[/COLOR][B]-[/B]build only [COLOR white] (v%s)[/COLOR]'%chkXbmc)
+ if len(opties)>1:
+  vh=dialog.select('[COLOR darkorange]fix, upgrade or update[B]?[/B][/COLOR][COLOR dimgray] (Upgr.=inc.LibreELEC / Upd.=Build only)[/COLOR]',opties)
+  if vh==-1:
+   return
+ else:
+  vh=0
+ dlname=opties[vh]
+ if vh==0:
+  stacker.fixer(stacker.toolupdate,3,2)
+ elif vh==1:
+  stacker.fixer(stacker.toolupdate,3,2)
+  stacker.showFiles(stacker.upgradeurl,1,1,melding=False)
+  stacker.showFiles(stacker.updateurl,2,2,melding=False)
+  Common.prettyReboot()
+ elif vh==2:
+  stacker.fixer(stacker.toolupdate,3,2)
+  stacker.showFiles(stacker.updateurl,2,2,melding=False)
+  Common.prettyReboot()
 def addItem(name,url,mode,iconimage,fanart):
  u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)+"&fanart="+urllib.quote_plus(fanart)
  ok=True
@@ -591,7 +625,8 @@ Common.log(str(AddonTitle))
 if mode==None or url==None or len(url)<1:
  mainMenu()
 elif mode==1:
- prtWizard(name,url)
+ wizard(name,url)
+ nursemaid.CCleaner(melding=False,CleanCrap=True,refresh=True)
 elif mode==10:
  XvBMCtools1()
 elif mode==20:
@@ -603,7 +638,7 @@ elif mode==2:
 elif mode==3:
  Common.closeandexit()
 elif mode==4:
- Common.okDialog(subtitleNope,'sorry, nothing todo...','with kind regards, team [COLOR green]XvBMC Nederland[/COLOR]')
+ nope()
 elif mode==5:
  rpiWizard(name,url)
 elif mode==6:
@@ -665,12 +700,8 @@ elif mode==43:
  FRESHSTART(params)
 elif mode==44:
  if xbmc.getCondVisibility('System.HasAddon("service.openelec.settings")')+xbmc.getCondVisibility('System.HasAddon("service.libreelec.settings")'):
-  stacker.fixer(stacker.toolupdate,3,2)
-  stacker.showFiles(stacker.upgradeurl,1,1,melding=False)
-  stacker.showFiles(stacker.updateurl,2,2,melding=False)
-  Common.prettyReboot()
+  vOoDoO()
  else:
-  dialog.ok(MainTitle+" [B]-[/B] [COLOR lime]RPi[/COLOR] [B]-[/B] [COLOR orange]vOoDoO[/COLOR]",subtitleNope,nonlinux,nonelecNL)
   disabled()
 elif mode==45:
  name='repository.xvbmc-4.2.1.zip'

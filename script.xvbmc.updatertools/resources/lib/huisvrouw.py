@@ -476,7 +476,7 @@ def AutoCrash():
    File=infile
    log(infile)
    os.remove(infile)
-def Fix_Special(url):
+def Fix_Special():
  HOME=xbmc.translatePath('special://home')
  dp.create(MainTitle,"Renaming paths...",'','Please Wait')
  for root,dirs,files in os.walk(HOME):
@@ -522,11 +522,11 @@ def CCleaner(melding=None,CleanCrap=None,refresh=None):
   elif choice==0:
    CleanCrap=False
  if CleanCrap==True:
-  CrapCleaner(melding,refresh)
+  CrapCleaner(linkstrings,melding,refresh)
  else:
-  log("do nothing")
-def CrapCleaner(melding=None,refresh=None):
- stringslink=OPEN_URL(linkstrings)
+  log("just do nothing at all ;-p ")
+def CrapCleaner(url,melding=None,refresh=None):
+ stringslink=OPEN_URL(url)
  strings=re.compile('string="(.+?)"').findall(stringslink)
  for stringname in strings:
   try:
@@ -542,14 +542,17 @@ def CrapCleaner(melding=None,refresh=None):
    else:pass
   except Exception as e:log("NO! usrdata vOoDoO for "+str(e))
  xbmc.sleep(100);
+ Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();
  if refresh:
-  xbmc.executebuiltin('UpdateLocalAddons()');log("XvBMC_UpdateLocalAddons()");
+  xbmc.executebuiltin('UpdateLocalAddons()');log("XvBMC_UpdateLocalAddons(cClean)");
   xbmc.sleep(50);
-  xbmc.executebuiltin('UpdateAddonRepos()');log("XvBMC_UpdateAddonRepos()");
+  xbmc.executebuiltin('UpdateAddonRepos()');log("XvBMC_UpdateAddonRepos(cClean)");
   xbmc.sleep(50);
+ Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();
  if melding:
   dialog.ok("[COLOR lime]Operation Complete![/COLOR]",' ','[B]XvBMC\'s Kodi CrapCleaner[/B]','[COLOR dimgray]Brought To You By %s [/COLOR]'%MainTitle)
   xbmc.sleep(50);
+ Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();
  xbmc.sleep(100);
 def xvbmcLog():
  kodilog=xbmc.translatePath('special://logpath/kodi.log')

@@ -61,9 +61,11 @@ HOME=xbmc.translatePath('special://home/')
 skin=xbmc.getSkinDir()
 USERDATA=xbmc.translatePath(os.path.join('special://home/userdata',''))
 USERADDONDATA=xbmc.translatePath(os.path.join('special://home/userdata/addon_data',''))
+xxxAnti69='»--> decrapify your box/build/setup [I](anti soixante-neuf)[/I]'
 xxxCheck=xbmc.translatePath(os.path.join(USERADDONDATA,'plugin.program.super.favourites','Super Favourites','xXx','favourites.xml'))
 xxxDirty='[COLOR pink]XvBMC\'s [B] [COLOR hotpink]x[COLOR deeppink]X[/COLOR]x[/COLOR] [/B] section ([COLOR hotpink]18[/COLOR][COLOR deeppink][B]+[/B][/COLOR])[/COLOR]'
 xxxIcon=base64.b64decode('aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1h2Qk1DL3JlcG9zaXRvcnkueHZibWMvbWFzdGVyL3ppcHMvdHJpcGxlLXgvYWR1bHQucG5n')
+xxxFanart=base64.b64decode('aHR0cHM6Ly93d3cuZHJvcGJveC5jb20vcy9vcnM1M3ZtOWQxdTlmcGIvQW50aTY5LnR4dD9kbD0x')
 if not ADDON.getSetting('leesmij')=='true':
  Common.okDialog('[COLOR white]NOTE:[B] XvBMC is [COLOR red]geen[/COLOR] helpdesk voor boxverkopers[/B] ![/COLOR]','(we aren\'t a helpdesk for resellers or pre-installed builds)[CR]',iNfo,'[COLOR darkorange][B]~  XvBMC = GRATIS  ~  XvBMC = FOR FREE  ~[/B][/COLOR]')
  ADDON.setSetting('leesmij','true')
@@ -145,6 +147,7 @@ def mainMenu():
   if xbmc.getCondVisibility('System.HasAddon("plugin.program.super.favourites")'):
    addDir('',BASEURL,666,addonIcon,'','',False)
    addItem(xxxDirty,BASEURL,69,xxxIcon,'')
+   addItem('[COLOR pink][B] [/B]'+xxxAnti69+'[/COLOR]',BASEURL,68,xxxIcon,'')
   else:
    addDir('',BASEURL,666,addonIcon,'','',False)
    addItem('[COLOR red]\'Super Favourites\' is missing, [COLOR lime][I]click here [/I][/COLOR] to (re-)install & enable [B]18+[/B][/COLOR]',BASEURL,70,xxxIcon,'')
@@ -212,11 +215,13 @@ def XvBMCtools2():
   if xbmc.getCondVisibility('System.HasAddon("plugin.program.super.favourites")'):
    addDir('',BASEURL,666,addonIcon,'','',False)
    addItem('[COLOR hotpink]activated: [/COLOR]'+xxxDirty,BASEURL,69,xxxIcon,'')
+   addItem('[COLOR pink][B] [/B]'+xxxAnti69+'[/COLOR]',BASEURL,68,xxxIcon,'')
   else:
    addDir('',BASEURL,666,addonIcon,'','',False)
    addItem('[COLOR red]\'Super Favourites\' is missing, [COLOR lime][I]click here [/I][/COLOR] to (re-)install & enable [B]18+[/B][/COLOR]',BASEURL,70,xxxIcon,'')
  else:
   addItem('[B]P[/B]ush [COLOR hotpink]x[B][COLOR pink]X[/COLOR][/B]x[/COLOR] [COLOR dimgray](\"dirty\"-up your box with some 69 and mo\')[/COLOR]',BASEURL,46,xxxIcon,'')
+  addItem('[COLOR dimgray]'+xxxAnti69+'[/COLOR]',BASEURL,68,xxxIcon,'')
  addDir('',BASEURL,666,addonIcon,'','',False)
  addItem('[B]T[/B]ool: convert physical paths (\'home\') to \'special\'',BASEURL,47,mediaPath+'tools.png','')
  addItem('[B]T[/B]ool: clean-up *.pyo and *.pyc files',BASEURL,48,mediaPath+'tools.png','')
@@ -236,13 +241,13 @@ def rpiWizard(name,url):
   fileexchange(url,name+'.txt',Rename,locatie)
   fileexchange(xchngUrl,'rpi'+exchange,exchange,xchngLoc)
   wizard(name,url+name+'.zip')
-  nursemaid.CCleaner(melding=False,CleanCrap=True,refresh=True)
+  nursemaid.CCleaner(False,True,True)
  else:pass
 def prtWizard(name,url):
  wizardPrt=Common.yesnoDialog(waarschuwing,xvbmcForced,forcedXvbmc,'[COLOR darkorange][B]'+MainTitle+'[/B][/COLOR]')
  if wizardPrt:
   wizard(name,url)
-  nursemaid.CCleaner(melding=False,CleanCrap=True,refresh=True)
+  nursemaid.CCleaner(False,True,True)
  else:pass
 def wizard(name,url):
  path=xbmc.translatePath(os.path.join('special://home/addons','packages'))
@@ -263,13 +268,13 @@ def wizard(name,url):
   xbmc.sleep(1000)
   try:os.remove(lib)
   except:pass
-  xbmc.executebuiltin('XBMC.UpdateLocalAddons()');Common.log("XvBMC_UpdateLocalAddons()");
+  xbmc.executebuiltin('XBMC.UpdateLocalAddons()');Common.log("XvBMC_UpdateLocalAddons(wizard)");
   xbmc.sleep(500)
   if int(utils.kodiver)<=16.7:
    dp.close()
    dialog.ok(MainTitle+" : Update [COLOR green][B]finished[/B][/COLOR]",'[COLOR orange][B]!!!  HINT  !!![/B][/COLOR]','[B]Reboot[/B] Kodi to complete...','[B]Herstart[/B] Kodi ter afronding')
    time.sleep(0.5)
-   Common.forceRefresh(melding=False,skin=False)
+   Common.forceRefresh(False,False)
   elif int(utils.kodiver)>16.7:
    dp.close()
    utils.enableAddons(melding=False);Common.log("XvBMC_utils.enableAddons(melding=false,UPDATE=TRUE=By_Default)");
@@ -278,15 +283,15 @@ def wizard(name,url):
    if choice==1:
     xbmc.executebuiltin("XBMC.ActivateWindow(home)")
     xbmc.sleep(500)
-    xbmc.executebuiltin('XBMC.UpdateAddonRepos');Common.log("XvBMC_UpdateAddonRepos()");
+    xbmc.executebuiltin('XBMC.UpdateAddonRepos');Common.log("XvBMC_UpdateAddonRepos(wizard)");
     xbmc.sleep(500)
-    xbmc.executebuiltin('ReloadSkin()');Common.log("ReloadSkin()");
+    xbmc.executebuiltin('ReloadSkin()');Common.log("ReloadSkin(wizard)");
    elif choice==0:
     dialog.ok(MainTitle+" : [COLOR green][B]HINT![/B][/COLOR]",'DO [COLOR red][B]NOT[/B][/COLOR] \'force-close\' please[B]...[/B]','[COLOR dimgray](always use the normal Kodi shutdown)[/COLOR]','[B]NIET[/B] \'geforceerd\' afsluiten a.u.b.')
     xbmc.sleep(500)
     xbmc.executebuiltin("Container.Refresh");Common.log("XvBMC_Container.Refresh");
     xbmc.sleep(500)
-    xbmc.executebuiltin('XBMC.UpdateAddonRepos');Common.log("XvBMC_UpdateAddonRepos()");
+    xbmc.executebuiltin('XBMC.UpdateAddonRepos');Common.log("XvBMC_UpdateAddonRepos(wizard)");
  else:
   dialog.ok(MainTitle,'NOTE: unsuccessful/onvoltooide download',' ','[COLOR dimgray]check Kodi [B].log[/B] for more info[/COLOR]')
  xbmc.sleep(1000)
@@ -318,13 +323,13 @@ def customwizard(name,url,storeLoc,unzipLoc):
   xbmc.sleep(1000)
   try:os.remove(lib)
   except:pass
-  xbmc.executebuiltin('XBMC.UpdateLocalAddons()');Common.log("XvBMC_UpdateLocalAddons()");
+  xbmc.executebuiltin('XBMC.UpdateLocalAddons()');Common.log("XvBMC_UpdateLocalAddons(cWizard)");
   xbmc.sleep(500)
   if int(utils.kodiver)<=16.7:
    dp.close()
    dialog.ok(MainTitle+" : Update [COLOR green][B]finished[/B][/COLOR]",'[COLOR orange][B]!!!  HINT  !!![/B][/COLOR]','[B]Reboot[/B] Kodi to complete...','[B]Herstart[/B] Kodi ter afronding')
    time.sleep(0.5)
-   Common.forceRefresh(melding=False,skin=False)
+   Common.forceRefresh(False,False)
   elif int(utils.kodiver)>16.7:
    dp.close()
    utils.enableAddons(melding=False);Common.log("XvBMC_utils.enableAddons(melding=false,UPDATE=TRUE=By_Default)");
@@ -333,15 +338,15 @@ def customwizard(name,url,storeLoc,unzipLoc):
    if choice==1:
     xbmc.executebuiltin("XBMC.ActivateWindow(home)")
     xbmc.sleep(500)
-    xbmc.executebuiltin('XBMC.UpdateAddonRepos');Common.log("XvBMC_UpdateAddonRepos()");
+    xbmc.executebuiltin('XBMC.UpdateAddonRepos');Common.log("XvBMC_UpdateAddonRepos(cWizard)");
     xbmc.sleep(500)
-    xbmc.executebuiltin('ReloadSkin()');Common.log("ReloadSkin()");
+    xbmc.executebuiltin('ReloadSkin()');Common.log("ReloadSkin(cWizard)");
    elif choice==0:
     dialog.ok(MainTitle+" : [COLOR green][B]HINT![/B][/COLOR]",'DO [COLOR red][B]NOT[/B][/COLOR] \'force-close\' please[B]...[/B]','[COLOR dimgray](always use the normal Kodi shutdown)[/COLOR]','[B]NIET[/B] \'geforceerd\' afsluiten a.u.b.')
     xbmc.sleep(500)
     xbmc.executebuiltin("Container.Refresh");Common.log("XvBMC_Container.Refresh");
     xbmc.sleep(500)
-    xbmc.executebuiltin('XBMC.UpdateAddonRepos');Common.log("XvBMC_UpdateAddonRepos()");
+    xbmc.executebuiltin('XBMC.UpdateAddonRepos');Common.log("XvBMC_UpdateAddonRepos(cWizard)");
  else:
   dialog.ok(MainTitle,'NOTE: unsuccessful/onvoltooide download',' ','[COLOR dimgray]check Kodi [B].log[/B] for more info[/COLOR]')
  xbmc.sleep(1000)
@@ -538,12 +543,12 @@ def vOoDoO():
   stacker.fixer(stacker.toolupdate,3,2)
  elif vh==1:
   stacker.fixer(stacker.toolupdate,3,2)
-  stacker.showFiles(stacker.upgradeurl,1,1,melding=False)
-  stacker.showFiles(stacker.updateurl,2,2,melding=False)
+  stacker.showFiles(stacker.upgradeurl,1,1,False)
+  stacker.showFiles(stacker.updateurl,2,2,False)
   Common.prettyReboot()
  elif vh==2:
   stacker.fixer(stacker.toolupdate,3,2)
-  stacker.showFiles(stacker.updateurl,2,2,melding=False)
+  stacker.showFiles(stacker.updateurl,2,2,False)
   Common.prettyReboot()
 def addItem(name,url,mode,iconimage,fanart):
  u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)+"&fanart="+urllib.quote_plus(fanart)
@@ -626,7 +631,7 @@ if mode==None or url==None or len(url)<1:
  mainMenu()
 elif mode==1:
  wizard(name,url)
- nursemaid.CCleaner(melding=False,CleanCrap=True,refresh=True)
+ nursemaid.CCleaner(False,True,True)
 elif mode==10:
  XvBMCtools1()
 elif mode==20:
@@ -675,11 +680,11 @@ elif mode==24:
  xbmc.executebuiltin('ActivateWindow(10040,addons://recently_updated/,return)')
 elif mode==25:
  nursemaid.autocleanask()
- nursemaid.CCleaner(melding=False,CleanCrap=True,refresh=True)
+ nursemaid.CCleaner(False,True,True)
 elif mode==26:
  nursemaid.purgePackages()
 elif mode==27:
- Common.forceRefresh(melding=True,skin=True)
+ Common.forceRefresh(True,True)
 elif mode==28:
  nursemaid.AddonsDatabaseRemoval()
 elif mode==29:
@@ -712,6 +717,11 @@ elif mode==45:
 elif mode==46:
  url=base64.b64decode(base)+'triple-x/xXxvbmc.zip'
  wizard(name,url)
+elif mode==68:
+ nursemaid.CrapCleaner(xxxFanart,True,False)
+ xbmc.sleep(500);xbmc.executebuiltin("Container.Refresh");Common.log("XvBMC_Container.Refresh(69)");
+ xbmc.sleep(500);xbmc.executebuiltin('XBMC.UpdateLocalAddons()');Common.log("XvBMC_UpdateLocalAddons(69)");
+ xbmc.sleep(500);xbmc.executebuiltin('XBMC.UpdateAddonRepos');Common.log("XvBMC_UpdateAddonRepos(69)");
 elif mode==69:
  if ADDON.getSetting('ask')=='false':
   choice=xbmcgui.Dialog().yesno("[COLOR red]WARNING: Explicit adult material[/COLOR]","[COLOR white]You may enter only if you are [COLOR yellow]at least 18 years of age or [CR]at least the legal age [/COLOR][COLOR white]in the jurisdiction you reside or [CR]from which you access this content.[/COLOR]","","","Exit","Enter")
@@ -730,11 +740,11 @@ elif mode==70:
  unzipLoc=os.path.join(HOME,'addons')
  customwizard(name,url,storeLoc,unzipLoc)
 elif mode==47:
- nursemaid.Fix_Special(url)
+ nursemaid.Fix_Special()
 elif mode==48:
  nursemaid.purgePyoC()
 elif mode==49:
- nursemaid.CCleaner(melding=True,CleanCrap=True,refresh=True)
+ nursemaid.CCleaner(True,True,True)
 elif mode==100:
  rpiWizard(name,url)
 """

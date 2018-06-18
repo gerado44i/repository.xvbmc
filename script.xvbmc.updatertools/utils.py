@@ -88,8 +88,8 @@ def enableAddons(melding=None,update=True):
   conn.executemany('update installed set enabled=1 WHERE addonID = (?)',((val,)for val in contents))
   conn.commit()
   if update:
-   xbmc.executebuiltin('UpdateLocalAddons()');log("XvBMC_UTILS.UpdateLocalAddons()")
-   xbmc.executebuiltin('UpdateAddonRepos()');log("XvBMC_UTILS.UpdateAddonRepos()")
+   xbmc.executebuiltin('UpdateLocalAddons()');log("XvBMC_UTILS.UpdateLocalAddons(update)")
+   xbmc.executebuiltin('UpdateAddonRepos()');log("XvBMC_UTILS.UpdateAddonRepos(update)")
   if melding:
    dialog.ok("[COLOR lime][B]Addons enabled[/COLOR][/B]",'[COLOR white]ALL[/COLOR] addons are [B]enabled![/B]')
  else:

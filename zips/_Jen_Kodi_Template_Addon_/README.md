@@ -1,6 +1,6 @@
 # Jen Plugin Playground
  
-**NOTE:** The author is not responsible for the use of this addon. The author is not responsible for the content found using this addon. The author does not host or own any content found within this addon.[CR]The author is in no way affiliated with Kodi, Team Kodi, or the XBMC Foundation.[CR]This is a Non-profit resource, organized solely for educational purposes which is protected under the Fair-Use doctrine of the Copyright Act, Specifically section 107, which does promote freedom of expression, by permitting the unlicensed use of copyright-protected works.
+**NOTE:** The author is not responsible for the use of this addon. The author is not responsible for the content found using this addon. The author does not host or own any content found within this addon. The author is in no way affiliated with Kodi, Team Kodi, or the XBMC Foundation. This is a Non-profit resource, organized solely for educational purposes which is protected under the Fair-Use doctrine of the Copyright Act, Specifically section 107, which does promote freedom of expression, by permitting the unlicensed use of copyright-protected works.
  
   
    
@@ -10,7 +10,8 @@
 * https://bestforkodi.com/how-to-create-your-own-add-on-with-jen-template-part-1/ [2-4]
 * https://bestforkodi.com/how-to-create-your-own-add-on-with-jen-template-part-3/ [3-4]
 * https://bestforkodi.com/how-to-create-your-own-add-on-with-jen-template-part-4/ [4-4]
-* *EtcEtcEtc*
+* https://youtu.be/0kFhoWahtFw [Video Guide]
+* *EtcEtcEtcEtcEtcEtcEtcEtcEtc*
    
   
  

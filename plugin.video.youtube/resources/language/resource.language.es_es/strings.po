@@ -50,11 +50,11 @@ msgstr "Configurar InputStream Adaptive"
 
 msgctxt "#30009"
 msgid "Always ask for the video quality"
-msgstr "Preguntar siempre por calidad de video"
+msgstr "Preguntar siempre por calidad de vídeo"
 
 msgctxt "#30010"
 msgid "Video quality"
-msgstr "Calidad de Video"
+msgstr "Calidad de vídeo"
 
 msgctxt "#30011"
 msgid "480p"
@@ -108,7 +108,7 @@ msgstr "Tamaño historial de búsqueda"
 
 msgctxt "#30024"
 msgid "Cache size (MB)"
-msgstr "Tamaño cache (MB)"
+msgstr "Tamaño para cache de funciones (MB)"
 
 msgctxt "#30025"
 msgid "Enable setup-wizard"
@@ -160,11 +160,11 @@ msgstr "Soportar reproductor alternativo"
 
 msgctxt "#30037"
 msgid "Custom Watch Later playlist id"
-msgstr "Personalizar ID lista reproducción 'Ver más tarde'"
+msgstr "Personalizar ID para lista de reproducción 'Ver más tarde'"
 
 msgctxt "#30038"
 msgid "Custom History playlist id"
-msgstr "Personalizar ID lista reproducción 'Historial'"
+msgstr "Personalizar ID para lista de reproducción 'Historial'"
 
 #Kodion Common
 #empty strings from id 30039 to 30099
@@ -203,11 +203,11 @@ msgstr "Ver más tarde"
 
 msgctxt "#30108"
 msgid "Remove"
-msgstr "Quitar"
+msgstr "Suprimir"
 
 msgctxt "#30109"
 msgid "Latest Videos"
-msgstr "Últimos Videos"
+msgstr "Últimos Vídeos"
 
 msgctxt "#30110"
 msgid "New Search"
@@ -231,7 +231,7 @@ msgstr "Confirmación para eliminar"
 
 msgctxt "#30115"
 msgid "Confirm remove"
-msgstr "Confirmación para quitar"
+msgstr "Confirmación para suprimir"
 
 msgctxt "#30116"
 msgid "Delete \"%s\"?"
@@ -239,7 +239,7 @@ msgstr "¿Esta seguro de que desea eliminar \"%s\"?"
 
 msgctxt "#30117"
 msgid "Remove \"%s\"?"
-msgstr "¿Esta seguro de que desea quitar \"%s\"?"
+msgstr "¿Esta seguro de que desea suprimir \"%s\"?"
 
 msgctxt "#30118"
 msgid "Delete"
@@ -247,7 +247,7 @@ msgstr "Eliminar"
 
 msgctxt "#30119"
 msgid "Please wait..."
-msgstr "Por favor espere..."
+msgstr "Por favor, espere..."
 
 msgctxt "#30120"
 msgid "Clear"
@@ -258,19 +258,19 @@ msgstr "Limpiar"
 
 msgctxt "#30200"
 msgid "API"
-msgstr ""
+msgstr "API"
 
 msgctxt "#30201"
 msgid "API Key"
-msgstr "Clave API"
+msgstr "API Key"
 
 msgctxt "#30202"
 msgid "API Id"
-msgstr "ID API"
+msgstr "API Id"
 
 msgctxt "#30203"
 msgid "API Secret"
-msgstr "API Secreta"
+msgstr "API Secret"
 
 msgctxt "#30204"
 msgid "Enable personal API keys"
@@ -317,7 +317,7 @@ msgstr "Mi Canal"
 
 msgctxt "#30508"
 msgid "Liked Videos"
-msgstr "Me gustó el video"
+msgstr "Me gustó el vídeo"
 
 msgctxt "#30509"
 msgid "History"
@@ -341,11 +341,11 @@ msgstr "Popular en YouTube"
 
 msgctxt "#30514"
 msgid "Related Videos"
-msgstr "Videos relacionados"
+msgstr "Vídeos relacionados"
 
 msgctxt "#30515"
 msgid "Auto-Remove from 'Watch Later'"
-msgstr "Auto-Eliminar de 'Ver más tarde'"
+msgstr "Auto-eliminar de 'Ver más tarde'"
 
 msgctxt "#30516"
 msgid "Folders"
@@ -357,11 +357,11 @@ msgstr "Suscribirse a %s"
 
 msgctxt "#30518"
 msgid "Go to '%s'"
-msgstr "Visite la URL '%s' desde cualquier navegador web" 
+msgstr "Por favor, vaya a la URL '%s' desde"
 
 msgctxt "#30519"
 msgid "and enter the following code:"
-msgstr "e introduzca el siguiente código:"
+msgstr "cualquier navegador web e introduzca el siguiente código..."
 
 msgctxt "#30520"
 msgid "Add to..."
@@ -437,7 +437,7 @@ msgstr "Reproducir desde aquí"
 
 msgctxt "#30538"
 msgid "Disliked Videos"
-msgstr "No me gustó el video"
+msgstr "No me gustó el vídeo"
 
 msgctxt "#30539"
 msgid "Live"
@@ -469,11 +469,11 @@ msgstr "No se encontraron enlaces"
 
 msgctxt "#30546"
 msgid "Please log in twice!"
-msgstr "Por favor inicie sesión dos veces!"
+msgstr "Por favor, inicie sesión dos veces!"
 
 msgctxt "#30547"
 msgid "You must enable two applications so that YouTube is functioning properly."
-msgstr "Debe habilitar dos sesiones para que el add-on YouTube funcione correctamente."
+msgstr "Para que el add-on YouTube funcione correctamente se deben habilitar dos sesiones."
 
 msgctxt "#30548"
 msgid "More..."
@@ -481,7 +481,7 @@ msgstr "Más..."
 
 msgctxt "#30549"
 msgid "No videos streams found"
-msgstr "No se han encontrados videos"
+msgstr "No se han encontrados vídeos"
 
 msgctxt "#30550"
 msgid "Region"
@@ -513,15 +513,15 @@ msgstr "Limpiar historial de búsqueda"
 
 msgctxt "#30557"
 msgid "function cache"
-msgstr "La cache para funciones"
+msgstr "cache para funciones"
 
 msgctxt "#30558"
 msgid "search history"
-msgstr "El Historial de búsqueda"
+msgstr "historial de búsqueda"
 
 msgctxt "#30559"
 msgid "Delete settings.xml"
-msgstr "Eliminar ajustes personales (settings.xml)"
+msgstr "Eliminar settings.xml"
 
 msgctxt "#30560"
 msgid "Subtitle language"
@@ -613,7 +613,7 @@ msgstr "¿Está seguro de que desea restablecer las credenciales de acceso?"
 
 msgctxt "#30582"
 msgid "Autoplay suggested videos"
-msgstr "Reproducir automáticamente videos sugeridos"
+msgstr "Reproducir vídeos sugeridos automáticamente"
 
 msgctxt "#30583"
 msgid "Automatic"
@@ -625,7 +625,7 @@ msgstr "Mis Suscripciones (Filtrado)"
 
 msgctxt "#30585"
 msgid "Filtered channel list (comma delimited)"
-msgstr "Lista de canales filtrados (separado por comas)"
+msgstr "Lista de canales filtrados (utilice comas como separador)"
 
 msgctxt "#30586"
 msgid "Blacklist"
@@ -649,7 +649,7 @@ msgstr "Eliminado de filtro de 'Mis Suscripciones'"
 
 msgctxt "#30591"
 msgid "Thumbnail size"
-msgstr "Tamaño miniaturas"
+msgstr "Tamaño para miniaturas"
 
 msgctxt "#30592"
 msgid "Medium (16:9)"
@@ -689,15 +689,15 @@ msgstr "Configurar subtítulos"
 
 msgctxt "#30601"
 msgid "%s with %s fallback"
-msgstr ""
+msgstr "%s con %s como respaldo"
 
 msgctxt "#30602"
 msgid "No auto-generated"
-msgstr "Sin autogenerado"
+msgstr "sin autogenerado"
 
 msgctxt "#30603"
 msgid "Age gate"
-msgstr "Activar restricciones por edad"
+msgstr "Habilitar restricciones por edad"
 
 msgctxt "#30604"
 msgid "Allow offensive content"
@@ -729,7 +729,7 @@ msgstr "Esta acción borrará su historial de reproducción en todos los disposi
 
 msgctxt "#30611"
 msgid "Saved Playlists"
-msgstr "Guardar listas de reproducción"
+msgstr "Listas de reproducción guardadas"
 
 msgctxt "#30612"
 msgid "Retry"
@@ -741,7 +741,7 @@ msgstr "Recuperar ID para lista de reproducción 'Ver más tarde'"
 
 msgctxt "#30614"
 msgid "Failed to retrieve Watch Later playlist id. Add a few videos to Watch Later via the web/app and retry."
-msgstr "¡Vaya! Algo ha fallado al recuperar la ID para la lista de reproducción 'Ver más tarde'. Agregue algunos videos a 'Ver más tarde' a través de la aplicación web / Android y vuelva a intentarlo."
+msgstr "¡Vaya! Algo ha fallado al recuperar la ID para la lista de reproducción 'Ver más tarde'. Agregue algunos vídeos a 'Ver más tarde' a través de la aplicación web / Android y vuelva a intentarlo."
 
 msgctxt "#30615"
 msgid "Cancel"
@@ -753,7 +753,7 @@ msgstr "Debe estar registrado."
 
 msgctxt "#30617"
 msgid "MPEG-DASH"
-msgstr ""
+msgstr "MPEG-DASH"
 
 msgctxt "#30618"
 msgid "Enable mpeg-dash proxy"
@@ -781,7 +781,7 @@ msgstr "Instalar InputStream Helper"
 
 msgctxt "#30624"
 msgid "Requires Kodi 17+"
-msgstr "Necesario Kodi 17 o superior"
+msgstr "Es necesario Kodi 17 o superior"
 
 msgctxt "#30625"
 msgid "InputStream Helper is already installed."
@@ -793,15 +793,15 @@ msgstr "Eliminar archivos temporales"
 
 msgctxt "#30627"
 msgid "Rate video after watching"
-msgstr "Calificar video después de ver"
+msgstr "Calificar vídeo después de ver"
 
 msgctxt "#30628"
 msgid "HTTP Server"
-msgstr "Server HTTP"
+msgstr "Servidor HTTP"
 
 msgctxt "#30629"
 msgid "IP whitelist (comma delimited)"
-msgstr "Lista blanca IP (separado por comas)"
+msgstr "Lista blanca IP (utilice comas como separador)"
 
 msgctxt "#30630"
 msgid "Save"
@@ -817,7 +817,7 @@ msgstr "Habilitar página de configuración API"
 
 msgctxt "#30633"
 msgid "http://<ipaddress>:<port>/api (see HTTP Server)"
-msgstr "http://<direccion_ip>:<puerto>/api (ver server HTTP)"
+msgstr "http://<direccion_ip>:<puerto>/api (ver Servidor HTTP)"
 
 msgctxt "#30634"
 msgid "YouTube Add-on API Configuration"
@@ -861,4 +861,176 @@ msgstr "IP a la escucha"
 
 msgctxt "#30644"
 msgid "Select listen IP"
-msgstr "Seleccione IP a la escucha"
+msgstr "Seleccionar IP a la escucha"
+
+msgctxt "#30645"
+msgid "Refresh after watching"
+msgstr "Actualizar después de ver"
+
+msgctxt "#30646"
+msgid "Upcoming Live"
+msgstr "Próximamente en Directo"
+
+msgctxt "#30647"
+msgid "Completed Live"
+msgstr ""
+
+msgctxt "#30648"
+msgid "API Key is incorrect. Settings - API - API Key"
+msgstr "La clave API es incorrecta. Ajustes - API - API Key"
+
+msgctxt "#30649"
+msgid "Client Id is incorrect. Settings - API - API Id"
+msgstr "La ID de cliente es incorrecta. Ajustes - API - API ID"
+
+msgctxt "#30650"
+msgid "Client Secret is incorrect. Settings - API - API Secret"
+msgstr "La ID Secreta es incorrecta. Ajustes - API - API Secret"
+
+msgctxt "#30651"
+msgid "Location"
+msgstr "Ubicación"
+
+msgctxt "#30652"
+msgid "Location radius (km)"
+msgstr "Radio de ubicación (km)"
+
+msgctxt "#30653"
+msgid "Perform geolocation? Used for [B]My Location[/B]"
+msgstr "¿Desea usar la geolocalización? Sera usado para [B]Mi Ubicación[/B]"
+
+msgctxt "#30654"
+msgid "My Location"
+msgstr "Mi Ubicación"
+
+msgctxt "#30655"
+msgid "Switch User"
+msgstr "Cambiar de usuario"
+
+msgctxt "#30656"
+msgid "New user"
+msgstr "Nuevo usuario"
+
+msgctxt "#30657"
+msgid "Unnamed"
+msgstr "Sin nombre"
+
+msgctxt "#30658"
+msgid "Enter a name for this user"
+msgstr "Introduzca un nombre para este usuario"
+
+msgctxt "#30659"
+msgid "User is now '%s'"
+msgstr "El nombre de usuario es ahora '%s'"
+
+msgctxt "#30660"
+msgid "Users"
+msgstr "usuarios"
+
+msgctxt "#30661"
+msgid "Add a user"
+msgstr "Añadir un usuario"
+
+msgctxt "#30662"
+msgid "Remove a user"
+msgstr "Suprimir un usuario"
+
+msgctxt "#30663"
+msgid "Rename a user"
+msgstr "Renombrar un usuario"
+
+msgctxt "#30664"
+msgid "Switch user"
+msgstr "Cambiar de usuario"
+
+msgctxt "#30665"
+msgid "Switch to '%s' now?"
+msgstr "¿Desea cambiar a '%s' ahora?"
+
+msgctxt "#30666"
+msgid "Removed '%s'"
+msgstr "Suprimir '%s'"
+
+msgctxt "#30667"
+msgid "Renamed '%s' to '%s'"
+msgstr "Renombrar '$s' a '%s'"
+
+msgctxt "#30668"
+msgid "Play count minimum percent"
+msgstr ""
+
+msgctxt "#30669"
+msgid "Mark unwatched"
+msgstr ""
+
+msgctxt "#30670"
+msgid "Mark watched"
+msgstr ""
+
+msgctxt "#30671"
+msgid "Clear playback history"
+msgstr ""
+
+msgctxt "#30672"
+msgid "Delete playback history"
+msgstr ""
+
+msgctxt "#30673"
+msgid "playback history"
+msgstr ""
+
+msgctxt "#30674"
+msgid "Reset resume point"
+msgstr ""
+
+msgctxt "#30675"
+msgid "Use playback history (watched, resume tracking)"
+msgstr ""
+
+msgctxt "#30676"
+msgid "Just now"
+msgstr ""
+
+msgctxt "#30677"
+msgid "A minute ago"
+msgstr ""
+
+msgctxt "#30678"
+msgid "Recently"
+msgstr ""
+
+msgctxt "#30679"
+msgid "An hour ago"
+msgstr ""
+
+msgctxt "#30680"
+msgid "Two hours ago"
+msgstr ""
+
+msgctxt "#30681"
+msgid "Three hours ago"
+msgstr ""
+
+msgctxt "#30682"
+msgid "Yesterday at"
+msgstr ""
+
+msgctxt "#30683"
+msgid "Two days ago"
+msgstr ""
+
+msgctxt "#30684"
+msgid "Today at"
+msgstr ""
+
+msgctxt "#30685"
+msgid "Delete data cache database"
+msgstr ""
+
+msgctxt "#30686"
+msgid "Clear data cache"
+msgstr ""
+
+msgctxt "#30687"
+msgid "data cache"
+msgstr ""

@@ -1135,25 +1135,28 @@
   </extension>
 </addon>
 
-<addon id="script.advanced_power_menu" name="Advanced Power Menu" version="1.0.1" provider-name="scott marten">
-	<requires>
-		<import addon="xbmc.python" version="2.14.0"/>
-	</requires>
-	<extension point="xbmc.python.script" library="addon.py">
-		<provides>executable</provides>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<platform>linux</platform>
-		<summary lang="en">Advanced Power Menu</summary>
-		<summary lang="hu">Kibővített Kikapcsoló Menű </summary>
-		<summary lang="de">Erweitertes Start Menü</summary>
-		<description lang="en">Suspend, Power Off, Reboot to Android, Reboot to LibreELEC, Restart KODI, For LibreElec S905, S905X, S905W, S912</description>
-		<description lang="hu">Alvó mód, Kikapcsolás, LibreELEC újraindítása, Android indítása, KODI újraindítása, Bőr újratöltése, Felhasználó kiléptetése.</description>
-		<description lang="de">Ruhemodus, Herunterfahren, Neustart zu Android, Neustart zu LibreELEC, KODI neu starten, Skin neu laden, Screenshot aufnehmen, Benutzer abmelden</description><license>GNU General Public License, v2</license>
-		<assets>
-			<icon>icon.png</icon>
-		</assets>
-	</extension>
+<addon id="script.advanced.power.menu" name="Advanced Power-Menu" version="1.0.0" provider-name="XvBMC">
+    <requires>
+        <import addon="xbmc.python" version="2.14.0"/>
+        <import addon="repository.xvbmc" version="4.2"/>
+        <import addon="script.module.xbmc.shared" version="1.4"/>
+    </requires>
+    <extension point="xbmc.python.script" library="addon.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Advanced Power-Menu</summary>
+        <description lang="en">Suspend, Shutdown, Reboot, Kill, Restart KODI, Reload Skin, Log Off, ScreenShot, Settings, Sys.Info, File Manager</description>
+        <platform>all</platform>
+        <disclaimer lang="en">! USE AT YOUR OWN RISK !</disclaimer>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <news>Advanced Power-Menu</news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+            <screenshot></screenshot>
+        </assets>
+    </extension>
 </addon>
 
 <addon id="script.elementum.burst" name="Elementum [COLOR FFFF6B00]Burst[/COLOR]" version="0.0.16" provider-name="elgatito">

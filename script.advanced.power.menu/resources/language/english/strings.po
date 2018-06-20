@@ -1,0 +1,104 @@
+# XBMC Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Advanced Power-Menu"
+msgstr ""
+
+msgctxt "#32001"
+msgid "Suspend"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Power OFF (OS)"
+msgstr ""
+
+msgctxt "#32003"
+msgid "REBOOT (OS)"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Force-Close (Kill)"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Soft-restart Kodi (RestartApp)"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Reload Skin"
+msgstr ""
+
+msgctxt "#32007"
+msgid "Log Off"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Screenshot (in 30sec)"
+msgstr ""
+
+msgctxt "#32009"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#32010"
+msgid "System Info"
+msgstr ""
+
+msgctxt "#32011"
+msgid "File Manager"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Reboot (OS)"
+msgstr ""
+
+msgctxt "#32013"
+msgid "Force-Close"
+msgstr ""
+
+msgctxt "#32014"
+msgid "Restart KODI"
+msgstr ""
+
+msgctxt "#32015"
+msgid "Reload the current skin"
+msgstr ""
+
+msgctxt "#32016"
+msgid "Log Off current user"
+msgstr ""
+
+msgctxt "#32017"
+msgid "30 seconds until ScreenShot..."
+msgstr ""
+
+msgctxt "#32018"
+msgid "Save image to ScreenShots folder"
+msgstr ""
+
+msgctxt "#32019"
+msgid "Suspend System"
+msgstr ""
+
+msgctxt "#32020"
+msgid "Shutdown System"
+msgstr ""
+
+msgctxt "#32021"
+msgid "Quit (Shutdown)"
+msgstr ""
+
+msgctxt "#32022"
+msgid "Quit Kodi"
+msgstr ""

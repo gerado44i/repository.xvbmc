@@ -1,6 +1,10 @@
-
-SEE: https://koditips.com/jen-kodi-addon-create-playlist-addon/ (for instance, etc...)
-
+ 
+More iNFO:
+  *  https://bestforkodi.com/how-to-create-your-own-add-on-with-jen-template-part-1/ [1-4]
+  *  https://bestforkodi.com/how-to-create-your-own-add-on-with-jen-template-part-1/ [2-4]
+  *  https://bestforkodi.com/how-to-create-your-own-add-on-with-jen-template-part-3/ [3-4]
+  *  https://bestforkodi.com/how-to-create-your-own-add-on-with-jen-template-part-4/ [4-4]
+ 
 ####
 
      <extension point="xbmc.addon.metadata">
@@ -13,9 +17,10 @@ SEE: https://koditips.com/jen-kodi-addon-create-playlist-addon/ (for instance, e
      </extension>
 
 ####
-
-More iNFO:
-  *  https://bestforkodi.com/how-to-create-your-own-add-on-with-jen-template-part-1/ [1-4]
-  *  https://bestforkodi.com/how-to-create-your-own-add-on-with-jen-template-part-1/ [2-4]
-  *  https://bestforkodi.com/how-to-create-your-own-add-on-with-jen-template-part-3/ [3-4]
-  *  https://bestforkodi.com/how-to-create-your-own-add-on-with-jen-template-part-4/ [4-4]
+ 
+Extra iNFO:
+  *   https://koditips.com/jen-kodi-addon-create-playlist-addon/
+ 
+Video Guide:
+  *   https://youtu.be/0kFhoWahtFw
+ 

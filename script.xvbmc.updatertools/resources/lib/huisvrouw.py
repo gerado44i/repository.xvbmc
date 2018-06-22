@@ -13,7 +13,7 @@ addon_name=xbmcaddon.Addon().getAddonInfo('name')
 addon_icon=xbmcaddon.Addon().getAddonInfo('icon')
 ADDON=xbmcaddon.Addon(id=addon_id)
 artwork=base64.b64decode('aHR0cHM6Ly93d3cuZHJvcGJveC5jb20=')
-thumbnailPath=xbmc.translatePath('special://thumbnails');
+thumbnailPath=xbmc.translatePath('special://thumbnails')
 cachePath=os.path.join(xbmc.translatePath('special://home'),'cache')
 tempPath=xbmc.translatePath('special://temp')
 databasePath=xbmc.translatePath('special://database')
@@ -491,7 +491,9 @@ def Fix_Special():
  dialog.ok(MainTitle,'All physical (home) paths have been converted to special','To complete this process Kodi will force close now!')
  Common.killKodi()
 def purgePyoC():
+ dp.create("[COLOR white][B]"+MainTitle+"[/B][/COLOR]",'XvBMC vOoDoO...',' ','Please Wait')
  xvbmcPyoC=os.path.join(xbmc.translatePath('special://home'),'addons')
+ dp.update(33,'','(Mo\' [B]vOoDoO[/B])','')
  if os.path.exists(xvbmcPyoC)==True:
   for root,dirs,files in os.walk(xvbmcPyoC):
    for f in files:
@@ -505,6 +507,10 @@ def purgePyoC():
     except:pass
  else:
   pass
+ dp.update(66,'','(Mo\' [B]VoOdOo[/B])','')
+ xbmc.sleep(500)
+ time.sleep(1)
+ dp.close()
  dialog.ok("[COLOR lime]Operation Complete![/COLOR]",' ','[B]XvBMC\'s Kodi PyoC-cleaner[/B]','[COLOR dimgray]Brought To You By %s [/COLOR]'%MainTitle)
 def OPEN_URL(url):
  req=urllib2.Request(url)
@@ -526,6 +532,8 @@ def CCleaner(melding=None,CleanCrap=None,refresh=None):
  else:
   log("just do nothing at all ;-p ")
 def CrapCleaner(url,melding=None,refresh=None):
+ if melding:
+  dp.create("[COLOR white][B]"+MainTitle+"[/B][/COLOR]",'XvBMC vOoDoO...',' ','Please Wait')
  stringslink=OPEN_URL(url)
  strings=re.compile('string="(.+?)"').findall(stringslink)
  for stringname in strings:
@@ -541,19 +549,28 @@ def CrapCleaner(url,melding=None,refresh=None):
     shutil.rmtree(removeUsradd);log("EPiC: vOoDoO for "+str(removeUsradd));
    else:pass
   except Exception as e:log("NO! usrdata vOoDoO for "+str(e))
- xbmc.sleep(100);
- Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();
+ if melding:
+  dp.update(25,'','(Mo\' [B]vOoDoO[/B])','')
+ xbmc.sleep(100)
+ Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();xbmc.sleep(50);
  if refresh:
   xbmc.executebuiltin('UpdateLocalAddons()');log("XvBMC_UpdateLocalAddons(cClean)");
-  xbmc.sleep(50);
+  xbmc.sleep(50)
   xbmc.executebuiltin('UpdateAddonRepos()');log("XvBMC_UpdateAddonRepos(cClean)");
-  xbmc.sleep(50);
- Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();
+  xbmc.sleep(50)
+ if melding:
+  dp.update(50,'','(Mo\' [B]VoOdOo[/B])','')
+ Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();xbmc.sleep(50);
+ if melding:
+  dp.update(75,'','(Mo\' [B]vOoDoO[/B])','')
+ Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();xbmc.sleep(50);
+ if melding:
+  dp.update(99,'','(Mo\' [B]VoOdOo[/B])','')
+  xbmc.sleep(500)
+  dp.close()
  if melding:
   dialog.ok("[COLOR lime]Operation Complete![/COLOR]",' ','[B]XvBMC\'s Kodi CrapCleaner[/B]','[COLOR dimgray]Brought To You By %s [/COLOR]'%MainTitle)
-  xbmc.sleep(50);
- Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();
- xbmc.sleep(100);
+ xbmc.sleep(100)
 def xvbmcLog():
  kodilog=xbmc.translatePath('special://logpath/kodi.log')
  spmclog=xbmc.translatePath('special://logpath/spmc.log')
@@ -565,37 +582,37 @@ def xvbmcLog():
   if os.path.exists(spmclog)and os.path.exists(spmcold):
    choice=xbmcgui.Dialog().yesno(MainTitle,'[COLOR lime]Current-[/COLOR] & [COLOR red]old[/COLOR] [B]Log[/B]\'s detected on your system.','Which \'log file\' would you like to view?','NL: wilt u de oude/vorige- OF actuele log file bekijken?',yeslabel='old/oud',nolabel='current/recent')
    if choice==0:
-    f=open(spmclog,mode='r');msg=f.read();f.close()
+    f=open(spmclog,mode='r');msg=f.read();f.close();
     Common.TextBoxes("%s - spmc.log"%"[COLOR white]"+msg+"[/COLOR]")
    else:
-    f=open(spmcold,mode='r');msg=f.read();f.close()
+    f=open(spmcold,mode='r');msg=f.read();f.close();
     Common.TextBoxes("%s - spmc.old.log"%"[COLOR white]"+msg+"[/COLOR]")
   else:
-   f=open(spmclog,mode='r');msg=f.read();f.close()
+   f=open(spmclog,mode='r');msg=f.read();f.close();
    Common.TextBoxes("%s - spmc.log"%"[COLOR white]"+msg+"[/COLOR]")
  if os.path.exists(kodilog):
   if os.path.exists(kodilog)and os.path.exists(kodiold):
    choice=xbmcgui.Dialog().yesno(MainTitle,'[COLOR lime]Current-[/COLOR] & [COLOR red]old[/COLOR] [B]Log[/B]\'s detected on your system.','Which \'log file\' would you like to view?','NL: wilt u de oude/vorige- OF actuele log file bekijken?',yeslabel='old/oud',nolabel='current/recent')
    if choice==0:
-    f=open(kodilog,mode='r');msg=f.read();f.close()
+    f=open(kodilog,mode='r');msg=f.read();f.close();
     Common.TextBoxes("%s - kodi.log"%"[COLOR white]"+msg+"[/COLOR]")
    else:
-    f=open(kodiold,mode='r');msg=f.read();f.close()
+    f=open(kodiold,mode='r');msg=f.read();f.close();
     Common.TextBoxes("%s - kodi.old.log"%"[COLOR white]"+msg+"[/COLOR]")
   else:
-   f=open(kodilog,mode='r');msg=f.read();f.close()
+   f=open(kodilog,mode='r');msg=f.read();f.close();
    Common.TextBoxes("%s - kodi.log"%"[COLOR white]"+msg+"[/COLOR]")
  if os.path.exists(dbmclog):
   if os.path.exists(dbmclog)and os.path.exists(dbmcold):
    choice=xbmcgui.Dialog().yesno(MainTitle,'[COLOR lime]Current-[/COLOR] & [COLOR red]old[/COLOR] [B]Log[/B]\'s detected on your system.','Which \'log file\' would you like to view?','NL: wilt u de oude/vorige- OF actuele log file bekijken?',yeslabel='old/oud',nolabel='current/recent')
    if choice==0:
-    f=open(dbmclog,mode='r');msg=f.read();f.close()
+    f=open(dbmclog,mode='r');msg=f.read();f.close();
     Common.TextBoxes("%s - dbmc.log"%"[COLOR white]"+msg+"[/COLOR]")
    else:
-    f=open(dbmcold,mode='r');msg=f.read();f.close()
+    f=open(dbmcold,mode='r');msg=f.read();f.close();
     Common.TextBoxes("%s - dbmc.old.log"%"[COLOR white]"+msg+"[/COLOR]")
   else:
-   f=open(dbmclog,mode='r');msg=f.read();f.close()
+   f=open(dbmclog,mode='r');msg=f.read();f.close();
    Common.TextBoxes("%s - dbmc.log"%"[COLOR white]"+msg+"[/COLOR]")
  if os.path.isfile(kodilog)or os.path.isfile(spmclog)or os.path.isfile(dbmclog):
   return True

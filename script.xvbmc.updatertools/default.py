@@ -144,10 +144,22 @@ def mainMenu():
   buildinfotxt='[COLOR gray][B] - [/B]your wizard build: %s [/COLOR]'%buildversie+' [COLOR dimgray][I](current wiz.: %s)[/I][/COLOR]'%bldversion
  addItem('%s'%buildinfotxt,BASEURL,8,mediaPath+'wtf.png','')
  if os.path.isfile(xxxCheck):
+  global Pr0n
   if xbmc.getCondVisibility('System.HasAddon("plugin.program.super.favourites")'):
    addDir('',BASEURL,666,addonIcon,'','',False)
-   addItem(xxxDirty,BASEURL,69,xxxIcon,'')
-   addItem('[COLOR pink][B] [/B]'+xxxAnti69+'[/COLOR]',BASEURL,68,xxxIcon,'')
+   HomePr0n,Pr0nOnline=Pr0nChkr()
+   if HomePr0n=="Pr0nUpdate":
+    Pr0n=' --please update: %s'%Pr0nOnline
+    addItem(xxxDirty+'[COLOR deeppink] %s[/COLOR]'%Pr0n,BASEURL,46,xxxIcon,'')
+    addItem('[COLOR pink][B] [/B]'+xxxAnti69+'[/COLOR]',BASEURL,68,xxxIcon,'')
+   elif HomePr0n=="NOpr0nUpdate":
+    Pr0n=''
+    addItem(xxxDirty+'[COLOR deeppink] %s[/COLOR]'%Pr0n,BASEURL,69,xxxIcon,'')
+    addItem('[COLOR pink][B] [/B]'+xxxAnti69+'[/COLOR]',BASEURL,68,xxxIcon,'')
+   else:
+    Pr0n=' --unknown Pr0n, try to update please'
+    addItem(xxxDirty+'[COLOR deeppink] %s[/COLOR]'%Pr0n,BASEURL,46,xxxIcon,'')
+    addItem('[COLOR pink][B] [/B]'+xxxAnti69+'[/COLOR]',BASEURL,68,xxxIcon,'')
   else:
    addDir('',BASEURL,666,addonIcon,'','',False)
    addItem('[COLOR red]\'Super Favourites\' is missing, [COLOR lime][I]click here [/I][/COLOR] to (re-)install & enable [B]18+[/B][/COLOR]',BASEURL,70,xxxIcon,'')
@@ -212,10 +224,22 @@ def XvBMCtools2():
  addItem('[B]P[/B]ush [COLOR lime]Fix[/COLOR]es and/or [COLOR green]updates[/COLOR] [COLOR dimgray] (recent vOoDoO: %s)[/COLOR]'%chkXbmc,BASEURL,44,mediaPath+'maint.png','')
  addItem('[B]P[/B]ush XvBMC REPOsitory [COLOR dimgray](install or fix repo)[/COLOR]',BASEURL,45,mediaPath+'maint.png','')
  if os.path.isfile(xxxCheck):
+  global Pr0n
   if xbmc.getCondVisibility('System.HasAddon("plugin.program.super.favourites")'):
    addDir('',BASEURL,666,addonIcon,'','',False)
-   addItem('[COLOR hotpink]activated: [/COLOR]'+xxxDirty,BASEURL,69,xxxIcon,'')
-   addItem('[COLOR pink][B] [/B]'+xxxAnti69+'[/COLOR]',BASEURL,68,xxxIcon,'')
+   HomePr0n,Pr0nOnline=Pr0nChkr()
+   if HomePr0n=="Pr0nUpdate":
+    Pr0n=' --please update: %s'%Pr0nOnline
+    addItem(xxxDirty+'[COLOR deeppink] %s[/COLOR]'%Pr0n,BASEURL,46,xxxIcon,'')
+    addItem('[COLOR pink][B] [/B]'+xxxAnti69+'[/COLOR]',BASEURL,68,xxxIcon,'')
+   elif HomePr0n=="NOpr0nUpdate":
+    Pr0n=''
+    addItem('[COLOR hotpink]activated: [/COLOR]'+xxxDirty+'[COLOR deeppink] %s[/COLOR]'%Pr0n,BASEURL,69,xxxIcon,'')
+    addItem('[COLOR pink][B] [/B]'+xxxAnti69+'[/COLOR]',BASEURL,68,xxxIcon,'')
+   else:
+    Pr0n=' --unknown Pr0n, try to update please'
+    addItem(xxxDirty+'[COLOR deeppink] %s[/COLOR]'%Pr0n,BASEURL,46,xxxIcon,'')
+    addItem('[COLOR pink][B] [/B]'+xxxAnti69+'[/COLOR]',BASEURL,68,xxxIcon,'')
   else:
    addDir('',BASEURL,666,addonIcon,'','',False)
    addItem('[COLOR red]\'Super Favourites\' is missing, [COLOR lime][I]click here [/I][/COLOR] to (re-)install & enable [B]18+[/B][/COLOR]',BASEURL,70,xxxIcon,'')
@@ -408,7 +432,7 @@ def rejuvXvbmc():
     Common.log("XvBMC.file_exclude+dB="+str(file_exclude))
    except:
     Common.log("XvBMC.file_exclude_dB=EXCEPTION")
-  dp.update(11,'','***Clean: files+folders...')
+  dp.update(11,'','***Clean: files+folders...','')
   keep_xvbmc=Common.message_yes_no("[COLOR white][B]"+AddonTitle+"[/B][/COLOR]",'Wilt u het XvBMC-NL basis \'framework\' handhaven na reset? Verwijderd alles behalve XvBMC (aanbeveling).','[COLOR dimgray](do you wish to keep XvBMC\'s default framework?)[/COLOR]')
   if keep_xvbmc:
    dir_exclude=('addon_data','media',)+dir_exclude
@@ -434,16 +458,16 @@ def rejuvXvbmc():
     files[:]=[file for file in files if file not in file_exclude]
     for file_name in files:
      try:
-      dp.update(33,'','***Cleaning files...')
+      dp.update(33,'','***Cleaning files...','')
       os.remove(os.path.join(root,file_name))
      except Exception as e:Common.log("rejuvXvbmc.file_name: User files partially removed - "+str(e))
     for folder in dirs:
      if folder not in dir_exclude:
       try:
-       dp.update(33,'','***Cleaning folders...')
+       dp.update(33,'','***Cleaning folders...','')
        os.rmdir(os.path.join(root,folder))
       except Exception as e:Common.log("rejuvXvbmc.folder: User folders partially removed - "+str(e))
-   dp.update(66,'','***Crap Cleaning...')
+   dp.update(66,'','***Crap Cleaning...','')
    Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();
    xbmc.sleep(333)
    Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();
@@ -452,7 +476,7 @@ def rejuvXvbmc():
    Common.log("rejuvXvbmc: User stuff partially removed - "+str(e))
    Common.message("[COLOR dodgerblue]"+AddonTitle+"[/COLOR] [COLOR red][B]- Error![/B][/COLOR]",'...DAT ging niet helemaal goed, controleer uw log...','[COLOR dimgray](XvBMC user files partially removed, please check log)[/COLOR]')
    sys.exit()
-  dp.update(99,'','***Cleaning Crap...')
+  dp.update(99,'','***Cleaning Crap...','')
   Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();
   xbmc.sleep(999)
   dp.close()
@@ -472,18 +496,18 @@ def WipeXBMC():
     for root,dirs,files in os.walk(HOME,topdown=True):
      dirs[:]=[d for d in dirs if d not in EXCLUDES]
      for name in files:
-      try:dp.update(33,'','***Cleaning files...');os.remove(os.path.join(root,name));os.rmdir(os.path.join(root,name));
+      try:dp.update(33,'','***Cleaning files...','');os.remove(os.path.join(root,name));os.rmdir(os.path.join(root,name));
       except:pass
      for name in dirs:
-      try:dp.update(33,'','***Cleaning folders...');os.rmdir(os.path.join(root,name));os.rmdir(root);
+      try:dp.update(33,'','***Cleaning folders...','');os.rmdir(os.path.join(root,name));os.rmdir(root);
       except:pass
-    dp.update(66,'','***Crap Cleaning...')
+    dp.update(66,'','***Crap Cleaning...','')
     Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();
     xbmc.sleep(333)
     Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();
     xbmc.sleep(666)
    except:pass
-   dp.update(99,'','***Cleaning Crap...')
+   dp.update(99,'','***Cleaning Crap...','')
    Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();
    xbmc.sleep(999)
    dp.close()
@@ -504,7 +528,7 @@ def FRESHSTART(params):
    try:
     for root,dirs,files in os.walk(xbmcPath,topdown=True):
      dirs[:]=[d for d in dirs if d not in EXCLUDES]
-     dp.update(33,'','***Cleaning files+folders...')
+     dp.update(33,'','***Cleaning files+folders...','')
      for name in files:
       try:os.remove(os.path.join(root,name))
       except:
@@ -515,12 +539,12 @@ def FRESHSTART(params):
       except:
        if name not in["Database","userdata"]:failed=True
        Common.log("XvBMC-Error removing folder: "+root+" "+name)
-    dp.update(66,'','***Crap Cleaning...')
+    dp.update(66,'','***Crap Cleaning...','')
     Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();
     if not failed:Common.log("freshstart.main_XvBMC: All user files removed, you now have a CLEAN install");Common.message("[COLOR dodgerblue]"+AddonTitle+"[/COLOR] [COLOR lime][B]- Voltooid![/B][/COLOR]",'\'FreshStart\' is klaar, verse Kodi beschikbaar na herstart...','[COLOR dimgray](\'FreshStart\' finished, fresh Kodi available after reboot)[/COLOR]');
     else:Common.log("freshstart.main_XvBMC: User files partially removed");Common.message("[COLOR dodgerblue]"+AddonTitle+"[/COLOR] [COLOR lime][B]- Voltooid![/B][/COLOR]",'\'FreshStart\' is klaar, verse Kodi beschikbaar na herstart...','[COLOR dimgray](\'FreshStart\' finished, fresh Kodi available after reboot)[/COLOR]');
    except:Common.message("[COLOR red][B]"+AddonTitle+"[/B][/COLOR]",'Problem found','Your settings have [B]not[/B] been changed');import traceback;Common.log(traceback.format_exc());Common.log("freshstart.main_XvBMC: NOTHING removed");sys.exit();
-   dp.update(99,'','***Cleaning Crap...')
+   dp.update(99,'','***Cleaning Crap...','')
    Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();Common.REMOVE_EMPTY_FOLDERS();
    dp.close()
    dialog.ok("[COLOR dodgerblue]"+AddonTitle+"[/COLOR] [COLOR lime][B]- Reboot![/B][/COLOR]",'Kodi zal nu afsluiten',' ','[COLOR dimgray](shutdown Kodi now)[/COLOR]')
@@ -550,6 +574,23 @@ def vOoDoO():
   stacker.fixer(stacker.toolupdate,3,2)
   stacker.showFiles(stacker.updateurl,2,2,False)
   Common.prettyReboot()
+def Pr0nChkr(onlycurrent=False):
+ chckPr0n=xbmc.translatePath(os.path.join(USERADDONDATA,'plugin.program.super.favourites','Super Favourites','xXx','xXxvbmc.txt'))
+ onlinePr0n=base64.b64decode(base)+'triple-x/xXxvbmc.txt'
+ if os.path.isfile(chckPr0n):
+  file=open(chckPr0n,'r')
+  versie=file.read()
+  file.close()
+  if onlycurrent:return versie,'Pr0nUpdate'
+  try:Pr0nChck=utils.getHtml2(onlinePr0n)
+  except:return 'NOpr0nUpdate',versie
+  try:
+   if int(Pr0nChck)>int(versie):
+    return 'Pr0nUpdate',Pr0nChck
+  except ValueError:
+   return 'NOpr0n',''
+  else:return 'NOpr0nUpdate',versie
+ else:return 'NOpr0n',''
 def addItem(name,url,mode,iconimage,fanart):
  u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)+"&fanart="+urllib.quote_plus(fanart)
  ok=True

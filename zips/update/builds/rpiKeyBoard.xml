@@ -1,0 +1,26 @@
+<keymap>
+  <global>
+    <keyboard>
+      <key id="61629">stop</key>
+      <next_track>CodecInfo</next_track>
+      <prev_track>ShowSubtitles</prev_track>
+      <f2>ContextMenu</f2>
+      <f1>XBMC.ActivateWindow(10153)</f1>
+      <home>XBMC.ActivateWindow(Home)</home>
+      <key id="61654">contextmenu</key>
+      <F5>XBMC.ReloadSkin()</F5>
+    </keyboard>
+  </global>
+  <FullscreenVideo>
+    <keyboard>
+      <key id="61629">PlayPause</key>
+      <key id="61654">Info</key>
+      <next_track>CodecInfo</next_track>
+      <prev_track>ShowSubtitles</prev_track>
+      <o>PlayerDebug</o>
+      <f1>XBMC.ActivateWindow(10153)</f1>
+      <period>SubtitleDelayPlus</period>
+      <comma>SubtitleDelayMinus</comma>
+    </keyboard>
+  </FullscreenVideo>
+</keymap>

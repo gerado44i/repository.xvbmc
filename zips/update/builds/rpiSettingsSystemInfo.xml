@@ -303,7 +303,7 @@
 					<shadowcolor>shadow</shadowcolor>
 					<texturenofocus border="1">separator5.png</texturenofocus>
 					<textcolor>labelheader</textcolor>
-					<onclick>PlayMedia(&quot;plugin://script.tar.gz.updater/?url=https%3A%2F%2Fxvbmcnl.stackstorage.com%2Fs%2FLFMdxvEag9SZFyA&amp;mode=11&amp;name=%5BB%5D+X%5B%2FB%5DvBMC+Upgrade&amp;iconimage=%2Fstorage%2F.kodi%2Faddons%2Fscript.tar.gz.updater%2Fmedia%2Fdev.png&amp;location=1&amp;xvbmc=1&amp;sf_options=fanart%3Dspecial%3A%2F%2Fhome%2Faddons%2Fscript.tar.gz.updater%2Ffanart.jpg%26meta%3Dvotes%253D0%2526label%253D%25255BB%25255D%252BU%25255B%25252FB%25255Dpgrade%252B%25255BCOLOR%252Bdimgray%25255D%252528v20180511%252529%25255B%25252FCOLOR%25255D%2526title%253D%25255BB%25255D%252BU%25255B%25252FB%25255Dpgrade%252B%25255BCOLOR%252Bdimgray%25255D%252528v20180511%252529%25255B%25252FCOLOR%25255D%26winID%3D10001%26desc%3DEPiC%26_options_sf&quot;)</onclick>
+					<onclick>RunPlugin("plugin://script.tar.gz.updater/?url=https%3A%2F%2Fxvbmcnl.stackstorage.com%2Fs%2FLFMdxvEag9SZFyA&amp;mode=11&amp;name=%5BB%5D+U%5B%2FB%5Dpgrade&amp;iconimage=C%3A%5C_XvBMC-NL%5Cportable_data%5Caddons%5Cscript.tar.gz.updater%5Cmedia%5Cdev.png&amp;location=1&amp;xvbmc=1")</onclick>
 				</control>
 			</control>
 			<control type="textbox" id="30">

@@ -53,14 +53,15 @@ xvbmcForced='[COLOR lime]Force XvBMC Update[B] ??? [/B][/COLOR][COLOR red](conti
 iNfo='[COLOR lime]goto [COLOR dodgerblue]http://bit.ly/XvBMC-NL[/COLOR], [COLOR dodgerblue]http://bit.ly/XvBMC-Pi[/COLOR] or [COLOR dodgerblue]https://bit.ly/XvBMC-Android[/COLOR] for info & our disclamer...[/COLOR]'
 forcedXvbmc='[COLOR red]XvBMC Update Forceren?[/COLOR] [COLOR lime](doorgaan op eigen risico)[/COLOR]'
 ReDo='[COLOR maroon](click to force/redo update)[/COLOR]'
+RasPi='[COLOR red]R[/COLOR][COLOR white]P[/COLOR][COLOR dodgerblue]i[/COLOR]'
 waarschuwing='[COLOR darkorange]!![B] WAARSCHUWING [/B]/[B] WARNING [/B]/[B] ACHTUNG [/B]!![/COLOR]'
-xbmcver=xbmc.getInfoLabel("System.BuildVersion")[:4]
 databasePath=xbmc.translatePath('special://database')
 EXCLUDES=[addon_id,'skin.estuary','plugin.program.xvbmcinstaller.nl','repository.xvbmc','script.module.xbmc.shared','script.xvbmc.updatertools']
 HOME=xbmc.translatePath('special://home/')
 skin=xbmc.getSkinDir()
 USERDATA=xbmc.translatePath(os.path.join('special://home/userdata',''))
 USERADDONDATA=xbmc.translatePath(os.path.join('special://home/userdata/addon_data',''))
+xbmcver=xbmc.getInfoLabel("System.BuildVersion")[:4]
 xxxAnti69='»--> decrapify your box/build/setup [I](anti soixante-neuf)[/I]'
 xxxCheck=xbmc.translatePath(os.path.join(USERADDONDATA,'plugin.program.super.favourites','Super Favourites','xXx','favourites.xml'))
 xxxDirty='[COLOR pink]XvBMC\'s [B] [COLOR hotpink]x[COLOR deeppink]X[/COLOR]x[/COLOR] [/B] section ([COLOR hotpink]18[/COLOR][COLOR deeppink][B]+[/B][/COLOR])[/COLOR]'
@@ -79,14 +80,19 @@ def Urlresolver_settings():
 def mainMenu():
  update,updateversie=utils.checkUpdate()
  if update=="NoxSpinUpdate":
-  updatetxt="[COLOR orange]XvBMC update available[B]: %s[/B][/COLOR]"%(updateversie)+'[COLOR orange] (NoxSpin)[/COLOR]'
-  Link=base64.b64decode(basewiz)+'noxspin-sp.zip'
-  addDir('%s'%updatetxt,Link,1,addonIcon,addonFanart,'',False)
+  if xbmc.getCondVisibility('System.HasAddon("service.openelec.settings")')+xbmc.getCondVisibility('System.HasAddon("service.libreelec.settings")'):
+   updatetxt="[COLOR orange]XvBMC "+RasPi+" update available[B]: %s[/B][/COLOR]"%(updateversie)+'[COLOR orange] (NoxSpin)[/COLOR]'
+   forceRPi=base64.b64decode(basewiz)
+   addDir('%s'%updatetxt,forceRPi,100,mediaPath+'xvbmc.png',addonFanart,'',False)
+  else:
+   updatetxt="[COLOR orange]XvBMC update available[B]: %s[/B][/COLOR]"%(updateversie)+'[COLOR orange] (NoxSpin)[/COLOR]'
+   Link=base64.b64decode(basewiz)+'noxspin-sp.zip'
+   addDir('%s'%updatetxt,Link,1,addonIcon,addonFanart,'',False)
  elif update=="notinstalled":
   if xbmc.getCondVisibility('System.HasAddon(skin.aeon.nox.spin)'):
    if os.path.isfile(NoxSpinTxtBld):
     if xbmc.getCondVisibility('System.HasAddon("service.openelec.settings")')+xbmc.getCondVisibility('System.HasAddon("service.libreelec.settings")'):
-     updatetxt="[COLOR orange]unknown [COLOR red]RPi[/COLOR] (NoxSpin) version; force update[B]?[/B][/COLOR] [COLOR lime] (continue?)[/COLOR]"
+     updatetxt="[COLOR orange]unknown "+RasPi+" (NoxSpin) version; force update[B]?[/B][/COLOR] [COLOR lime] (continue?)[/COLOR]"
      forceRPi=base64.b64decode(basewiz)
      addDir('%s'%updatetxt,forceRPi,100,mediaPath+'xvbmc.png',addonFanart,'',False)
     else:
@@ -103,7 +109,7 @@ def mainMenu():
     addDir('%s'%updatetxt,Link,1,mediaPath+'xvbmc.png',addonFanart,'',False)
    else:
     if xbmc.getCondVisibility('System.HasAddon("service.openelec.settings")')+xbmc.getCondVisibility('System.HasAddon("service.libreelec.settings")'):
-     updatetxt="[COLOR orange]unknown [COLOR red]RPi[/COLOR] build status; force update[B]?[/B][/COLOR] [COLOR lime] (continue?)[/COLOR]"
+     updatetxt="[COLOR orange]unknown "+RasPi+" build status; force update[B]?[/B][/COLOR] [COLOR lime] (continue?)[/COLOR]"
      forceRPi=base64.b64decode(basewiz)
      addDir('%s'%updatetxt,forceRPi,100,mediaPath+'xvbmc.png',addonFanart,'',False)
     else:
@@ -114,7 +120,7 @@ def mainMenu():
    addItem('%s'%updatetxt,BASEURL,4,addonIcon,'')
  else:
   if xbmc.getCondVisibility('System.HasAddon("service.openelec.settings")')+xbmc.getCondVisibility('System.HasAddon("service.libreelec.settings")'):
-   updatetxt="[COLOR orange]You have the [B]latest[/B] XvBMC [COLOR lime][B]RPi[/B][/COLOR] updates [/COLOR]"+ReDo
+   updatetxt="[COLOR orange]You have the [B]latest[/B] XvBMC "+RasPi+" updates [/COLOR]"+ReDo
    forceRPi=base64.b64decode(basewiz)
    addItem('%s'%updatetxt,forceRPi,5,mediaPath+'xvbmc.png','')
   else:
@@ -195,7 +201,7 @@ def XvBMCtools1():
  addItem('[B]R[/B]esolveURL  -> settings',BASEURL,9,mediaPath+'tools.png','')
  addItem('[B]U[/B]RLResolver -> settings',BASEURL,18,mediaPath+'tools.png','')
  addDir('',BASEURL,666,addonIcon,'','',False)
- addItem('[B][COLOR lime]X[/COLOR][/B]vBMC\'s Advancedsettings unlocker [COLOR dimgray](reset)[/COLOR]',BASEURL,19,addonIcon,'')
+ addItem('[B][COLOR lime]X[/COLOR][/B]vBMC\'s Advancedsettings unlocker [COLOR dimgray](reset!)[/COLOR]',BASEURL,19,addonIcon,'')
  addDir('[B][COLOR lime]X[/COLOR][/B]vBMC\'s [COLOR white][B]H[/B]idden [B]g[/B]ems[B] & [/B][B]M[/B]ore [B]t[/B]ools[/COLOR] [COLOR dimgray](T[COLOR dodgerblue]i[/COLOR]P[B]!![/B])[/COLOR]',BASEURL,40,addonIcon,addonFanart,'',True)
  addDir('',BASEURL,666,addonIcon,'','',False)
  addItem(About,BASEURL,2,mediaPath+'wtf.png','')
@@ -217,11 +223,12 @@ def XvBMCrpi():
  addItem(Terug,BASEURL,3,addonIcon,mediaPath+'rpi2.jpg')
  Common.setView('movies','EPiC')
 def XvBMCtools2():
+ chkLbre=stacker.chckStckr(upgradeurllist)
  chkXbmc=stacker.chckStckr(updateurllist)
  addItem('[B]K[/B]odi Quick Reset [COLOR dimgray](\"rejuvenate\" XvBMC-NL build)[/COLOR]',BASEURL,41,mediaPath+'maint.png','')
  addItem('[B]K[/B]odi Factory Reset [COLOR dimgray](complete Kodi Krypton wipe)[/COLOR]',BASEURL,42,mediaPath+'maint.png','')
  addItem('[B]K[/B]odi Fresh Start [COLOR dimgray](wipe for older Kodi\'s)[/COLOR]',BASEURL,43,mediaPath+'maint.png','')
- addItem('[B]P[/B]ush [COLOR lime]Fix[/COLOR]es and/or [COLOR green]updates[/COLOR] [COLOR dimgray] (recent vOoDoO: %s)[/COLOR]'%chkXbmc,BASEURL,44,mediaPath+'maint.png','')
+ addItem('[B]P[/B]ush [COLOR lime]Fix[/COLOR]es and/or [COLOR green]updates[/COLOR] [COLOR dimgray] (latest rpi voodoo: %s'%chkXbmc+'-%s)[/COLOR]'%chkLbre,BASEURL,44,mediaPath+'maint.png','')
  addItem('[B]P[/B]ush XvBMC REPOsitory [COLOR dimgray](install or fix repo)[/COLOR]',BASEURL,45,mediaPath+'maint.png','')
  if os.path.isfile(xxxCheck):
   global Pr0n
@@ -253,26 +260,37 @@ def XvBMCtools2():
  addItem(About,BASEURL,2,mediaPath+'wtf.png','')
  addItem(Terug,BASEURL,3,addonIcon,'')
  Common.setView('movies','EPiC')
-def rpiWizard(name,url):
- wizardRPi=Common.yesnoDialog(waarschuwing,xvbmcForced,forcedXvbmc,'[COLOR darkorange][B]'+MainTitle+'[/B][/COLOR]')
- if wizardRPi:
+def rpiWizard(name,url,melding=None,rasPiWiz=True):
+ if melding:
+  wizardRPi=Common.yesnoDialog(waarschuwing,xvbmcForced,forcedXvbmc,'[COLOR darkorange][B]'+MainTitle+'[/B][/COLOR]')
+  if wizardRPi==1:
+   rasPiWiz=True
+  elif wizardRPi==0:
+   rasPiWiz=False
+ if rasPiWiz==True:
+  dp.create(MainTitle,'XvBMC-NL: file update [B]VoOdOo[/B]...',' ','Please Wait')
   exchange='SettingsSystemInfo.xml'
   locatie=USERDATA
   name='noxspin-sp'
   Rename=name+'.log'
   xchngLoc=xbmc.translatePath(os.path.join('special://home/addons','skin.aeon.nox.spin','1080'))
   xchngUrl=base64.b64decode(base)+'update/builds/'
+  xchngMap=xbmc.translatePath(os.path.join(USERDATA,'keymaps'))
   fileexchange(url,name+'.txt',Rename,locatie)
   fileexchange(xchngUrl,'rpi'+exchange,exchange,xchngLoc)
+  fileexchange(xchngUrl,'rpiKeyBoard.xml','keyboard.xml',xchngMap)
   wizard(name,url+name+'.zip')
   nursemaid.CCleaner(False,True,True)
- else:pass
+  dp.close()
+ else:
+  pass
 def prtWizard(name,url):
  wizardPrt=Common.yesnoDialog(waarschuwing,xvbmcForced,forcedXvbmc,'[COLOR darkorange][B]'+MainTitle+'[/B][/COLOR]')
  if wizardPrt:
   wizard(name,url)
   nursemaid.CCleaner(False,True,True)
- else:pass
+ else:
+  pass
 def wizard(name,url):
  path=xbmc.translatePath(os.path.join('special://home/addons','packages'))
  if not os.path.exists(path):os.makedirs(path)
@@ -317,20 +335,16 @@ def wizard(name,url):
     xbmc.sleep(500)
     xbmc.executebuiltin('XBMC.UpdateAddonRepos');Common.log("XvBMC_UpdateAddonRepos(wizard)");
  else:
+  dp.close()
   dialog.ok(MainTitle,'NOTE: unsuccessful/onvoltooide download',' ','[COLOR dimgray]check Kodi [B].log[/B] for more info[/COLOR]')
  xbmc.sleep(1000)
 def fileexchange(url,name,Rename,locatie):
- dp.create(MainTitle,'XvBMC-NL: file update [B]VoOdOo[/B]...',' ','Please Wait')
  if not os.path.exists(locatie):os.makedirs(locatie)
  lib=os.path.join(locatie,Rename)
- dp.update(0,'','(Mo\' [B]vOoDoO[/B])',' ')
  try:os.remove(lib)
  except:pass
  downloader.download(url+name,lib,dp)
  time.sleep(1)
- dp.close()
- xbmc.executebuiltin("Container.Refresh")
- xbmc.sleep(1000)
 def customwizard(name,url,storeLoc,unzipLoc):
  if not os.path.exists(storeLoc):os.makedirs(storeLoc)
  dp.create(MainTitle,'XvBMC-NL: just doing our [B]VoOdOo[/B]...',' ','Please Wait')
@@ -372,6 +386,7 @@ def customwizard(name,url,storeLoc,unzipLoc):
     xbmc.sleep(500)
     xbmc.executebuiltin('XBMC.UpdateAddonRepos');Common.log("XvBMC_UpdateAddonRepos(cWizard)");
  else:
+  dp.close()
   dialog.ok(MainTitle,'NOTE: unsuccessful/onvoltooide download',' ','[COLOR dimgray]check Kodi [B].log[/B] for more info[/COLOR]')
  xbmc.sleep(1000)
 def unlocker():
@@ -392,7 +407,7 @@ def XvbmcOc():
  myplatform=platform()
  Common.log("Platform: "+str(myplatform))
  if not myplatform=='linux':
-  dialog.ok(MainTitle+" [B]-[/B] [COLOR lime]RPi[/COLOR] [B]-[/B] OverClock!",subtitleNope,nonlinux,nonelecNL)
+  dialog.ok(MainTitle+" [B]-[/B] "+RasPi+" [B]-[/B] OverClock!",subtitleNope,nonlinux,nonelecNL)
   Common.log("none Linux OS ie. Open-/LibreELEC")
  else:
   Common.log("linux os")
@@ -401,7 +416,7 @@ def XvbmcDev():
  myplatform=platform()
  Common.log("Platform: "+str(myplatform))
  if not myplatform=='linux':
-  dialog.ok(MainTitle+" [B]-[/B] [COLOR lime]RPi[/COLOR] [B]-[/B] #dev#",subtitleNope,nonlinux,nonelecNL)
+  dialog.ok(MainTitle+" [B]-[/B] "+RasPi+" [B]-[/B] #dev#",subtitleNope,nonlinux,nonelecNL)
   Common.log("none Linux OS ie. Open-/LibreELEC")
  else:
   Common.log("linux os")
@@ -554,8 +569,8 @@ def vOoDoO():
  chkLbre=stacker.chckStckr(upgradeurllist)
  chkXbmc=stacker.chckStckr(updateurllist)
  opties=['[COLOR dimgray] 0. fix/update RPi-tool (if \'upgrade\' doesn\'t work)[/COLOR]']
- opties.append('[COLOR dimgray] 1. [/COLOR] [COLOR red]LibreELEC[/COLOR]+XvBMC [COLOR white](v%s)[/COLOR]'%chkLbre)
- opties.append('[COLOR dimgray] 2.[/COLOR] [COLOR lime]XvBMC[/COLOR][B]-[/B]build only [COLOR white] (v%s)[/COLOR]'%chkXbmc)
+ opties.append('[COLOR dimgray] 1.[/COLOR] [COLOR red] LibreELEC[/COLOR][B]+[/B][COLOR green]XvBMC[/COLOR] [COLOR white](v%s'%chkLbre+'+v%s)[/COLOR]'%chkXbmc)
+ opties.append('[COLOR dimgray] 2.[/COLOR] [COLOR lime]XvBMC[/COLOR][B]-[/B][COLOR red]build only[/COLOR] [COLOR white]  (v%s)[/COLOR]'%chkXbmc)
  if len(opties)>1:
   vh=dialog.select('[COLOR darkorange]fix, upgrade or update[B]?[/B][/COLOR][COLOR dimgray] (Upgr.=inc.LibreELEC / Upd.=Build only)[/COLOR]',opties)
   if vh==-1:
@@ -686,7 +701,7 @@ elif mode==3:
 elif mode==4:
  nope()
 elif mode==5:
- rpiWizard(name,url)
+ rpiWizard(name,url,True)
 elif mode==6:
  prtWizard(name,url)
 elif mode==7:
@@ -787,7 +802,7 @@ elif mode==48:
 elif mode==49:
  nursemaid.CCleaner(True,True,True)
 elif mode==100:
- rpiWizard(name,url)
+ rpiWizard(name,url,True)
 """
     IF you copy/paste XvBMC's -default.py- please keep the credits -2- XvBMC-NL, Thx.
 """

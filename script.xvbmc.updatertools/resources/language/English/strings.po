@@ -1,0 +1,29 @@
+# XvBMC Media Center language file
+# Addon Name: XvBMC UPDATE, Tools & Maintenance
+# Addon id: script.xvbmc.updatertools
+# Addon Provider: XvBMC-NL
+# Translators:
+# XvBMC
+# XvBMC-NL
+# XvBMC Nederland
+msgid ""
+msgstr ""
+"Project-Id-Version: XvBMC Nederland\n"
+"Report-Msgid-Bugs-To: http://bit.ly/XvBMC-NL/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XvBMC\n"
+"Language-Team: English (Dutch)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#31020"
+msgid "Actions"
+msgstr "Acties"
+
+msgctxt "#31021"
+msgid "Misc options"
+msgstr "Overige opties"

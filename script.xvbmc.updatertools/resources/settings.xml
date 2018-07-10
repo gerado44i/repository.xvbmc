@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <category label="XvBMC-View">
-	<setting id="auto-view" type="bool" label="Enable Auto View" default="true"/>
-	<setting id="EPiC" type="number" label="Kodi View Type" default="50" enable="!eq(-1,false)"/>
+    <category label="XvBMC-NL">
+    <setting type="lsep" label="View settings main-menu"/>
+	<setting id="auto-view" type="bool" label=" Enable Auto View" default="true"/>
+	<setting id="EPiC" type="number" label=" Kodi View Type" default="50" enable="!eq(-1,false)"/>
     <setting id="ask" type="bool" label="ask" default="false" visible="false"/>
+    <setting type="lsep" label="Disclaimer / Usage Policy XvBMC Nederland"/>
+    <setting id="leesmij" type="bool" label=" [B][COLOR lime]I agree[/COLOR][/B] to XvBMC's terms (disclaimer / usage policy)" default="false" />
+    <setting type="lsep" label="Authenticate RealDebrid Resolvers"/>
+    <setting id="RU" type="action" label=" ResolveURL  RealDebrid authentication" enable="true" action='RunPlugin("plugin://script.module.resolveurl/?mode=auth_rd")' />
+    <setting id="UR" type="action" label=" URLResolver RealDebrid authentication" enable="true" action='RunPlugin("plugin://script.module.urlresolver/?mode=auth_rd")'/>
+    <setting type="lsep" label="DISCLAIMER: https://bit.ly/Disclaimer_XvBMC-NL"/>
    	</category>	   	
   </settings>

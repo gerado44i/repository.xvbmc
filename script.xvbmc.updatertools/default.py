@@ -51,6 +51,8 @@ xvbmcSPcheck='[COLOR gray][B] - [/B]your service pack: [I]unknown[/I] [/COLOR]'
 xvbmcUnknown='[COLOR orange]unknown build status; force update?[/COLOR] [COLOR red][B](continue at your own risk)[/B][/COLOR]'
 xvbmcForced='[COLOR lime]Force XvBMC Update[B] ??? [/B][/COLOR][COLOR red](continue at your own risk)[/COLOR]'
 iNfo='[COLOR lime]goto [COLOR dodgerblue]http://bit.ly/XvBMC-NL[/COLOR], [COLOR dodgerblue]http://bit.ly/XvBMC-Pi[/COLOR] or [COLOR dodgerblue]https://bit.ly/XvBMC-Android[/COLOR] for info & our disclamer...[/COLOR]'
+achtung='[COLOR white]You may enter only if you are [COLOR yellow]at least 18 years of age or [CR]at least the legal age [/COLOR][COLOR white]in the jurisdiction you reside or [CR]from which you access this content.[/COLOR]'
+explicit='[COLOR red]WARNING: Explicit adult material[/COLOR]'
 forcedXvbmc='[COLOR red]XvBMC Update Forceren?[/COLOR] [COLOR lime](doorgaan op eigen risico)[/COLOR]'
 ReDo='[COLOR maroon](click to force/redo update)[/COLOR]'
 RasPi='[COLOR red]R[/COLOR][COLOR white]P[/COLOR][COLOR dodgerblue]i[/COLOR]'
@@ -68,7 +70,7 @@ xxxDirty='[COLOR pink]XvBMC\'s [B] [COLOR hotpink]x[COLOR deeppink]X[/COLOR]x[/C
 xxxIcon=base64.b64decode('aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1h2Qk1DL3JlcG9zaXRvcnkueHZibWMvbWFzdGVyL3ppcHMvdHJpcGxlLXgvYWR1bHQucG5n')
 xxxFanart=base64.b64decode('aHR0cHM6Ly93d3cuZHJvcGJveC5jb20vcy9vcnM1M3ZtOWQxdTlmcGIvQW50aTY5LnR4dD9kbD0x')
 if not ADDON.getSetting('leesmij')=='true':
- Common.okDialog('[COLOR white]NOTE:[B] XvBMC is [COLOR red]geen[/COLOR] helpdesk voor boxverkopers[/B] ![/COLOR]','(we aren\'t a helpdesk for resellers or pre-installed builds)[CR]',iNfo,'[COLOR darkorange][B]~  XvBMC = GRATIS  ~  XvBMC = FOR FREE  ~[/B][/COLOR]')
+ Common.okDialog(' ','[COLOR white]NOTE:[B] XvBMC is [COLOR red]geen[/COLOR] helpdesk voor boxverkopers[/B] ![/COLOR][CR](we aren\'t a helpdesk for resellers or pre-installed builds)',iNfo,'[COLOR darkorange][B]~  XvBMC = GRATIS  ~  XvBMC = FOR FREE  ~[/B][/COLOR]')
  ADDON.setSetting('leesmij','true')
  xbmc.log('usage=okay',level=xbmc.LOGNOTICE)
 def resolveUrl_settings():
@@ -198,8 +200,8 @@ def XvBMCtools1():
  addItem('[B]F[/B]orce close Kodi  [COLOR dimgray](Kill Kodi)[/COLOR]',BASEURL,15,mediaPath+'maint.png','')
  addItem('[B]L[/B]og viewer [COLOR dimgray](show \'kodi.log\')[/COLOR]',BASEURL,17,mediaPath+'maint.png','')
  addDir('',BASEURL,666,addonIcon,'','',False)
- addItem('[B]R[/B]esolveURL  -> settings',BASEURL,9,mediaPath+'tools.png','')
- addItem('[B]U[/B]RLResolver -> settings',BASEURL,18,mediaPath+'tools.png','')
+ addDir('[B]R[/B]esolver settings & Real-Debrid [B]auth.[/B] [COLOR dimgray](ResolveURL/URLResolver)[/COLOR]',BASEURL,50,mediaPath+'tools.png',addonFanart,'',True)
+ addItem('[B]S[/B]how Settings[B]:[/B] [COLOR dimgray][B]\'[/B]'+addon_name+'  [B]\'[/B][/COLOR]',BASEURL,18,mediaPath+'maint.png','')
  addDir('',BASEURL,666,addonIcon,'','',False)
  addItem('[B][COLOR lime]X[/COLOR][/B]vBMC\'s Advancedsettings unlocker [COLOR dimgray](reset!)[/COLOR]',BASEURL,19,addonIcon,'')
  addDir('[B][COLOR lime]X[/COLOR][/B]vBMC\'s [COLOR white][B]H[/B]idden [B]g[/B]ems[B] & [/B][B]M[/B]ore [B]t[/B]ools[/COLOR] [COLOR dimgray](T[COLOR dodgerblue]i[/COLOR]P[B]!![/B])[/COLOR]',BASEURL,40,addonIcon,addonFanart,'',True)
@@ -222,7 +224,7 @@ def XvBMCrpi():
  addItem(About,BASEURL,2,mediaPath+'wtf.png',mediaPath+'rpi2.jpg')
  addItem(Terug,BASEURL,3,addonIcon,mediaPath+'rpi2.jpg')
  Common.setView('movies','EPiC')
-def XvBMCtools2():
+def XvBMCtools2a():
  chkLbre=stacker.chckStckr(upgradeurllist)
  chkXbmc=stacker.chckStckr(updateurllist)
  addItem('[B]K[/B]odi Quick Reset [COLOR dimgray](\"rejuvenate\" XvBMC-NL build)[/COLOR]',BASEURL,41,mediaPath+'maint.png','')
@@ -256,6 +258,19 @@ def XvBMCtools2():
  addDir('',BASEURL,666,addonIcon,'','',False)
  addItem('[B]T[/B]ool: convert physical paths (\'home\') to \'special\'',BASEURL,47,mediaPath+'tools.png','')
  addItem('[B]T[/B]ool: clean-up *.pyo and *.pyc files',BASEURL,48,mediaPath+'tools.png','')
+ addDir('',BASEURL,666,addonIcon,'','',False)
+ addItem(About,BASEURL,2,mediaPath+'wtf.png','')
+ addItem(Terug,BASEURL,3,addonIcon,'')
+ Common.setView('movies','EPiC')
+def XvBMCtools2b():
+ addItem('[B]R[/B]esolveURL  <- Settings',BASEURL,51,os.path.join(addon_folder,'script.module.resolveurl','icon.png'),'')
+ addItem('[B]R[/B]esolveURL  -> RD-auth. [COLOR dimgray](RealDebrid authentication/authorisatie)[/COLOR]',BASEURL,52,os.path.join(addon_folder,'script.module.resolveurl','icon.png'),'')
+ addItem('[B]U[/B]RLResolver <- Settings',BASEURL,53,os.path.join(addon_folder,'script.module.urlresolver','icon.png'),'')
+ addItem('[B]U[/B]RLResolver -> RD-auth. [COLOR dimgray](RealDebrid authorisatie/authentication)[/COLOR]',BASEURL,54,os.path.join(addon_folder,'script.module.urlresolver','icon.png'),'')
+ if os.path.isfile(xbmc.translatePath(os.path.join(addon_folder,'script.module.universalscrapers','addon.xml'))):
+  addDir('',BASEURL,666,addonIcon,'','',False)
+  addDir('Other dependencies settings[B]:[/B]',BASEURL,666,addonIcon,'','',False)
+  addItem('[B] [/B]Universal Scrapers <-> settings',BASEURL,55,os.path.join(addon_folder,'script.module.universalscrapers','icon.png'),'')
  addDir('',BASEURL,666,addonIcon,'','',False)
  addItem(About,BASEURL,2,mediaPath+'wtf.png','')
  addItem(Terug,BASEURL,3,addonIcon,'')
@@ -568,11 +583,11 @@ def FRESHSTART(params):
 def vOoDoO():
  chkLbre=stacker.chckStckr(upgradeurllist)
  chkXbmc=stacker.chckStckr(updateurllist)
- opties=['[COLOR dimgray] 0. fix/update RPi-tool (if \'upgrade\' doesn\'t work)[/COLOR]']
- opties.append('[COLOR dimgray] 1.[/COLOR] [COLOR red] LibreELEC[/COLOR][B]+[/B][COLOR green]XvBMC[/COLOR] [COLOR white](v%s'%chkLbre+'+v%s)[/COLOR]'%chkXbmc)
- opties.append('[COLOR dimgray] 2.[/COLOR] [COLOR lime]XvBMC[/COLOR][B]-[/B][COLOR red]build only[/COLOR] [COLOR white]  (v%s)[/COLOR]'%chkXbmc)
+ opties=['[COLOR dimgray] 0.[B] [/B]fix/update RPi-tool[B]  [/B](if upgrade does not! work)[/COLOR]']
+ opties.append('[COLOR dimgray] [B]1[/B].[/COLOR] [COLOR red] LibreELEC[/COLOR][COLOR white][B]+[/B][/COLOR][COLOR green]XvBMC[/COLOR] [COLOR white](v%s'%chkLbre+'+v%s)[/COLOR]'%chkXbmc)
+ opties.append('[COLOR dimgray] 2.[B] [/B][COLOR lime]XvBMC[/COLOR]-[COLOR red]build only[/COLOR][B]   [/B](v%s)[/COLOR]'%chkXbmc)
  if len(opties)>1:
-  vh=dialog.select('[COLOR darkorange]fix, upgrade or update[B]?[/B][/COLOR][COLOR dimgray] (Upgr.=inc.LibreELEC / Upd.=Build only)[/COLOR]',opties)
+  vh=dialog.select('[COLOR darkorange]fix, upgrade[B]?[/B] or update[B]?[/B][/COLOR][COLOR dimgray] [B]  [/B] ( 1.[B]=[/B]incl. LibreELEC [B] / [/B] 2.[B]=[/B]Build only! )[/COLOR]',opties)
   if vh==-1:
    return
  else:
@@ -720,10 +735,9 @@ elif mode==16:
  Common.KODIVERSION()
 elif mode==17:
  nursemaid.xvbmcLog()
-elif mode==9:
- resolveUrl_settings()
 elif mode==18:
- Urlresolver_settings()
+ show_settings=ADDON.openSettings
+ show_settings()
 elif mode==19:
  unlocker()
 elif mode==21:
@@ -752,7 +766,7 @@ elif mode==32:
 elif mode==33:
  XvbmcDev()
 elif mode==40:
- XvBMCtools2()
+ XvBMCtools2a()
 elif mode==41:
  rejuvXvbmc()
 elif mode==42:
@@ -771,16 +785,25 @@ elif mode==45:
  unzipLoc=os.path.join(HOME,'addons')
  customwizard(name,url,storeLoc,unzipLoc)
 elif mode==46:
- url=base64.b64decode(base)+'triple-x/xXxvbmc.zip'
- wizard(name,url)
+ if ADDON.getSetting('ask')=='false':
+  choice=xbmcgui.Dialog().yesno(explicit,achtung,'','',"Exit","Enter")
+  if choice==0:
+   ADDON.setSetting('ask','false')
+   xbmc.executebuiltin("Container.Refresh");Common.log("XvBMC_Container.Refresh(46)");
+  elif choice==1:
+   url=base64.b64decode(base)+'triple-x/xXxvbmc.zip'
+   wizard(name,url)
+ if not ADDON.getSetting('ask')=='true':
+  Common.log("skip_pr0n");
 elif mode==68:
  nursemaid.CrapCleaner(xxxFanart,True,False)
+ ADDON.setSetting('ask','false')
  xbmc.sleep(500);xbmc.executebuiltin("Container.Refresh");Common.log("XvBMC_Container.Refresh(69)");
  xbmc.sleep(500);xbmc.executebuiltin('XBMC.UpdateLocalAddons()');Common.log("XvBMC_UpdateLocalAddons(69)");
  xbmc.sleep(500);xbmc.executebuiltin('XBMC.UpdateAddonRepos');Common.log("XvBMC_UpdateAddonRepos(69)");
 elif mode==69:
  if ADDON.getSetting('ask')=='false':
-  choice=xbmcgui.Dialog().yesno("[COLOR red]WARNING: Explicit adult material[/COLOR]","[COLOR white]You may enter only if you are [COLOR yellow]at least 18 years of age or [CR]at least the legal age [/COLOR][COLOR white]in the jurisdiction you reside or [CR]from which you access this content.[/COLOR]","","","Exit","Enter")
+  choice=xbmcgui.Dialog().yesno(explicit,achtung,'','',"Exit","Enter")
   if choice==0:
    ADDON.setSetting('ask','false')
    xbmc.executebuiltin("XBMC.ActivateWindow(home)")
@@ -801,6 +824,18 @@ elif mode==48:
  nursemaid.purgePyoC()
 elif mode==49:
  nursemaid.CCleaner(True,True,True)
+elif mode==50:
+ XvBMCtools2b()
+elif mode==51:
+ resolveUrl_settings()
+elif mode==52:
+ xbmc.executebuiltin('RunPlugin("plugin://script.module.resolveurl/?mode=auth_rd")')
+elif mode==53:
+ Urlresolver_settings()
+elif mode==54:
+ xbmc.executebuiltin('RunPlugin("plugin://script.module.urlresolver/?mode=auth_rd")')
+elif mode==55:
+ xbmcaddon.Addon(id='script.module.universalscrapers').openSettings()
 elif mode==100:
  rpiWizard(name,url,True)
 """

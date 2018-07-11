@@ -1135,7 +1135,7 @@
   </extension>
 </addon>
 
-<addon id="script.advanced.power.menu" name="Advanced Power-Menu" version="1.0.0" provider-name="XvBMC">
+<addon id="script.advanced.power.menu" name="Advanced Portable Power-Menu" version="1.0.1" provider-name="XvBMC-NL">
     <requires>
         <import addon="xbmc.python" version="2.14.0"/>
         <import addon="repository.xvbmc" version="4.2"/>
@@ -1145,12 +1145,12 @@
         <provides>executable</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en">Advanced Power-Menu</summary>
+        <summary lang="en">Advanced Portable Power-Menu</summary>
         <description lang="en">Suspend, Shutdown, Reboot, Kill, Restart KODI, Reload Skin, Log Off, ScreenShot, Settings, Sys.Info, File Manager</description>
         <platform>all</platform>
         <disclaimer lang="en">! USE AT YOUR OWN RISK !</disclaimer>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
-        <news>Advanced Power-Menu</news>
+        <news>Advanced Portable Power-Menu</news>
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>

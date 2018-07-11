@@ -520,7 +520,7 @@ def OPEN_URL(url):
  response.close()
  return link
 linkstrings=artwork+fanart+'?dl=1'
-def CCleaner(melding=None,CleanCrap=None,refresh=None):
+def CCleaner(melding=False,CleanCrap=True,refresh=True):
  if melding:
   choice=dialog.yesno("[COLOR red]Attention/Attentie/Beachtung[/COLOR]",'Uw \'build\' vrijmaken van brakke add-ons & repo\'s','en XvBMC (cosmetische) \'vOoDoO fixes\' uitvoeren?','[COLOR dimgray](do you want to clean-\'n-fix your Kodi build?)[/COLOR]')
   if choice==1:
@@ -531,7 +531,7 @@ def CCleaner(melding=None,CleanCrap=None,refresh=None):
   CrapCleaner(linkstrings,melding,refresh)
  else:
   log("just do nothing at all ;-p ")
-def CrapCleaner(url,melding=None,refresh=None):
+def CrapCleaner(url,melding=False,refresh=True):
  if melding:
   dp.create("[COLOR white][B]"+MainTitle+"[/B][/COLOR]",'XvBMC vOoDoO...',' ','Please Wait')
  stringslink=OPEN_URL(url)
@@ -540,13 +540,13 @@ def CrapCleaner(url,melding=None,refresh=None):
   try:
    removeAddons=xbmc.translatePath(os.path.join('special://home/','addons','',stringname))
    if os.path.exists(removeAddons):
-    shutil.rmtree(removeAddons);log("EPiC: VoOdOo for "+str(removeAddons));
+    shutil.rmtree(removeAddons);log("EPiC VoOdOo for "+str(removeAddons));
    else:pass
   except Exception as e:log("NO! add-ons vOoDoO for "+str(e))
   try:
    removeUsradd=xbmc.translatePath(os.path.join('special://home/userdata','addon_data','',stringname))
    if os.path.exists(removeUsradd):
-    shutil.rmtree(removeUsradd);log("EPiC: vOoDoO for "+str(removeUsradd));
+    shutil.rmtree(removeUsradd);log("EPiC vOoDoO for "+str(removeUsradd));
    else:pass
   except Exception as e:log("NO! usrdata vOoDoO for "+str(e))
  if melding:

@@ -64,7 +64,7 @@ skin=xbmc.getSkinDir()
 USERDATA=xbmc.translatePath(os.path.join('special://home/userdata',''))
 USERADDONDATA=xbmc.translatePath(os.path.join('special://home/userdata/addon_data',''))
 xbmcver=xbmc.getInfoLabel("System.BuildVersion")[:4]
-xxxAnti69='»--> decrapify your box/build/setup [I](anti soixante-neuf)[/I]'
+xxxAnti69='»-->[I] decrapify your box/build/setup (anti soixante-neuf)[/I]'
 xxxCheck=xbmc.translatePath(os.path.join(USERADDONDATA,'plugin.program.super.favourites','Super Favourites','xXx','favourites.xml'))
 xxxDirty='[COLOR pink]XvBMC\'s [B] [COLOR hotpink]x[COLOR deeppink]X[/COLOR]x[/COLOR] [/B] section ([COLOR hotpink]18[/COLOR][COLOR deeppink][B]+[/B][/COLOR])[/COLOR]'
 xxxIcon=base64.b64decode('aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1h2Qk1DL3JlcG9zaXRvcnkueHZibWMvbWFzdGVyL3ppcHMvdHJpcGxlLXgvYWR1bHQucG5n')
@@ -230,8 +230,9 @@ def XvBMCtools2a():
  addItem('[B]K[/B]odi Quick Reset [COLOR dimgray](\"rejuvenate\" XvBMC-NL build)[/COLOR]',BASEURL,41,mediaPath+'maint.png','')
  addItem('[B]K[/B]odi Factory Reset [COLOR dimgray](complete Kodi Krypton wipe)[/COLOR]',BASEURL,42,mediaPath+'maint.png','')
  addItem('[B]K[/B]odi Fresh Start [COLOR dimgray](wipe for older Kodi\'s)[/COLOR]',BASEURL,43,mediaPath+'maint.png','')
+ addDir('',BASEURL,666,addonIcon,'','',False)
  addItem('[B]P[/B]ush [COLOR lime]Fix[/COLOR]es and/or [COLOR green]updates[/COLOR] [COLOR dimgray] (latest rpi voodoo: %s'%chkXbmc+'-%s)[/COLOR]'%chkLbre,BASEURL,44,mediaPath+'maint.png','')
- addItem('[B]P[/B]ush XvBMC REPOsitory [COLOR dimgray](install or fix repo)[/COLOR]',BASEURL,45,mediaPath+'maint.png','')
+ addItem('[B]P[/B]ush XvBMC REPOsitory [COLOR dimgray](install or fix repo only!)[/COLOR]',BASEURL,45,mediaPath+'maint.png','')
  if os.path.isfile(xxxCheck):
   global Pr0n
   if xbmc.getCondVisibility('System.HasAddon("plugin.program.super.favourites")'):
@@ -275,7 +276,7 @@ def XvBMCtools2b():
  addItem(About,BASEURL,2,mediaPath+'wtf.png','')
  addItem(Terug,BASEURL,3,addonIcon,'')
  Common.setView('movies','EPiC')
-def rpiWizard(name,url,melding=None,rasPiWiz=True):
+def rpiWizard(name,url,melding=False,rasPiWiz=True):
  if melding:
   wizardRPi=Common.yesnoDialog(waarschuwing,xvbmcForced,forcedXvbmc,'[COLOR darkorange][B]'+MainTitle+'[/B][/COLOR]')
   if wizardRPi==1:
@@ -295,7 +296,7 @@ def rpiWizard(name,url,melding=None,rasPiWiz=True):
   fileexchange(xchngUrl,'rpi'+exchange,exchange,xchngLoc)
   fileexchange(xchngUrl,'rpiKeyBoard.xml','keyboard.xml',xchngMap)
   wizard(name,url+name+'.zip')
-  nursemaid.CCleaner(False,True,True)
+  nursemaid.CCleaner()
   dp.close()
  else:
   pass
@@ -303,7 +304,7 @@ def prtWizard(name,url):
  wizardPrt=Common.yesnoDialog(waarschuwing,xvbmcForced,forcedXvbmc,'[COLOR darkorange][B]'+MainTitle+'[/B][/COLOR]')
  if wizardPrt:
   wizard(name,url)
-  nursemaid.CCleaner(False,True,True)
+  nursemaid.CCleaner()
  else:
   pass
 def wizard(name,url):
@@ -702,7 +703,7 @@ if mode==None or url==None or len(url)<1:
  mainMenu()
 elif mode==1:
  wizard(name,url)
- nursemaid.CCleaner(False,True,True)
+ nursemaid.CCleaner()
 elif mode==10:
  XvBMCtools1()
 elif mode==20:
@@ -716,7 +717,7 @@ elif mode==3:
 elif mode==4:
  nope()
 elif mode==5:
- rpiWizard(name,url,True)
+ rpiWizard(name,url,melding=True)
 elif mode==6:
  prtWizard(name,url)
 elif mode==7:
@@ -750,7 +751,7 @@ elif mode==24:
  xbmc.executebuiltin('ActivateWindow(10040,addons://recently_updated/,return)')
 elif mode==25:
  nursemaid.autocleanask()
- nursemaid.CCleaner(False,True,True)
+ nursemaid.CCleaner()
 elif mode==26:
  nursemaid.purgePackages()
 elif mode==27:
@@ -823,7 +824,7 @@ elif mode==47:
 elif mode==48:
  nursemaid.purgePyoC()
 elif mode==49:
- nursemaid.CCleaner(True,True,True)
+ nursemaid.CCleaner(melding=True)
 elif mode==50:
  XvBMCtools2b()
 elif mode==51:
@@ -837,7 +838,7 @@ elif mode==54:
 elif mode==55:
  xbmcaddon.Addon(id='script.module.universalscrapers').openSettings()
 elif mode==100:
- rpiWizard(name,url,True)
+ rpiWizard(name,url,melding=False)
 """
     IF you copy/paste XvBMC's -default.py- please keep the credits -2- XvBMC-NL, Thx.
 """

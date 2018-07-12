@@ -10,7 +10,7 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <summary lang="en">Advanced Portable Power-Menu</summary>
-        <description lang="en">Suspend, Shutdown, Reboot, Kill, Restart KODI, Reload Skin, Log Off, ScreenShot, Settings, Sys.Info, File Manager</description>
+        <description lang="en">Suspend, Shutdown, Reboot, Kill, Restart KODI, Reload Skin, Log Off, ScreenShot, Settings, Sys.Info, File Manager, XvBMC</description>
         <platform>all</platform>
         <disclaimer lang="en">! USE AT YOUR OWN RISK !</disclaimer>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>

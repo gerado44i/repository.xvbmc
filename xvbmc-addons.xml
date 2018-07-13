@@ -1135,7 +1135,7 @@
   </extension>
 </addon>
 
-<addon id="script.advanced.power.menu" name="Advanced Portable Power-Menu" version="1.0.2" provider-name="XvBMC-NL">
+<addon id="script.advanced.power.menu" name="Advanced Portable Power-Menu [COLOR dimgray](XvBMC)[/COLOR]" version="1.0.3" provider-name="XvBMC-NL">
     <requires>
         <import addon="xbmc.python" version="2.14.0"/>
         <import addon="repository.xvbmc" version="4.2"/>
@@ -1150,7 +1150,7 @@
         <platform>all</platform>
         <disclaimer lang="en">! USE AT YOUR OWN RISK !</disclaimer>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
-        <news>Advanced Portable Power-Menu</news>
+        <news>Advanced Portable Power-Menu (XvBMC)</news>
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>

@@ -39,7 +39,7 @@ pofm = ADDON.getLocalizedString(32020)
 xvbmc= ADDON.getLocalizedString(32023)
 
 dialog = xbmcgui.Dialog()
-sel = dialog.select(adn, [rtk, rbt, qut, pof, kil, scr, rls, sus, lof, flm, stt, sti, vbmc ])
+sel = dialog.select(adn, [rtk, rbt, pof, kil, lof, qut, rls, scr, stt, sus, sti, flm, vbmc ])
 
 if sel == 0:
      xbmc.executebuiltin("Notification(Advanced Power-Menu, " + rtkm.encode('utf-8') + ")")
@@ -54,27 +54,26 @@ elif sel == 1:
 elif sel == 2:
      xbmc.executebuiltin("Notification(Advanced Power-Menu, " + pofm.encode('utf-8') + ")")
      time.sleep(1)
-     xbmc.executebuiltin("Quit")
+     xbmc.executebuiltin("Powerdown")
 
 elif sel == 3:
-     xbmc.executebuiltin("Notification(Advanced Power-Menu, " + pofm.encode('utf-8') + ")")
+     xbmc.executebuiltin("Notification(Advanced Power-Menu, " + kilm.encode('utf-8') + ")")
      time.sleep(1)
-     xbmc.executebuiltin("Powerdown")
+     os._exit(1)
 
 #elif sel == 4:
 #     xbmc.executebuiltin("Notification(Advanced Power-Menu, " + rtam.encode('utf-8') + ")")
 #     time.sleep(1)
 #     xbmc.executebuiltin('System.Exec(rebootfromnand)')
 elif sel == 4:
-     xbmc.executebuiltin("Notification(Advanced Power-Menu, " + kilm.encode('utf-8') + ")")
+     xbmc.executebuiltin("Notification(Advanced Power-Menu, " + lofm.encode('utf-8') + ")")
      time.sleep(1)
-     os._exit(1)
+     xbmc.executebuiltin("System.LogOff")
 
 elif sel == 5:
-     xbmc.executebuiltin("Notification(Advanced Power-Menu, " + scrm.encode('utf-8') + ")")
-     time.sleep(30)
-     xbmc.executebuiltin("TakeScreenshot")
-     xbmc.executebuiltin("Notification(Advanced Power-Menu, " + scrm2.encode('utf-8') + ")")
+     xbmc.executebuiltin("Notification(Advanced Power-Menu, " + pofm.encode('utf-8') + ")")
+     time.sleep(1)
+     xbmc.executebuiltin("Quit")
 
 elif sel == 6:
      xbmc.executebuiltin("Notification(Advanced Power-Menu, " + rlsm.encode('utf-8') + ")")
@@ -82,23 +81,24 @@ elif sel == 6:
      xbmc.executebuiltin("ReloadSkin()")
 
 elif sel == 7:
+     xbmc.executebuiltin("Notification(Advanced Power-Menu, " + scrm.encode('utf-8') + ")")
+     time.sleep(30)
+     xbmc.executebuiltin("TakeScreenshot")
+     xbmc.executebuiltin("Notification(Advanced Power-Menu, " + scrm2.encode('utf-8') + ")")
+
+elif sel == 8:
+     xbmc.executebuiltin("ActivateWindow(settings)")
+
+elif sel == 9:
      xbmc.executebuiltin("Notification(Advanced Power-Menu, " + susm.encode('utf-8') + ")")
      time.sleep(1)
      xbmc.executebuiltin("Suspend")
 
-elif sel == 8:
-     xbmc.executebuiltin("Notification(Advanced Power-Menu, " + lofm.encode('utf-8') + ")")
-     time.sleep(1)
-     xbmc.executebuiltin("System.LogOff")
-
-elif sel == 9:
-     xbmc.executebuiltin("ActivateWindow(filemanager)")
-
 elif sel == 10:
-     xbmc.executebuiltin("ActivateWindow(settings)")
+     xbmc.executebuiltin("ActivateWindow(systeminfo)")
 
 elif sel == 11:
-     xbmc.executebuiltin("ActivateWindow(systeminfo)")
+     xbmc.executebuiltin("ActivateWindow(filemanager)")
 
 elif sel == 12:
      xbmc.executebuiltin("Notification(Advanced Power-Menu, " + xvbmc.encode('utf-8') + ")")

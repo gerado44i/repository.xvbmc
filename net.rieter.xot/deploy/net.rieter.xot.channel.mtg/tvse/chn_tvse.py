@@ -61,6 +61,11 @@ class Channel(chn_class.Channel):
             self.noImage = "tv10seimage.png"
             self.channelId = (5462, )
 
+        elif self.channelCode == "viafreese":
+            self.mainListUri = "https://www.viafree.se/program/"
+            self.noImage = "viafreeimage.png"
+            self.channelId = None
+
         elif self.channelCode == "sesport":
             raise NotImplementedError('ViaSat sport is not in this channel anymore.')
 
@@ -159,7 +164,7 @@ class Channel(chn_class.Channel):
                                 matchType=ParserData.MatchExact)
             self._AddDataParser(self.mainListUri, preprocessor=self.ExtractCategoriesAndAddSearch, json=True,
                                 matchType=ParserData.MatchExact,
-                                parser=("context", "dispatcher", "stores", "ApplicationStore", "programs"),
+                                parser=("allProgramsPage", "programs"),
                                 creator=self.CreateJsonEpisodeItem)
 
         # This is the new way, but more complex and some channels have items with missing
@@ -222,8 +227,8 @@ class Channel(chn_class.Channel):
         Logger.Info("Extracting Category Information")
         dummyData, items = self.AddSearch(data)
 
-        json = JsonHelper(data, logger=Logger.Instance())
-        categories = json.GetValue("context", "dispatcher", "stores", "ApplicationStore", "categories")
+        # The data was already in a JsonHelper
+        categories = data.GetValue("categories")
         for category in categories:
             self.__categories[category["id"]] = category
 
@@ -240,14 +245,23 @@ class Channel(chn_class.Channel):
         Logger.Info("Performing Pre-Processing")
         items = []
 
-        jsonData = Regexer.DoRegex('window.App=({[^<]+);', data)[0]
+        jsonData = Regexer.DoRegex('__initialState__=([^<]+);\W+window.__config__', data)[0]
         # the "RouteStore" has some weird functions, removing it.
-        start = jsonData.index('"RouteStore"')
+        # start = jsonData.index('"RouteStore"')
         # the need at least the 'ApplicationStore'
-        end = jsonData.index('"ApplicationStore"')
-        data = jsonData[0:start] + jsonData[end:]
-        Logger.Trace("Found Json:\n%s", data)
-        return data, items
+        # end = jsonData.index('"ApplicationStore"')
+        # returnData = jsonData[0:start] + jsonData[end:]
+        returnData = jsonData
+        Logger.Trace("Found Json:\n%s", returnData)
+
+        # append categorie data
+        # catData = Regexer.DoRegex('"categories":(\[.*?),"allProgramsPage', data)
+        # if catData:
+        #     catData = catData[0]
+        #     returnData = returnData[:-1] + ', "categories": ' + catData + '}'
+
+        # file('c:\\temp\\json.txt', 'w+').write(returnData)
+        return JsonHelper(returnData), items
 
     def CreateJsonEpisodeItem(self, resultSet):
         Logger.Trace(resultSet)
@@ -633,21 +647,18 @@ class Channel(chn_class.Channel):
         """
 
         Logger.Debug('Starting UpdateVideoItem for %s (%s)', item.name, self.channelName)
+        useKodiHls = AddonSettings.UseAdaptiveStreamAddOn()
+
         # User-agent (and possible other headers), should be consistent over all M3u8 requests (See #864)
-        headers = {
-            # "User-Agent": AddonSettings.GetUserAgent(),
-            "User-Agent": "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)",
-            # "Origin": "https://www.viafree.se"
-        }
+        headers = {}
+        if not useKodiHls:
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)",
+            }
         if self.localIP:
             headers.update(self.localIP)
 
-        if True:
-            data = UriHandler.Open(item.url, proxy=self.proxy, additionalHeaders=headers or None)
-        else:
-            from debug.router import Router
-            data = Router.GetVia("se", item.url, self.proxy)
-
+        data = UriHandler.Open(item.url, proxy=self.proxy, additionalHeaders=headers or None)
         json = JsonHelper(data)
 
         # see if there was an srt already
@@ -671,14 +682,27 @@ class Channel(chn_class.Channel):
                 continue
 
             if url.startswith("http") and ".m3u8" in url:
+                # first see if there are streams in this file, else check the second location.
                 for s, b in M3u8.GetStreamsFromM3u8(url, self.proxy, headers=headers):
-                    part.AppendMediaStream(s, b)
+                    if useKodiHls:
+                        strm = part.AppendMediaStream(url, 0)
+                        M3u8.SetInputStreamAddonInput(strm,  headers=headers)
+                        # Only the main M3u8 is needed
+                        break
+                    else:
+                        part.AppendMediaStream(s, b)
 
-                if not part.MediaStreams and "manifest.m3u8":
+                if not part.MediaStreams and "manifest.m3u8" in url:
                     Logger.Warning("No streams found in %s, trying alternative with 'master.m3u8'", url)
                     url = url.replace("manifest.m3u8", "master.m3u8")
                     for s, b in M3u8.GetStreamsFromM3u8(url, self.proxy, headers=headers):
-                        part.AppendMediaStream(s, b)
+                        if useKodiHls:
+                            strm = part.AppendMediaStream(url, 0)
+                            M3u8.SetInputStreamAddonInput(strm, headers=headers)
+                            # Only the main M3u8 is needed
+                            break
+                        else:
+                            part.AppendMediaStream(s, b)
 
                 # check for subs
                 # https://mtgxse01-vh.akamaihd.net/i/201703/13/DCjOLN_1489416462884_427ff3d3_,48,260,460,900,1800,2800,.mp4.csmil/master.m3u8?__b__=300&hdnts=st=1489687185~exp=3637170832~acl=/*~hmac=d0e12e62c219d96798e5b5ef31b11fa848724516b255897efe9808c8a499308b&cc1=name=Svenska%20f%C3%B6r%20h%C3%B6rselskadade~default=no~forced=no~lang=sv~uri=https%3A%2F%2Fsubstitch.play.mtgx.tv%2Fsubtitle%2Fconvert%2Fxml%3Fsource%3Dhttps%3A%2F%2Fcdn-subtitles-mtgx-tv.akamaized.net%2Fpitcher%2F20xxxxxx%2F2039xxxx%2F203969xx%2F20396967%2F20396967-swt.xml%26output%3Dm3u8
@@ -690,10 +714,6 @@ class Channel(chn_class.Channel):
                     subData = UriHandler.Open(subUrl, proxy=self.proxy)
                     # subUrl = None
                     subs = filter(lambda line: line.startswith("http"), subData.split("\n"))
-                    # for line in subData.split("\n"):
-                    #     if line.startswith("http"):
-                    #         subUrl = line
-                    #         break
                     if subs:
                         part.Subtitle = SubtitleHelper.DownloadSubtitle(subs[0], format='webvtt', proxy=self.proxy)
 
@@ -718,7 +738,9 @@ class Channel(chn_class.Channel):
             else:
                 part.AppendMediaStream(url, q[1])
 
-        part.HttpHeaders.update(headers)
+        if not useKodiHls:
+            part.HttpHeaders.update(headers)
+
         if part.MediaStreams:
             item.complete = True
         Logger.Trace("Found mediaurl: %s", item)

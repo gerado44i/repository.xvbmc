@@ -10,6 +10,7 @@
 from urihandler import UriHandler
 from logger import Logger
 from regexer import Regexer
+from streams.adaptive import Adaptive
 
 
 class M3u8:
@@ -57,6 +58,10 @@ class M3u8:
                 sub = "%s?%s" % (sub, qs)
 
         return sub
+
+    @staticmethod
+    def SetInputStreamAddonInput(strm, proxy=None, headers=None):
+        return Adaptive.SetInputStreamAddonInput(strm, proxy, headers, manifestType="hls")
 
     @staticmethod
     def GetStreamsFromM3u8(url, proxy=None, headers=None, appendQueryString=False, mapAudio=False,

@@ -1,5 +1,6 @@
 import chn_class
 import mediaitem
+from addonsettings import AddonSettings
 from regexer import Regexer
 from parserdata import ParserData
 from logger import Logger
@@ -7,6 +8,7 @@ from urihandler import UriHandler
 from helpers.htmlentityhelper import HtmlEntityHelper
 from helpers.jsonhelper import JsonHelper
 from streams.m3u8 import M3u8
+from streams.mpd import Mpd
 from vault import Vault
 from helpers.datehelper import DateHelper
 from helpers.languagehelper import LanguageHelper
@@ -60,9 +62,9 @@ class Channel(chn_class.Channel):
         self._AddDataParser("https://services.vrt.be/videoplayer/r/live.json", json=True,
                             name="Live streams parser",
                             parser=(), creator=self.CreateLiveStream)
-        self._AddDataParser("http://live.stream.vrt.be/",
-                            name="Live streams updater",
-                            updater=self.UpdateLiveVideo)
+        self._AddDataParsers(["http://live.stream.vrt.be/", "https://live-vrt.akamaized.net"],
+                             name="Live streams updater",
+                             updater=self.UpdateLiveVideo)
         self._AddDataParser("https://live-[^/]+\.vrtcdn\.be",
                             matchType=ParserData.MatchRegex,
                             name="Live streams updater",
@@ -70,37 +72,37 @@ class Channel(chn_class.Channel):
 
         catregex = '<a[^>]+href="(?<url>/vrtnu/categorieen/(?<catid>[^"]+)/)"[^>]*>(?:\W*<div[^>]' \
                    '*>\W*){2}<picture[^>]*>\W+(?:<[^>]+>\W*){3}<source[^>]+srcset="' \
-                   '(?<thumburl>[^ ]+)[\w\W]{0,2000}?<h3[^>]+>(?<title>[^<]+)'
+                   '(?<thumburl>[^ ]+)[\w\W]{0,2000}?<span[^>]+title"[^>]*>(?<title>[^<]+)'
         catregex = Regexer.FromExpresso(catregex)
         self._AddDataParser("https://www.vrt.be/vrtnu/categorieen/", name="Category parser",
                             matchType=ParserData.MatchExact,
                             parser=catregex,
                             creator=self.CreateCategory)
 
-        folderRegex = '<option[^>]+data-href="/(?<url>[^"]+)">(?<title>[^<]+)</option>'
+        folderRegex = '<li class="vrt-labelnav--item "[^>]*>\W+<a[^>]*href="(?<url>[^"]+)"[^>]*>' \
+                      '(?<title>[^<]+)</a>'
         folderRegex = Regexer.FromExpresso(folderRegex)
         self._AddDataParser("*", name="Folder/Season parser",
                             parser=folderRegex, creator=self.CreateFolderItem)
 
-        videoRegex = '<a[^>]+href="(?<url>/vrtnu[^"]+)"[^>]*>(?:\W*<div[^>]*>\W*){2}<picture[^>]' \
-                     '*>\W+(?:<[^>]+>\W*){3}<source[^>]+srcset="(?<thumburl>[^ ]+)[^>]*>\W*' \
-                     '(?:<[^>]+>\W*){3}<img[^>]+>\W*(?:</\w+>\W*)+<div[^>]+>\W*<h3[^>]+>' \
-                     '(?<title>[^<]+)</h3>[\w\W]{0,1000}?(?:<span[^>]+class="tile__broadcastdate' \
-                     '--mobile[^>]*>(?<day>\d+)/(?<month>\d+)/?(?<year>\d+)?</span><span[^>]+' \
-                     'tile__broadcastdate--other[^>]+>(?<subtitle_>[^<]+)</span></div>\W*<div>)?' \
-                     '[^<]*<abbr[^>]+title'
+        videoRegex = '<a[^>]+href="(?<url>/vrtnu[^"]+)"[^>]*>\W*<div[^>]*>\W*<h2[^>]*>\s*' \
+                     '(?<subtitle>[^<]+)\s*</h2>\W*<p[^>]*>\W*(?:<span[^>]*>\s*' \
+                     '(?<title>[^|]+) \|\s*</span>\W*<span[^>]+>[^<]*</span>){0,1}\s*' \
+                     '(?<description>[^|]+) \|\W+\d+ ?<abbr[\w\W]{0,500}<source srcset="[^"]+' \
+                     '(?<thumburl>//[^ ]+)'
         # No need for a subtitle for now as it only includes the textual date
         videoRegex = Regexer.FromExpresso(videoRegex)
         self._AddDataParser("*", name="Video item parser",
                             parser=videoRegex, creator=self.CreateVideoItem)
 
         # needs to be after the standard video item regex
-        singleVideoRegex = '<picture[^>]*>\W+(?:<[^>]+>\W*){3}<source[^>]+srcset="(?<thumburl>' \
-                           '[^ ]+)[\w\W]{0,4000}<span[^>]+id="title"[^>]*>(?<title>[^<]+)</span>' \
-                           '\W*<span[^>]+>(?<description>[^<]+)'
+        singleVideoRegex = '<script type="application/ld\+json">\W+({[^<]+})\W+</script'
+        # singleVideoRegex = '<picture[^>]*>\W+(?:<[^>]+>\W*){3}<source[^>]+srcset="(?<thumburl>' \
+        #                    '[^ ]+)[\w\W]{0,4000}<span[^>]+id="title"[^>]*>(?<title>[^<]+)</span>' \
+        #                    '\W*<span[^>]+>(?<description>[^<]+)'
         singleVideoRegex = Regexer.FromExpresso(singleVideoRegex)
         self._AddDataParser("*", name="Single video item parser",
-                            parser=singleVideoRegex, creator=self.CreateVideoItem)
+                            parser=singleVideoRegex, creator=self.CreateSingleVideoItem)
 
         self._AddDataParser("*", updater=self.UpdateVideoItem, requiresLogon=True)
 
@@ -115,41 +117,45 @@ class Channel(chn_class.Channel):
                 "metaCode": "mnm",
                 "fanart": TextureHandler.Instance().GetTextureUri(self, "mnmfanart.jpg"),
                 "thumb": TextureHandler.Instance().GetTextureUri(self, "mnmimage.jpg"),
-                "icon": TextureHandler.Instance().GetTextureUri(self, "mnmicon.png"),
+                "icon": TextureHandler.Instance().GetTextureUri(self, "mnmicon.png")
             },
             "vualto_stubru": {
                 "title": "Studio Brussel",
                 "metaCode": "stubru",
                 "fanart": TextureHandler.Instance().GetTextureUri(self, "stubrufanart.jpg"),
                 "thumb": TextureHandler.Instance().GetTextureUri(self, "stubruimage.jpg"),
-                "icon": TextureHandler.Instance().GetTextureUri(self, "stubruicon.png"),
+                "icon": TextureHandler.Instance().GetTextureUri(self, "stubruicon.png")
             },
             "vualto_een": {
                 "title": "E&eacute;n",
                 "metaCode": "een",
                 "fanart": TextureHandler.Instance().GetTextureUri(self, "eenfanart.jpg"),
                 "thumb": TextureHandler.Instance().GetTextureUri(self, "eenimage.png"),
-                "icon": TextureHandler.Instance().GetTextureUri(self, "eenlarge.png")
+                "icon": TextureHandler.Instance().GetTextureUri(self, "eenlarge.png"),
+                "url": "https://live-vrt.akamaized.net/groupc/live/8edf3bdf-7db3-41c3-a318-72cb7f82de66/live_aes.isml/.m3u8"
             },
             "vualto_canvas": {
                 "title": "Canvas",
                 "metaCode": "canvas",
                 "fanart": TextureHandler.Instance().GetTextureUri(self, "canvasfanart.png"),
                 "thumb": TextureHandler.Instance().GetTextureUri(self, "canvasimage.png"),
-                "icon": TextureHandler.Instance().GetTextureUri(self, "canvaslarge.png")
+                "icon": TextureHandler.Instance().GetTextureUri(self, "canvaslarge.png"),
+                "url": "https://live-vrt.akamaized.net/groupc/live/14a2c0f6-3043-4850-88a5-7fb062fe7f05/live_aes.isml/.m3u8"
             },
             "vualto_ketnet": {
                 "title": "KetNet",
                 "metaCode": "ketnet",
                 "fanart": TextureHandler.Instance().GetTextureUri(self, "ketnetfanart.jpg"),
                 "thumb": TextureHandler.Instance().GetTextureUri(self, "ketnetimage.png"),
-                "icon": TextureHandler.Instance().GetTextureUri(self, "ketnetlarge.png")
+                "icon": TextureHandler.Instance().GetTextureUri(self, "ketnetlarge.png"),
+                "url": "https://live-vrt.akamaized.net/groupc/live/f132f1b8-d04d-404e-90e0-6da1abb4f4fc/live_aes.isml/.m3u8"
             },
             "vualto_sporza": {  # not in the channel filter maps, so no metaCode
                 "title": "Sporza",
                 "fanart": TextureHandler.Instance().GetTextureUri(self, "sporzafanart.jpg"),
                 "thumb": TextureHandler.Instance().GetTextureUri(self, "sporzaimage.png"),
-                "icon": TextureHandler.Instance().GetTextureUri(self, "sporzalarge.png")
+                "icon": TextureHandler.Instance().GetTextureUri(self, "sporzalarge.png"),
+                "url": "https://live-vrt.akamaized.net/groupa/live/7d5f0e4a-3429-4861-91d4-aa3229d7ad7b/live_aes.isml/.m3u8"
             },
             "ketnet-jr": {  # Not in the live channels
                 "title": "KetNet Junior",
@@ -159,6 +165,11 @@ class Channel(chn_class.Channel):
                 "icon": TextureHandler.Instance().GetTextureUri(self, "ketnetlarge.png")
             }
         }
+
+        # To get the tokens:
+        # POST
+        # Content-Type:application/json
+        # https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v1/tokens
 
         # ===============================================================================================================
         # Test cases:
@@ -278,7 +289,8 @@ class Channel(chn_class.Channel):
             if not channelData:
                 continue
 
-            liveItem = mediaitem.MediaItem(channelData["title"], streamValue["hls"])
+            url = channelData["url"] if "url" in channelData else streamValue["hls"]
+            liveItem = mediaitem.MediaItem(channelData["title"], url)
             liveItem.isLive = True
             liveItem.type = 'video'
             liveItem.fanart = channelData.get("fanart", self.fanart)
@@ -325,16 +337,26 @@ class Channel(chn_class.Channel):
         item.name = item.name.title()
         return item
 
+    def CreateSingleVideoItem(self, resultSet):
+        if self.__hasAlreadyVideoItems:
+            # we already have items, so don't show this one, it will be a duplicate
+            return None
+
+        jsonData = JsonHelper(resultSet)
+        url = self.parentItem.url
+        title = jsonData.GetValue("name")
+        description = jsonData.GetValue("description")
+        item = mediaitem.MediaItem(title, url, type="video")
+        item.description = description
+        item.thumb = self.parentItem.thumb
+        item.fanart = self.parentItem.fanart
+        return item
+
     def CreateVideoItem(self, resultSet):
+        if "title" not in resultSet or resultSet["title"] is None:
+            resultSet["title"] = resultSet.pop("subtitle")
+
         resultSet["title"] = resultSet["title"].strip()
-        if "url" not in resultSet:
-            if self.__hasAlreadyVideoItems:
-                Logger.Debug("Found a 'single' item, but we have more. So this is a duplicate")
-                return None
-
-            # this only happens once with single video folders
-            resultSet["url"] = self.parentItem.url
-
         item = chn_class.Channel.CreateVideoItem(self, resultSet)
         if item is None:
             return None
@@ -377,12 +399,24 @@ class Channel(chn_class.Channel):
         data = UriHandler.Open(assetUrl, proxy=self.proxy)
         assetData = JsonHelper(data, logger=Logger.Instance())
 
+        adaptiveAvailable = AddonSettings.UseAdaptiveStreamAddOn(withEncryption=False)
+
+        part = item.CreateNewEmptyMediaPart()
         for streamData in assetData.GetValue("targetUrls"):
+            url = streamData["url"]
+            # replace the host with the akamized ones
+            url = "%s/%s" % ("https://ondemand-vrt.akamaized.net", url.split("/", 3)[-1])
+
+            if adaptiveAvailable:
+                if streamData["type"] != "MPEG_DASH":
+                    continue
+                stream = part.AppendMediaStream(url, 0)
+                Mpd.SetInputStreamAddonInput(stream, self.proxy)
+
             if streamData["type"] != "HLS":
                 continue
 
-            part = item.CreateNewEmptyMediaPart()
-            for s, b, a in M3u8.GetStreamsFromM3u8(streamData["url"], self.proxy, mapAudio=True):
+            for s, b, a in M3u8.GetStreamsFromM3u8(url, self.proxy, mapAudio=True):
                 item.complete = True
                 if a:
                     audioPart = a.rsplit("-", 1)[-1]

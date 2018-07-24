@@ -1,7 +1,10 @@
 ﻿[B]Changelog[/B]
-* Added: times to NOS Journaal (Fixes #933)
+* Fixed: npostart.nl url parameters are case sensitive (Fixes #971)
 
 [I]Previous Changes[/I]
+* Fixed: renamed npo.nl -> npostart.nl (Fixes #968)
+* Fixed: NPO Live streams
+* Added: times to NOS Journaal (Fixes #933)
 * Fixed: NOS.nl only showed old videos (Fixes #912)
 * Fixed: NTR School TV had some weird <null> items (Fixes #913)
 * Fixed: NPO Search and paging

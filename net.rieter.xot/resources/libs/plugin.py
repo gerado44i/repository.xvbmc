@@ -570,7 +570,7 @@ class Plugin:
         # we are finished, so just return
         return self.ShowFavourites(self.channelObject)
 
-    @LockWithDialog(logger=Logger.Instance())
+    # @LockWithDialog(logger=Logger.Instance())  No longer needed as Kodi will do this automatically
     def PlayVideoItem(self):
         """Starts the videoitem using a playlist. """
 
@@ -623,7 +623,7 @@ class Plugin:
 
             # now we force the busy dialog to close, else the video will not play and the
             # setResolved will not work.
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            LockWithDialog.CloseBusyDialog()
 
             resolvedUrl = None
             if item.IsResolvable():
@@ -1060,12 +1060,16 @@ class Plugin:
     @LockWithDialog(logger=Logger.Instance())
     def __SendLog(self):
         from helpers.logsender import LogSender
-        logSender = LogSender(Config.GooglApi, logger=Logger.Instance(), mode='gist')
+        senderMode = 'pastebin'
+        logSender = LogSender(Config.LogSenderApi, logger=Logger.Instance(), mode=senderMode)
         try:
             title = LanguageHelper.GetLocalizedString(LanguageHelper.LogPostSuccessTitle)
             urlText = LanguageHelper.GetLocalizedString(LanguageHelper.LogPostLogUrl)
             filesToSend = [Logger.Instance().logFileName, Logger.Instance().logFileName.replace(".log", ".old.log")]
-            pasteUrl = logSender.SendFiles(Config.logFileNameAddon, filesToSend)
+            if senderMode != "gist":
+                pasteUrl = logSender.SendFile(Config.logFileNameAddon, filesToSend[0])
+            else:
+                pasteUrl = logSender.SendFiles(Config.logFileNameAddon, filesToSend)
             XbmcWrapper.ShowDialog(title, urlText % (pasteUrl,))
         except Exception, e:
             Logger.Error("Error sending %s", Config.logFileNameAddon, exc_info=True)

@@ -1,7 +1,12 @@
 ﻿[B]Changelog[/B]
-* Fixed: ViaSat streams would not play (Fixes #864)
+* Fixed: MTG changed their API again (Fixes #973)
 
 [I]Previous changes[/I]
+* Fixed: clean-up some code in the Swedish channels
+* Changed: Use the 'inputstream.adaptive' add-on for some Leia streams to solve some playback and header issues
+* Added: ViaFree.se channel (See #945)
+* Fixed: ViaFree.se channels broke (Fixes #945)
+* Fixed: ViaSat streams would not play (Fixes #864)
 * Fixed: not all ViaSat streams would have subtitles (Fixes #843)
 * Fixed: ViaSat changed subtitle formats (Fixes #784)
 * Fixed: ViaFree parsing (Fixes #765)

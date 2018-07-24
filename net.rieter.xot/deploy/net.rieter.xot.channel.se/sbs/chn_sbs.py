@@ -4,6 +4,7 @@ import uuid
 
 import mediaitem
 import chn_class
+from addonsettings import AddonSettings
 
 from helpers.jsonhelper import JsonHelper
 from helpers.languagehelper import LanguageHelper
@@ -37,11 +38,12 @@ class Channel(chn_class.Channel):
         self.programPageSize = 100
         self.videoPageSize = 100
         self.swfUrl = "http://player.dplay.se/4.0.6/swf/AkamaiAdvancedFlowplayerProvider_v3.8.swf"
-        self.subtitleKey = "subtitles_se_srt"
+        self.subtitleKey = "subtitles_{0}_srt".format(self.language)
         self.channelSlugs = ()
         self.liveUrl = None
         self.recentUrl = None
         self.primaryChannelId = None
+        self.baseUrlApi = "disco-api.dplay.{0}".format(self.language)
 
         if self.channelCode == "tv5json":
             self.noImage = "tv5seimage.png"
@@ -56,25 +58,80 @@ class Channel(chn_class.Channel):
             self.primaryChannelId = 26
 
         elif self.channelCode == "tv11json":
-            self.noImage = "tv11seimage.jpg"
+            self.noImage = "dplayimage.png"
             self.baseUrl = "http://www.dplay.se/api/v2/ajax"
             # self.liveUrl = "https://secure.dplay.se/secure/api/v2/user/authorization/stream/132039"
             self.primaryChannelId = 22
 
         elif self.channelCode == "dplayse":
-            self.noImage = "tv11seimage.jpg"
+            self.noImage = "dplayimage.png"
             self.baseUrl = "http://www.dplay.se/api/v2/ajax"
+
+        elif self.channelCode == "dplayno":
+            self.noImage = "dplayimage.png"
+            self.baseUrl = "http://www.dplay.no/api/v2/ajax"
+
+        elif self.channelCode == "tlcnorge":
+            self.noImage = "dplayimage.png"
+            self.baseUrl = "http://www.dplay.no/api/v2/ajax"
+            self.primaryChannelId = 15
+
+        elif self.channelCode == "tvnorge":
+            self.noImage = "dplayimage.png"
+            self.baseUrl = "http://www.dplay.no/api/v2/ajax"
+            self.primaryChannelId = 28
+
+        elif self.channelCode == "femnorge":
+            self.noImage = "dplayimage.png"
+            self.baseUrl = "http://www.dplay.no/api/v2/ajax"
+            self.primaryChannelId = 29
+
+        elif self.channelCode == "maxnorge":
+            self.noImage = "dplayimage.png"
+            self.baseUrl = "http://www.dplay.no/api/v2/ajax"
+            self.primaryChannelId = 30
+
+        elif self.channelCode == "voxnorge":
+            self.noImage = "dplayimage.png"
+            self.baseUrl = "http://www.dplay.no/api/v2/ajax"
+            self.primaryChannelId = 31
+
+        elif self.channelCode == "animalplanetnorge":
+            self.noImage = "dplayimage.png"
+            self.baseUrl = "http://www.dplay.no/api/v2/ajax"
+            self.primaryChannelId = 35
+
+        elif self.channelCode == "discoverynorge":
+            self.noImage = "dplayimage.png"
+            self.baseUrl = "http://www.dplay.no/api/v2/ajax"
+            self.primaryChannelId = 45
+
+        elif self.channelCode == "discoverysciencenorge":
+            self.noImage = "dplayimage.png"
+            self.baseUrl = "http://www.dplay.no/api/v2/ajax"
+            self.primaryChannelId = 71
+
+        elif self.channelCode == "discoveryworldnorge":
+            self.noImage = "dplayimage.png"
+            self.baseUrl = "http://www.dplay.no/api/v2/ajax"
+            self.primaryChannelId = 72
+
+        elif self.channelCode == "investigationdiscoverynorge":
+            self.noImage = "dplayimage.png"
+            self.baseUrl = "http://www.dplay.no/api/v2/ajax"
+            self.primaryChannelId = 73
 
         else:
             raise NotImplementedError("ChannelCode %s is not implemented" % (self.channelCode, ))
 
         if self.primaryChannelId:
-            self.recentUrl = "https://disco-api.dplay.se/content/videos?decorators=viewingHistory&" \
+            self.recentUrl = "https://{0}/content/videos?decorators=viewingHistory&" \
                              "include=images%2CprimaryChannel%2Cshow&" \
                              "filter%5BvideoType%5D=EPISODE&" \
-                             "filter%5BprimaryChannel.id%5D={0}&" \
-                             "page%5Bsize%5D={1}&" \
-                             "sort=-publishStart".format(self.primaryChannelId, self.videoPageSize)
+                             "filter%5BprimaryChannel.id%5D={1}&" \
+                             "page%5Bsize%5D={2}&" \
+                             "sort=-publishStart"\
+                .format(self.baseUrlApi, self.primaryChannelId, self.videoPageSize)
 
         #===========================================================================================
         # THIS CHANNEL DOES NOT SEEM TO WORK WITH PROXIES VERY WELL!
@@ -85,18 +142,20 @@ class Channel(chn_class.Channel):
         #                     updater=self.UpdateChannelItem)
 
         # Recent
-        self._AddDataParser("https://disco-api.dplay.se/content/videos?decorators=viewingHistory&"
+        self._AddDataParser("/content/videos?decorators=viewingHistory&"
                             "include=images%2CprimaryChannel%2Cshow&filter%5BvideoType%5D=EPISODE&"
                             "filter%5BprimaryChannel.id%5D=",
                             name="Recent video items", json=True,
                             preprocessor=self.__GetImagesFromMetaData,
+                            matchType=ParserData.MatchContains,
                             parser=("data", ), creator=self.CreateVideoItemWithShowTitle)
 
-        self._AddDataParser("https://disco-api.dplay.se/content/videos?decorators=viewingHistory&"
+        self._AddDataParser("/content/videos?decorators=viewingHistory&"
                             "include=images%2CprimaryChannel%2Cshow&filter%5BvideoType%5D=EPISODE&"
                             "filter%5BprimaryChannel.id%5D=",
                             name="Recent more pages", json=True,
                             preprocessor=self.__GetImagesFromMetaData,
+                            matchType=ParserData.MatchContains,
                             parser=("data", ), creator=self.CreateVideoItem)
 
         # Search
@@ -125,12 +184,13 @@ class Channel(chn_class.Channel):
 
         #===========================================================================================
         # non standard items
-        if not UriHandler.GetCookie("st", "disco-api.dplay.se"):
+        if not UriHandler.GetCookie("st", self.baseUrlApi):
             guid = uuid.uuid4()
             guid = str(guid).replace("-", "")
             # https://disco-api.dplay.se/token?realm=dplayse&deviceId
             # =aa9ef0ed760df76d184b262d739299a75ccae7b67eec923fe3fcd861f97bcc7f&shortlived=true
-            url = "https://disco-api.dplay.se/token?realm=dplayse&deviceId={0}&shortlived=true".format(guid)
+            url = "https://{0}/token?realm=dplay{1}&deviceId={2}&shortlived=true"\
+                .format(self.baseUrlApi, self.language, guid)
             JsonHelper(UriHandler.Open(url, proxy=self.proxy))
 
         self.imageLookup = {}
@@ -166,9 +226,9 @@ class Channel(chn_class.Channel):
 
         # fetch al pages
         p = 1
-        urlFormat = "https://disco-api.dplay.se/content/shows?" \
+        urlFormat = "https://{0}/content/shows?" \
                     "include=images" \
-                    "&page%5Bsize%5D=100&page%5Bnumber%5D={0}"
+                    "&page%5Bsize%5D=100&page%5Bnumber%5D={{0}}".format(self.baseUrlApi)
         # "include=images%2CprimaryChannel" \
         url = urlFormat.format(p)
         data = UriHandler.Open(url, proxy=self.proxy)
@@ -178,10 +238,6 @@ class Channel(chn_class.Channel):
 
         # extract the images
         self.__UpdateImageLookup(json)
-
-        # https://disco-api.dplay.se/content/shows?include=genres%2Cimages%2CprimaryChannel.images
-        # &page%5Bsize%5D=100&page%5Bnumber%5D=1
-        # https://disco-api.dplay.se/content/shows?page%5Bsize%5D=100&page%5Bnumber%5D=1
 
         for p in range(2, pages + 1, 1):
             url = urlFormat.format(p)
@@ -241,13 +297,14 @@ class Channel(chn_class.Channel):
         """
 
         Logger.Trace(resultSet)
-        urlFormat = "https://disco-api.dplay.se/content/videos?decorators=viewingHistory&" \
+        urlFormat = "https://{0}/content/videos?decorators=viewingHistory&" \
                     "include=images%2CprimaryChannel%2Cshow&" \
-                    "filter%5BvideoType%5D=EPISODE%2CLIVE&" \
+                    "filter%5BvideoType%5D=EPISODE%2CLIVE%2CFOLLOW_UP&" \
                     "filter%5Bshow.id%5D={{0}}&" \
-                    "page%5Bsize%5D={0}&" \
-                    "sort=-seasonNumber%2C-episodeNumber%2CearliestPlayableStart".\
-            format(self.videoPageSize)
+                    "page%5Bsize%5D={1}&" \
+                    "page%5Bnumber%5D=1&" \
+                    "sort=-seasonNumber%2C-episodeNumber%2CvideoType%2CearliestPlayableStart".\
+            format(self.baseUrlApi, self.videoPageSize)
         item = self.__CreateGenericItem(resultSet, "show", urlFormat)
         if item is None:
             return None
@@ -331,29 +388,28 @@ class Channel(chn_class.Channel):
 
         """
 
-
         if self.primaryChannelId:
-            shows_url = "https://disco-api.dplay.se/content/shows?" \
+            shows_url = "https://{0}/content/shows?" \
                         "include=genres%%2Cimages%%2CprimaryChannel.images&" \
-                        "filter%%5BprimaryChannel.id%%5D={0}&" \
-                        "page%%5Bsize%%5D={1}&query=%s"\
-                .format(self.primaryChannelId or "", self.programPageSize)
+                        "filter%%5BprimaryChannel.id%%5D={1}&" \
+                        "page%%5Bsize%%5D={2}&query=%s"\
+                .format(self.baseUrlApi, self.primaryChannelId or "", self.programPageSize)
 
-            videos_url = "https://disco-api.dplay.se/content/videos?decorators=viewingHistory&" \
+            videos_url = "https://{0}/content/videos?decorators=viewingHistory&" \
                          "include=images%%2CprimaryChannel%%2Cshow&" \
-                         "filter%%5BprimaryChannel.id%%5D={0}&" \
-                         "page%%5Bsize%%5D={1}&query=%s"\
-                .format(self.primaryChannelId or "", self.videoPageSize)
+                         "filter%%5BprimaryChannel.id%%5D={1}&" \
+                         "page%%5Bsize%%5D={2}&query=%s"\
+                .format(self.baseUrlApi, self.primaryChannelId or "", self.videoPageSize)
         else:
-            shows_url = "https://disco-api.dplay.se/content/shows?" \
+            shows_url = "https://{0}/content/shows?" \
                         "include=genres%%2Cimages%%2CprimaryChannel.images&" \
-                        "page%%5Bsize%%5D={0}&query=%s" \
-                .format(self.programPageSize)
+                        "page%%5Bsize%%5D={1}&query=%s" \
+                .format(self.baseUrlApi, self.programPageSize)
 
-            videos_url = "https://disco-api.dplay.se/content/videos?decorators=viewingHistory&" \
+            videos_url = "https://{0}/content/videos?decorators=viewingHistory&" \
                          "include=images%%2CprimaryChannel%%2Cshow&" \
-                         "page%%5Bsize%%5D={0}&query=%s" \
-                .format(self.videoPageSize)
+                         "page%%5Bsize%%5D={1}&query=%s" \
+                .format(self.baseUrlApi, self.videoPageSize)
 
         needle = XbmcWrapper.ShowKeyBoard()
         if needle:
@@ -398,7 +454,7 @@ class Channel(chn_class.Channel):
         if not resultSet:
             return None
 
-        urlFormat = "https://disco-api.dplay.se/playback/videoPlaybackInfo/{0}"
+        urlFormat = "https://{0}/playback/videoPlaybackInfo/{{0}}".format(self.baseUrlApi)
         item = self.__CreateGenericItem(resultSet, "video", urlFormat)
         if item is None:
             return None
@@ -475,7 +531,7 @@ class Channel(chn_class.Channel):
 
         """
 
-        videoData = UriHandler.Open(item.url, proxy=self.proxy)
+        videoData = UriHandler.Open(item.url, proxy=self.proxy, additionalHeaders=self.localIP)
 
         if not videoData:
             return item
@@ -484,20 +540,25 @@ class Channel(chn_class.Channel):
         videoInfo = videoData.GetValue("data", "attributes")
 
         part = item.CreateNewEmptyMediaPart()
-        # Somehow only this specific user-agent works (dunno why)!
-        part.HttpHeaders["user-agent"] = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)"
 
         m3u8url = videoInfo["streaming"]["hls"]["url"]
-        m3u8data = UriHandler.Open(m3u8url, self.proxy)
 
-        for s, b, a in M3u8.GetStreamsFromM3u8(m3u8url, self.proxy, appendQueryString=False,
-                                               mapAudio=True, playListData=m3u8data):
+        m3u8data = UriHandler.Open(m3u8url, self.proxy)
+        if AddonSettings.UseAdaptiveStreamAddOn():
+            stream = part.AppendMediaStream(m3u8url, 0)
             item.complete = True
-            if a:
-                audioPart = a.split("-prog_index.m3u8", 1)[0]
-                audioId = audioPart.rsplit("/", 1)[-1]
-                s = s.replace("-prog_index.m3u8", "-{0}-prog_index.m3u8".format(audioId))
-            part.AppendMediaStream(s, b)
+            M3u8.SetInputStreamAddonInput(stream, self.proxy)
+        else:
+            # user agent for all sub m3u8 and ts requests needs to be the same
+            part.HttpHeaders["user-agent"] = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)"
+            for s, b, a in M3u8.GetStreamsFromM3u8(m3u8url, self.proxy, appendQueryString=False,
+                                                   mapAudio=True, playListData=m3u8data):
+                item.complete = True
+                if a:
+                    audioPart = a.split("-prog_index.m3u8", 1)[0]
+                    audioId = audioPart.rsplit("/", 1)[-1]
+                    s = s.replace("-prog_index.m3u8", "-{0}-prog_index.m3u8".format(audioId))
+                part.AppendMediaStream(s, b)
 
         vttUrl = M3u8.GetSubtitle(m3u8url, self.proxy, m3u8data)
         # https://dplaynordics-vod-80.akamaized.net/dplaydni/259/0/hls/243241001/1112635959-prog_index.m3u8?version_hash=bb753129&hdnts=st=1518218118~exp=1518304518~acl=/*~hmac=bdeefe0ec880f8614e14af4d4a5ca4d3260bf2eaa8559e1eb8ba788645f2087a
@@ -590,10 +651,11 @@ class Channel(chn_class.Channel):
         item.isGeoLocked = "world" not in geoInfo.get("countries")
 
         # set the images
-        thumbId = resultSet["relationships"]["images"]["data"][0]["id"]
-        item.thumb = self.imageLookup.get(thumbId, self.noImage)
-        if item.thumb == self.noImage:
-            Logger.Warning("No thumb found for %s", thumbId)
+        if "images" in resultSet["relationships"]:
+            thumbId = resultSet["relationships"]["images"]["data"][0]["id"]
+            item.thumb = self.imageLookup.get(thumbId, self.noImage)
+            if item.thumb == self.noImage:
+                Logger.Warning("No thumb found for %s", thumbId)
 
         # paid or not?
         if "contentPackages" in resultSet["relationships"]:

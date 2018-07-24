@@ -1025,7 +1025,7 @@
   </extension>
 </addon>
 
-<addon id="plugin.video.youtube" name="YouTube" version="6.1.0~alpha10" provider-name="bromix">
+<addon id="plugin.video.youtube" name="YouTube" version="6.1.0~alpha11" provider-name="bromix">
     <requires>
         <import addon="xbmc.python" version="2.20.0"/>
         <import addon="script.module.six"/>

@@ -1,12 +1,11 @@
+# -*- coding: utf-8 -*-
+# Universal Scrapers
 import re,time
-import requests
 import resolveurl as urlresolver
-import xbmc,xbmcaddon
-import urllib
+import xbmcaddon
 from ..scraper import Scraper
 from ..common import clean_title,clean_search,send_log,error_log
 from universalscrapers.modules import cfscrape 
-
 
 dev_log = xbmcaddon.Addon('script.module.universalscrapers').getSetting("dev_log")
 
@@ -20,18 +19,17 @@ class movie25org(Scraper):
 
     def __init__(self):
         self.base_link = 'http://www.movies25.org'
-        self.scraper = cfscrape.create_scraper()
         self.sources = []
-        if dev_log=='true':
-            self.start_time = time.time()
 
     def scrape_movie(self, title, year, imdb, debrid=False):
         try:
+            start_time = time.time()
             search_id = clean_search(title.lower())
             start_url = '%s/?s=%s' %(self.base_link,search_id.replace(' ','+'))
             #print 'search>>>'+start_url
             headers = {'User_Agent':User_Agent}
-            html = self.scraper.get(start_url,headers=headers,timeout=5).content
+            scraper = cfscrape.create_scraper()
+            html = scraper.get(start_url,headers=headers,timeout=5).content
             
             Regex = re.compile('id="mt-.+?href="(.+?)".+?class="tt">(.+?)</span>',re.DOTALL).findall(html)
             for item_url,item_name in Regex:
@@ -41,21 +39,21 @@ class movie25org(Scraper):
                 if not year in item_name:
                     continue
                 #print item_url
-                self.get_source(item_url)
+                self.get_source(item_url,title,year,'','',start_time)
             
                 
             return self.sources
         except Exception, argument:        
             if dev_log == 'true':
-                error_log(self.name,'Check Search')
+                error_log(self.name,argument)
             return self.sources
             
-    def get_source(self,item_url):
+    def get_source(self,item_url,title,year,season,episode,start_time):
         try:
-            html = self.scraper.get(item_url).content
+            html = scraper.get(item_url).content
             frame_holder = re.compile('<iframe src="(.+?)"',re.DOTALL).findall(html)[0]
             #print 'somovie link ' +frame_holder
-            links_page = self.scraper.get(frame_holder).content
+            links_page = scraper.get(frame_holder).content
             grab = re.compile('data-src="(.+?)"',re.DOTALL).findall(links_page)
             count = 0
             for link in grab:
@@ -72,7 +70,8 @@ class movie25org(Scraper):
                     self.sources.append({'source': host,'quality': 'DVD','scraper': self.name,'url': link,'direct': False})
                 else:
                     link = 'http:' + link
-                    get_end_link = self.scraper.get(link).content
+                    scraper = cfscrape.create_scraper()
+                    get_end_link = scraper.get(link).content
 
                     try:
                         final_url = re.compile("src='(.+?)'",re.DOTALL).findall(get_end_link)[0]
@@ -93,7 +92,7 @@ class movie25org(Scraper):
                         count +=1
                         self.sources.append({'source': 'GoogleLink','quality': 'HD','scraper': self.name,'url': final_url,'direct': True})
             if dev_log=='true':
-                end_time = time.time() - self.start_time
-                send_log(self.name,end_time,count)
+                end_time = time.time() - start_time
+                send_log(self.name,end_time,count,title,year)
         except:
             pass

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import concurrent.futures
 from itertools import islice
 import xbmc
@@ -22,5 +23,8 @@ def execute(f, iterable, stop_flag=None, workers=10, timeout=30):
 def _batched_pool_runner(pool, batch_size, f, iterable, timeout):
     futures = [pool.submit(f, x) for x in iterable]
 
-    for item in concurrent.futures.as_completed(futures, timeout):
-        yield item
+    try:
+        for item in concurrent.futures.as_completed(futures, timeout):
+            yield item
+    except:
+        pass

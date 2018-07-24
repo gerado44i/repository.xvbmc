@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# Universal Scrapers
 import xbmc,xbmcaddon,time
 import re
 import requests
@@ -40,7 +42,7 @@ class freemusic(Scraper):
                     if clean_title(artist).lower() in clean_title(match2).lower():
                         final_link = 'https://www.youtube.com/watch?v='+link
                         count +=1
-                        self.sources.append({'source':self.name, 'quality':'SD', 'scraper':match5, 'url':final_link, 'direct': False})
+                        self.sources.append({'source':match5, 'quality':'SD', 'scraper':self.name, 'url':final_link, 'direct': False})
             if dev_log=='true':
                 end_time = time.time() - self.start_time
                 send_log(self.name,end_time,count)             

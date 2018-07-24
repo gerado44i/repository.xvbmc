@@ -1,8 +1,7 @@
 import re
-import requests
-import xbmc,xbmcaddon,time
+import xbmcaddon,time
 from ..scraper import Scraper
-from ..common import clean_title,clean_search,send_log,error_log 
+from ..common import clean_search,send_log,error_log
 from universalscrapers.modules import cfscrape 
 dev_log = xbmcaddon.Addon('script.module.universalscrapers').getSetting("dev_log")
 
@@ -15,17 +14,15 @@ class OpenLoadMovie(Scraper):
     sources = []
 
     def __init__(self):
-        self.base_link = 'https://openloadmovie.me'
-        self.scraper = cfscrape.create_scraper()
-        if dev_log=='true':
-            self.start_time = time.time()
+        self.base_link = 'https://openloadmovie.ws'
 
     def scrape_movie(self, title, year, imdb, debrid=False):
         try:
+            start_time = time.time()
             search_id = clean_search(title.lower())
             # start_url = '%s/?s=%s' %(self.base_link,search_id.replace(' ','+'))
             # headers = {'User_Agent':User_Agent}
-            # html = self.scraper.get(start_url,headers=headers,timeout=5).content
+            # html = scraper.get(start_url,headers=headers,timeout=5).content
             # #xbmc.log('************ Passed'+repr(html),xbmc.LOGNOTICE)
             # Regex = re.compile('class="result-item".+?href="(.+?)".+?alt="(.+?)"',re.DOTALL).findall(html)   
             # for item_url,name in Regex:    # removed date as date isnt seperate
@@ -37,7 +34,7 @@ class OpenLoadMovie(Scraper):
                 # #print 'Grabbed movie url to pass > ' + movie_link   
             movie_link = '%s/movies/%s-%s/' %(self.base_link,search_id.replace(' ','-'),year)
             print 'Grabbed movie url to pass > ' + movie_link 
-            self.get_source(movie_link)
+            self.get_source(movie_link,title,year,'','',start_time)
                 
             return self.sources
         except Exception, argument:        
@@ -50,7 +47,7 @@ class OpenLoadMovie(Scraper):
             # search_id = clean_search(title.lower())
             # # start_url = '%s/?s=%s' %(self.base_link,search_id.replace(' ','+'))
             # # headers = {'User_Agent':User_Agent}
-            # # html = self.scraper.get(start_url,headers=headers,timeout=5).content
+            # # html = scraper.get(start_url,headers=headers,timeout=5).content
             # # Regex = re.compile('class="result-item".+?href="(.+?)".+?alt="(.+?)"',re.DOTALL).findall(html)
             # # for item_url,name in Regex:
                 # # if not clean_title(title).lower() == clean_title(name).lower():
@@ -67,10 +64,11 @@ class OpenLoadMovie(Scraper):
                 # error_log(self.name,'Check Search')
             # return self.sources
 
-    def get_source(self,movie_link):
+    def get_source(self,movie_link, title, year, season, episode, start_time):
         try:
             #print 'passed show '+movie_link
-            html = self.scraper.get(movie_link).content
+            scraper = cfscrape.create_scraper()
+            html = scraper.get(movie_link).content
             links = re.compile('data-lazy-src="(.+?)"',re.DOTALL).findall(html)
             count = 0
             for link in links:                
@@ -87,8 +85,8 @@ class OpenLoadMovie(Scraper):
                     count +=1
                     self.sources.append({'source': host,'quality': qual,'scraper': self.name,'url': link,'direct': False})
             if dev_log=='true':
-                end_time = time.time() - self.start_time
-                send_log(self.name,end_time,count)
+                end_time = time.time() - start_time
+                send_log(self.name,end_time,count,title,year, season=season,episode=episode)
         except:
             pass
 

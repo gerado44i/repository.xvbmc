@@ -8,25 +8,12 @@
 * https://bit.ly/XvBMC-NL 
 * https://www.fb.com/groups/XvBMCnederland/ 
  
-### XvBMC_Pi: 
-* https://bit.ly/XvBMC-Pi 
-* https://www.fb.com/groups/XbmcVoorBeginnersRaspberryPi/ 
+### OFFLINE / AFGESLOTEN / SHUTDOWN / DOWN: 
  
-### XvBMC_Android: 
-* https://bit.ly/XvBMC-Android 
-* https://www.fb.com/groups/xbmcvoorbeginners.android/ 
+Op last van Stichting BREIN wordt 'XvBMC Repository' niet langer aangeboden, omdat middels deze repository op grote schaal films, tv-series en muziek zonder toestemming ter beschikking werden gesteld. Het aldus ter beschikking stellen aan het publiek van auteursrechterlijk beschermde werken maakt inbreuk op de auteursrechten en naburige rechten van de rechthebbenden op die werken. Ook het streamen uit ongeautoriseerde bron is verboden in Nederland. 'XvBMC Repository' is met Stichting BREIN tot een schikking gekomen. Voor aanbieders van legale content verwijst 'XvBMC Repository' u naar thecontenmap.nl en film.nl
  
-### XvBMC_FilmsSeriesMuziekSport: 
-* https://bit.ly/XvBMC-Media 
-* https://www.fb.com/groups/XbmcvoorbeginnersfilmsForum/ 
- 
-### XvBMC_retro-Games | .:C.T.R.L:. GamingRoom[NL]: 
-* https://bit.ly/XvBMC-Gaming 
-* https://www.fb.com/groups/ctrlgamingroom/ 
- 
-### XvBMC_YouTube: 
-* https://bit.ly/XvBMC-YouTube 
-* https://www.youtube.com/user/onlinefilmskijken/ 
+**NUANCE:**
+*Volgens ons, XvBMC Nederland, is deze nuance weldegelijk op zijn plaats; Wij (XvBMC-NL) hebben **ZELF** nooit films, tv-series en muziek zonder toestemming ter beschikking gesteld!*
   
 ----------
   

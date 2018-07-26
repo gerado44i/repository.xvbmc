@@ -1,2 +1,0 @@
-MetalKettle STOPPED: http://koditips.com/uninstall-metalkettle-repository/ https://twitter.com/metal_kettle [as long this works]
-**You should uninstall all broken/stopped/unused REPOs

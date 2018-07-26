@@ -1,5 +1,0 @@
-name="disabled"
-url=" "
-img=" "
-fanart=" "
-description="*V*E*R*V*A*L*T*"

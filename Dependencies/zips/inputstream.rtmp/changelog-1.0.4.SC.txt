@@ -1,4 +1,0 @@
-[B]1.0.4.0.SC[/B]
- + XvBMC Nederland start from scratch: 
- ! Modified 'Spiff' version; compiled by superceleron and patched with KSV fixes.
- 

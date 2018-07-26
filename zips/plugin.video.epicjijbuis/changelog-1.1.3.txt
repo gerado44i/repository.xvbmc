@@ -1,9 +1,0 @@
-[B]Version 1.1.3[/B]
- + VoOdOo & more ;-)
-
-[B]Version 1.1.2[/B]
- + CodeCosmetics ;-)
-
-[B]Version 1.1.1[/B]
- + intitial release 
- ! [XvBMC Nederland]

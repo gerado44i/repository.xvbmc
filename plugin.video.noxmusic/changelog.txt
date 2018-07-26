@@ -1,5 +1,0 @@
-1.0.4
-- Updates
-
-1.0.3
-- First official release ;-p

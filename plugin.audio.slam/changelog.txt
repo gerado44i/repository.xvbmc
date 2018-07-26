@@ -1,8 +1,0 @@
-v1.0.0
--Initial release
-v1.1.0
--New urls
--Music information on most streams
-v1.2.0
-- AAC 128 kbps streams added
-- SlamTV stream removed :(

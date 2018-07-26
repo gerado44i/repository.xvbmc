@@ -1,2 +1,0 @@
-[B]1.0.00[/B]
-- Initial Release

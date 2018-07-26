@@ -1,4 +1,0 @@
-1.1 
-Fout bij opstarten addon gerepareerd. Andere icoon
-1.0
-Eerste release

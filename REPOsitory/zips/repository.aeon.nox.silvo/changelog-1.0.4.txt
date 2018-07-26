@@ -1,2 +1,0 @@
-[B]v1.0.4[/B]
-- mirror release @XvBMC-NL

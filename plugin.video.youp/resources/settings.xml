@@ -1,5 +1,0 @@
-<settings>
-<category label="Film Info">
-<setting id="enable_meta" type="bool" label="Film informatie" default="true"/>
-</category>
-</settings>

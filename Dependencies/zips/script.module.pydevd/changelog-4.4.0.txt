@@ -1,7 +1,0 @@
-v4.4.0
- -Update Pydev version
-v3.4.1
-- Packed for XvBMC
-
-+ https://github.com/nabilbendafi/script.module.pydevd
-- https://github.com/powlo/script.module.pydevd

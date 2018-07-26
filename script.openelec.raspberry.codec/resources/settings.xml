@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <category label="Codec info">
-        <setting label="License keys" type="lsep"/>
-        <setting label="MPEG-2 (decode_MPG2)" type="text" id="decode_MPG2"/>
-        <setting label="VC-1 (decode_WVC1)" type="text" id="decode_WVC1"/>
-        </category>
-</settings>

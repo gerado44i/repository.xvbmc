@@ -1,3 +1,0 @@
-v3.4.1 
--Packed for XvBMC-
-+ https://github.com/powlo/script.module.pydevd

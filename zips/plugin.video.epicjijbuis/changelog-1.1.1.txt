@@ -1,3 +1,0 @@
-[B]Version 1.1.1[/B]
- + intitial release 
- ! [XvBMC Nederland]

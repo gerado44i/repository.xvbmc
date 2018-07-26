@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <category label="Allesin1NL!-View">
-	<setting id="auto-view" type="bool" label="Enable Auto View" default="true"/>
-	<setting id="EPiC" type="number" label="Kodi View Type" default="50" enable="!eq(-1,false)"/>
-   	</category>	   	
-  </settings>

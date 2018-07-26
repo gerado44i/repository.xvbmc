@@ -1,2 +1,0 @@
-[B]v1.0.6[/B]
-- initial release @XvBMC-NL

@@ -1,7 +1,0 @@
-#1.12.2-blxd2
-+ New version with new versioning scheme, should fix an issue with TVCatchup.com.
-
-#version 0.1.0
-
-+ initial release
-

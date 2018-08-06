@@ -10,10 +10,10 @@
  
 ### OFFLINE / AFGESLOTEN / SHUTDOWN / DOWN: 
  
-Op last van Stichting BREIN wordt 'XvBMC Repository' niet langer aangeboden, omdat middels deze repository op grote schaal films, tv-series en muziek zonder toestemming ter beschikking werden gesteld. Het aldus ter beschikking stellen aan het publiek van auteursrechterlijk beschermde werken maakt inbreuk op de auteursrechten en naburige rechten van de rechthebbenden op die werken. Ook het streamen uit ongeautoriseerde bron is verboden in Nederland. 'XvBMC Repository' is met Stichting BREIN tot een schikking gekomen. Voor aanbieders van legale content verwijst 'XvBMC Repository' u naar thecontenmap.nl en film.nl
- 
-**NUANCE:**
-*Volgens ons, XvBMC Nederland, is deze nuance weldegelijk op zijn plaats; Wij (XvBMC-NL) hebben **ZELF** nooit films, tv-series en muziek zonder toestemming ter beschikking gesteld!*
+'XvBMC Nederland' heeft moeten besluiten met deze pagina te stoppen en op slot te zetten (per 26-07-2018),
+ook de 'XvBMC Repository' is per ommegaande offline, cq. leeggehaald waardoor deze niet meer bruikbaar zal zijn.
+
+De(ze) 'repo' zal alleen worden "vastgehouden" ter voorkoming van kaping in- en onder onze naam, een en ander om eventuele misstanden te voorkomen.
   
 ----------
   

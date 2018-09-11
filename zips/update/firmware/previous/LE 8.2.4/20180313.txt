@@ -1,1 +1,0 @@
-XvBMC: https://github.com/raspberrypi/firmware/tree/master/boot/ [20180313] LibreELEC 8.2.4

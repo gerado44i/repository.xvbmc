@@ -1,1 +1,0 @@
-EPiC: https://github.com/raspberrypi/firmware/tree/master/boot/ [20170711]

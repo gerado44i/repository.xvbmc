@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addons>
 <addon id="script.module.simplejson"
        name="simplejson"
-       version="3.4.2"
+       version="3.4.2" 
        provider-name="Bob Ippolito">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -23,4 +22,3 @@
     <source>https://pypi.python.org/pypi/simplejson/</source>
   </extension>
 </addon>
-</addons>

@@ -8,7 +8,7 @@
 * https://bit.ly/XvBMC-NL (shutdown)
 * https://www.fb.com/groups/XvBMCnederland/ (shutdown)
  
-### OFFLINE / AFGESLOTEN / SHUTDOWN / DOWN / STOPPED / QUIT / THE END / GESCHLOSSEN / FERMÉ
+### OFFLINE / AFGESLOTEN / SHUTDOWN / DOWN / QUIT / THE END / GESCHLOSSEN / FERMÉ
  
 ----------
  

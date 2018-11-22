@@ -18,4 +18,4 @@
  
 ----------
  
-(c) [XvBMC Nederland](https://bit.ly/AddonBlacklist (r)
+(c) [XvBMC Nederland](https://bit.ly/AddonBlacklist) (r)
